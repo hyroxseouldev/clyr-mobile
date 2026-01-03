@@ -18,7 +18,7 @@ abstract interface class UserRepository {
     ({String email, String password}) params,
   );
   FutureEither<AuthException, void> signup(
-    ({String email, String password}) params,
+    ({String email, String password, String fullName}) params,
   );
   FutureEither<AuthException, void> logout();
 }
@@ -46,12 +46,17 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   FutureEither<AuthException, void> signup(
-    ({String email, String password}) params,
+    ({String email, String password, String fullName}) params,
   ) async {
     try {
       await supabase.auth.signUp(
         email: params.email,
         password: params.password,
+        data: {
+          'full_name': params.fullName,
+          'role': 'USER',
+          'avatar_url': '',
+        },
       );
       return right(null);
     } on sb.AuthException catch (e) {

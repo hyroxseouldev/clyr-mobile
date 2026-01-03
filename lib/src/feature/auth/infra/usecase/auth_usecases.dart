@@ -5,7 +5,7 @@ import 'package:clyr_mobile/src/feature/auth/data/user_repository.dart';
 
 // Params 정의
 typedef LoginParams = ({String email, String password});
-typedef SignupParams = ({String email, String password});
+typedef SignupParams = ({String email, String password, String fullName});
 typedef LogoutParams = void;
 
 // UseCase 들
@@ -25,7 +25,11 @@ class SignupUseCase implements Usecase<SignupParams, void> {
 
   @override
   FutureEither<AuthException, void> call(SignupParams input) {
-    return _repository.signup((email: input.email, password: input.password));
+    return _repository.signup((
+      email: input.email,
+      password: input.password,
+      fullName: input.fullName,
+    ));
   }
 }
 

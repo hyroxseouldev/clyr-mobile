@@ -3,13 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AsyncWidget<T> extends StatelessWidget {
   const AsyncWidget({super.key, required this.data, required this.builder});
-  final AsyncData<T> data;
+  final AsyncValue<T> data;
   final Widget Function(T data) builder;
 
   @override
   Widget build(BuildContext context) {
     return data.when(
-      data: builder,
+      data: (data) => builder(data),
       error: (error, stackTrace) => Text(error.toString()),
       loading: () => const CircularProgressIndicator(),
     );

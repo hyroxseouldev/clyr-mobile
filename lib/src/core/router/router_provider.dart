@@ -3,7 +3,9 @@ import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/login_page.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/signup_page.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/splash_view.dart';
-import 'package:clyr_mobile/src/shared/default_layout.dart';
+import 'package:clyr_mobile/src/feature/settings/view/settings_page.dart';
+import 'package:clyr_mobile/src/feature/workout/view/workout_page.dart';
+import 'package:clyr_mobile/src/shared/widgets/main_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -47,14 +49,17 @@ GoRouter router(Ref ref) {
         builder: (context, state) => const SignupPage(),
       ),
 
-      // ✅ ShellRoute 안: 홈 및 내부 페이지 (공통 레이아웃 적용)
+      // ✅ ShellRoute: 바텀 네비게이션
       ShellRoute(
-        builder: (context, state, child) => DefaultLayout(child: child),
+        builder: (context, state, child) => MainNavigation(child: child),
         routes: [
           GoRoute(
-            path: RoutePaths.home,
-            builder: (context, state) =>
-                const Scaffold(body: Center(child: Text('Home Screen'))),
+            path: RoutePaths.workout,
+            builder: (context, state) => const WorkoutPage(),
+          ),
+          GoRoute(
+            path: RoutePaths.settings,
+            builder: (context, state) => const SettingsPage(),
           ),
         ],
       ),
@@ -74,7 +79,6 @@ GoRouter router(Ref ref) {
 
       // [3] 미인증 유저 처리
       if (!isLoggedIn) {
-        // 현재 위치가 로그인이나 스플래시가 아니라면 로그인으로 보냄
         if (location != RoutePaths.login &&
             location != RoutePaths.splash &&
             location != RoutePaths.signup) {
@@ -85,11 +89,10 @@ GoRouter router(Ref ref) {
 
       // [4] 인증된 유저 처리
       if (isLoggedIn) {
-        // 이미 접속 중인 상황에서 로그인이나 스플래시에 머물러 있다면 홈으로 이동
         if (location == RoutePaths.login ||
             location == RoutePaths.splash ||
             location == RoutePaths.signup) {
-          return RoutePaths.home;
+          return RoutePaths.workout;
         }
       }
 

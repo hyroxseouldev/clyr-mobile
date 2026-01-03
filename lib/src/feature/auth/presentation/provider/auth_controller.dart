@@ -20,12 +20,16 @@ class AuthController extends _$AuthController {
     });
   }
 
-  Future<void> signup(String email, String password) async {
+  Future<void> signup(String email, String password, String fullName) async {
     state = const AsyncLoading();
     final usecases = ref.read(authUseCasesProvider);
 
     state = await AsyncValue.guard(() async {
-      final result = await usecases.signup((email: email, password: password));
+      final result = await usecases.signup((
+        email: email,
+        password: password,
+        fullName: fullName,
+      ));
       return result.fold((l) => throw l, (r) => r);
     });
   }
@@ -34,9 +38,13 @@ class AuthController extends _$AuthController {
     state = const AsyncLoading();
     final usecases = ref.read(authUseCasesProvider);
 
-    state = await AsyncValue.guard(() async {
-      final result = await usecases.logout(null);
-      return result.fold((l) => throw l, (r) => r);
-    });
+    final result = await usecases.logout(null);
+
+    if (ref.mounted) {
+      state = result.fold(
+        (l) => AsyncError(l, StackTrace.current),
+        (_) => const AsyncData(null),
+      );
+    }
   }
 }

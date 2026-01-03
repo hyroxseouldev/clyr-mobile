@@ -31,6 +31,14 @@ class SignupPage extends HookConsumerWidget {
             ),
           );
         }
+      } else if (next is AsyncData && previous is AsyncLoading) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('회원가입이 완료되었습니다. 이메일을 확인해주세요.'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        context.pop();
       }
     });
 
@@ -58,10 +66,22 @@ class SignupPage extends HookConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    '이메일과 비밀번호를 입력해주세요',
+                    '정보를 입력해주세요',
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 32),
+                  FormBuilderTextField(
+                    name: 'fullName',
+                    decoration: const InputDecoration(
+                      labelText: '이름',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.person),
+                    ),
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(errorText: '이름을 입력해주세요.'),
+                    ]),
+                  ),
+                  const SizedBox(height: 16),
                   FormBuilderTextField(
                     name: 'email',
                     decoration: const InputDecoration(
@@ -133,6 +153,7 @@ class SignupPage extends HookConsumerWidget {
                                     .signup(
                                       data['email'] as String,
                                       data['password'] as String,
+                                      data['fullName'] as String,
                                     );
                               }
                             }
