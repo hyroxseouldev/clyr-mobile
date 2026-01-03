@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/src/shared/loader.dart';
 import 'package:flutter/material.dart';
 
 class AsyncButton extends StatelessWidget {
@@ -15,7 +16,7 @@ class AsyncButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      child: isLoading ? const CircularProgressIndicator() : Text(text),
+      child: isLoading ? const Loader() : Text(text),
     );
   }
 }

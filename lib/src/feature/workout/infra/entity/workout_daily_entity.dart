@@ -10,6 +10,9 @@ part 'workout_daily_entity.freezed.dart';
 @freezed
 abstract class WorkoutDailyEntity with _$WorkoutDailyEntity {
   const factory WorkoutDailyEntity({
+    /// enrollment 레코드 존재 여부
+    required bool hasEnrollment,
+
     /// enrollment 시작 날짜가 설정되었는지 여부
     required bool isStartDateSet,
 
@@ -26,9 +29,21 @@ abstract class WorkoutDailyEntity with _$WorkoutDailyEntity {
     WorkoutWithSession? workout,
   }) = _WorkoutDailyEntity;
 
-  /// 시작 날짜 미설정 상태 생성 (초기 상태)
+  /// enrollment가 없는 상태 생성 (구매한 프로그램 없음)
+  factory WorkoutDailyEntity.noEnrollment() {
+    return const WorkoutDailyEntity(
+      hasEnrollment: false,
+      isStartDateSet: false,
+      isFutureRestricted: false,
+      isBeforeStartDate: false,
+      workout: null,
+    );
+  }
+
+  /// 시작 날짜 미설정 상태 생성 (enrollment는 있으나 start_date가 null)
   factory WorkoutDailyEntity.noStartDate() {
     return const WorkoutDailyEntity(
+      hasEnrollment: true,
       isStartDateSet: false,
       isFutureRestricted: false,
       isBeforeStartDate: false,
@@ -41,6 +56,7 @@ abstract class WorkoutDailyEntity with _$WorkoutDailyEntity {
     required WorkoutWithSession? workout,
   }) {
     return WorkoutDailyEntity(
+      hasEnrollment: true,
       isStartDateSet: true,
       isFutureRestricted: false,
       isBeforeStartDate: false,
@@ -51,6 +67,7 @@ abstract class WorkoutDailyEntity with _$WorkoutDailyEntity {
   /// 미래 날짜 접근 제한 상태 생성 (4일 뒤 이후)
   factory WorkoutDailyEntity.futureRestricted() {
     return const WorkoutDailyEntity(
+      hasEnrollment: true,
       isStartDateSet: true,
       isFutureRestricted: true,
       isBeforeStartDate: false,
@@ -61,6 +78,7 @@ abstract class WorkoutDailyEntity with _$WorkoutDailyEntity {
   /// 시작 날짜 이전 상태 생성 (프로그램 시작 전)
   factory WorkoutDailyEntity.beforeStartDate() {
     return const WorkoutDailyEntity(
+      hasEnrollment: true,
       isStartDateSet: true,
       isFutureRestricted: false,
       isBeforeStartDate: true,

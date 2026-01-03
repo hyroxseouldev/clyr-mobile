@@ -57,6 +57,11 @@ class WorkoutPage extends HookConsumerWidget {
             child: AsyncWidget<WorkoutDailyEntity>(
               data: dailyState,
               builder: (daily) {
+                // enrollment가 없는 상태 (구매한 프로그램 없음)
+                if (!daily.hasEnrollment) {
+                  return _buildNoEnrollmentPrompt(context);
+                }
+
                 // 시작 날짜 미설정 상태
                 if (!daily.isStartDateSet) {
                   return _buildStartDatePrompt(context);
@@ -83,6 +88,41 @@ class WorkoutPage extends HookConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// 구매한 프로그램 없음 프롬프트
+  Widget _buildNoEnrollmentPrompt(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.shopping_cart_outlined,
+              size: 80,
+              color: Colors.orange.shade300,
+            ),
+            const SizedBox(height: 24),
+            Text(
+              '구매한 프로그램이 없습니다',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              '먼저 프로그램을 구매해주세요\n프로그램을 구매하면 맞춤 워크아웃을 제공합니다',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey.shade600,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

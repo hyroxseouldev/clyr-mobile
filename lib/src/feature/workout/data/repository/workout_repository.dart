@@ -68,10 +68,16 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
           .eq('status', 'ACTIVE')
           .maybeSingle();
 
-      if (enrollmentResult == null ||
-          enrollmentResult['start_date'] == null ||
+      // enrollment가 없는 경우 (구매한 프로그램 없음)
+      if (enrollmentResult == null) {
+        log('getWorkoutDaily: enrollment 레코드 없음 (구매한 프로그램 없음)');
+        return right(WorkoutDailyEntity.noEnrollment());
+      }
+
+      // start_date 또는 program_id가 없는 경우
+      if (enrollmentResult['start_date'] == null ||
           enrollmentResult['program_id'] == null) {
-        log('getWorkoutDaily: enrollment 없음');
+        log('getWorkoutDaily: start_date 또는 program_id 없음');
         return right(WorkoutDailyEntity.noStartDate());
       }
 

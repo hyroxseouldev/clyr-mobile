@@ -14,7 +14,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$WorkoutDailyEntity {
 
-/// enrollment 시작 날짜가 설정되었는지 여부
+/// enrollment 레코드 존재 여부
+ bool get hasEnrollment;/// enrollment 시작 날짜가 설정되었는지 여부
  bool get isStartDateSet;/// 미래 날짜 접근 제한 여부 (4일 뒤 이후 접근 불가)
  bool get isFutureRestricted;/// 시작 날짜 이전 여부 (프로그램 시작 전)
  bool get isBeforeStartDate;/// 해당 날짜의 워크아웃 정보 (설정된 시작 날짜로부터 계산된 dayNumber)
@@ -32,16 +33,16 @@ $WorkoutDailyEntityCopyWith<WorkoutDailyEntity> get copyWith => _$WorkoutDailyEn
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WorkoutDailyEntity&&(identical(other.isStartDateSet, isStartDateSet) || other.isStartDateSet == isStartDateSet)&&(identical(other.isFutureRestricted, isFutureRestricted) || other.isFutureRestricted == isFutureRestricted)&&(identical(other.isBeforeStartDate, isBeforeStartDate) || other.isBeforeStartDate == isBeforeStartDate)&&(identical(other.workout, workout) || other.workout == workout));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WorkoutDailyEntity&&(identical(other.hasEnrollment, hasEnrollment) || other.hasEnrollment == hasEnrollment)&&(identical(other.isStartDateSet, isStartDateSet) || other.isStartDateSet == isStartDateSet)&&(identical(other.isFutureRestricted, isFutureRestricted) || other.isFutureRestricted == isFutureRestricted)&&(identical(other.isBeforeStartDate, isBeforeStartDate) || other.isBeforeStartDate == isBeforeStartDate)&&(identical(other.workout, workout) || other.workout == workout));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isStartDateSet,isFutureRestricted,isBeforeStartDate,workout);
+int get hashCode => Object.hash(runtimeType,hasEnrollment,isStartDateSet,isFutureRestricted,isBeforeStartDate,workout);
 
 @override
 String toString() {
-  return 'WorkoutDailyEntity(isStartDateSet: $isStartDateSet, isFutureRestricted: $isFutureRestricted, isBeforeStartDate: $isBeforeStartDate, workout: $workout)';
+  return 'WorkoutDailyEntity(hasEnrollment: $hasEnrollment, isStartDateSet: $isStartDateSet, isFutureRestricted: $isFutureRestricted, isBeforeStartDate: $isBeforeStartDate, workout: $workout)';
 }
 
 
@@ -52,7 +53,7 @@ abstract mixin class $WorkoutDailyEntityCopyWith<$Res>  {
   factory $WorkoutDailyEntityCopyWith(WorkoutDailyEntity value, $Res Function(WorkoutDailyEntity) _then) = _$WorkoutDailyEntityCopyWithImpl;
 @useResult
 $Res call({
- bool isStartDateSet, bool isFutureRestricted, bool isBeforeStartDate, WorkoutWithSession? workout
+ bool hasEnrollment, bool isStartDateSet, bool isFutureRestricted, bool isBeforeStartDate, WorkoutWithSession? workout
 });
 
 
@@ -69,9 +70,10 @@ class _$WorkoutDailyEntityCopyWithImpl<$Res>
 
 /// Create a copy of WorkoutDailyEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isStartDateSet = null,Object? isFutureRestricted = null,Object? isBeforeStartDate = null,Object? workout = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? hasEnrollment = null,Object? isStartDateSet = null,Object? isFutureRestricted = null,Object? isBeforeStartDate = null,Object? workout = freezed,}) {
   return _then(_self.copyWith(
-isStartDateSet: null == isStartDateSet ? _self.isStartDateSet : isStartDateSet // ignore: cast_nullable_to_non_nullable
+hasEnrollment: null == hasEnrollment ? _self.hasEnrollment : hasEnrollment // ignore: cast_nullable_to_non_nullable
+as bool,isStartDateSet: null == isStartDateSet ? _self.isStartDateSet : isStartDateSet // ignore: cast_nullable_to_non_nullable
 as bool,isFutureRestricted: null == isFutureRestricted ? _self.isFutureRestricted : isFutureRestricted // ignore: cast_nullable_to_non_nullable
 as bool,isBeforeStartDate: null == isBeforeStartDate ? _self.isBeforeStartDate : isBeforeStartDate // ignore: cast_nullable_to_non_nullable
 as bool,workout: freezed == workout ? _self.workout : workout // ignore: cast_nullable_to_non_nullable
@@ -172,10 +174,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isStartDateSet,  bool isFutureRestricted,  bool isBeforeStartDate,  WorkoutWithSession? workout)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool hasEnrollment,  bool isStartDateSet,  bool isFutureRestricted,  bool isBeforeStartDate,  WorkoutWithSession? workout)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _WorkoutDailyEntity() when $default != null:
-return $default(_that.isStartDateSet,_that.isFutureRestricted,_that.isBeforeStartDate,_that.workout);case _:
+return $default(_that.hasEnrollment,_that.isStartDateSet,_that.isFutureRestricted,_that.isBeforeStartDate,_that.workout);case _:
   return orElse();
 
 }
@@ -193,10 +195,10 @@ return $default(_that.isStartDateSet,_that.isFutureRestricted,_that.isBeforeStar
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isStartDateSet,  bool isFutureRestricted,  bool isBeforeStartDate,  WorkoutWithSession? workout)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool hasEnrollment,  bool isStartDateSet,  bool isFutureRestricted,  bool isBeforeStartDate,  WorkoutWithSession? workout)  $default,) {final _that = this;
 switch (_that) {
 case _WorkoutDailyEntity():
-return $default(_that.isStartDateSet,_that.isFutureRestricted,_that.isBeforeStartDate,_that.workout);case _:
+return $default(_that.hasEnrollment,_that.isStartDateSet,_that.isFutureRestricted,_that.isBeforeStartDate,_that.workout);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -213,10 +215,10 @@ return $default(_that.isStartDateSet,_that.isFutureRestricted,_that.isBeforeStar
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isStartDateSet,  bool isFutureRestricted,  bool isBeforeStartDate,  WorkoutWithSession? workout)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool hasEnrollment,  bool isStartDateSet,  bool isFutureRestricted,  bool isBeforeStartDate,  WorkoutWithSession? workout)?  $default,) {final _that = this;
 switch (_that) {
 case _WorkoutDailyEntity() when $default != null:
-return $default(_that.isStartDateSet,_that.isFutureRestricted,_that.isBeforeStartDate,_that.workout);case _:
+return $default(_that.hasEnrollment,_that.isStartDateSet,_that.isFutureRestricted,_that.isBeforeStartDate,_that.workout);case _:
   return null;
 
 }
@@ -228,9 +230,11 @@ return $default(_that.isStartDateSet,_that.isFutureRestricted,_that.isBeforeStar
 
 
 class _WorkoutDailyEntity implements WorkoutDailyEntity {
-  const _WorkoutDailyEntity({required this.isStartDateSet, required this.isFutureRestricted, required this.isBeforeStartDate, this.workout});
+  const _WorkoutDailyEntity({required this.hasEnrollment, required this.isStartDateSet, required this.isFutureRestricted, required this.isBeforeStartDate, this.workout});
   
 
+/// enrollment 레코드 존재 여부
+@override final  bool hasEnrollment;
 /// enrollment 시작 날짜가 설정되었는지 여부
 @override final  bool isStartDateSet;
 /// 미래 날짜 접근 제한 여부 (4일 뒤 이후 접근 불가)
@@ -253,16 +257,16 @@ _$WorkoutDailyEntityCopyWith<_WorkoutDailyEntity> get copyWith => __$WorkoutDail
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WorkoutDailyEntity&&(identical(other.isStartDateSet, isStartDateSet) || other.isStartDateSet == isStartDateSet)&&(identical(other.isFutureRestricted, isFutureRestricted) || other.isFutureRestricted == isFutureRestricted)&&(identical(other.isBeforeStartDate, isBeforeStartDate) || other.isBeforeStartDate == isBeforeStartDate)&&(identical(other.workout, workout) || other.workout == workout));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WorkoutDailyEntity&&(identical(other.hasEnrollment, hasEnrollment) || other.hasEnrollment == hasEnrollment)&&(identical(other.isStartDateSet, isStartDateSet) || other.isStartDateSet == isStartDateSet)&&(identical(other.isFutureRestricted, isFutureRestricted) || other.isFutureRestricted == isFutureRestricted)&&(identical(other.isBeforeStartDate, isBeforeStartDate) || other.isBeforeStartDate == isBeforeStartDate)&&(identical(other.workout, workout) || other.workout == workout));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isStartDateSet,isFutureRestricted,isBeforeStartDate,workout);
+int get hashCode => Object.hash(runtimeType,hasEnrollment,isStartDateSet,isFutureRestricted,isBeforeStartDate,workout);
 
 @override
 String toString() {
-  return 'WorkoutDailyEntity(isStartDateSet: $isStartDateSet, isFutureRestricted: $isFutureRestricted, isBeforeStartDate: $isBeforeStartDate, workout: $workout)';
+  return 'WorkoutDailyEntity(hasEnrollment: $hasEnrollment, isStartDateSet: $isStartDateSet, isFutureRestricted: $isFutureRestricted, isBeforeStartDate: $isBeforeStartDate, workout: $workout)';
 }
 
 
@@ -273,7 +277,7 @@ abstract mixin class _$WorkoutDailyEntityCopyWith<$Res> implements $WorkoutDaily
   factory _$WorkoutDailyEntityCopyWith(_WorkoutDailyEntity value, $Res Function(_WorkoutDailyEntity) _then) = __$WorkoutDailyEntityCopyWithImpl;
 @override @useResult
 $Res call({
- bool isStartDateSet, bool isFutureRestricted, bool isBeforeStartDate, WorkoutWithSession? workout
+ bool hasEnrollment, bool isStartDateSet, bool isFutureRestricted, bool isBeforeStartDate, WorkoutWithSession? workout
 });
 
 
@@ -290,9 +294,10 @@ class __$WorkoutDailyEntityCopyWithImpl<$Res>
 
 /// Create a copy of WorkoutDailyEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isStartDateSet = null,Object? isFutureRestricted = null,Object? isBeforeStartDate = null,Object? workout = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? hasEnrollment = null,Object? isStartDateSet = null,Object? isFutureRestricted = null,Object? isBeforeStartDate = null,Object? workout = freezed,}) {
   return _then(_WorkoutDailyEntity(
-isStartDateSet: null == isStartDateSet ? _self.isStartDateSet : isStartDateSet // ignore: cast_nullable_to_non_nullable
+hasEnrollment: null == hasEnrollment ? _self.hasEnrollment : hasEnrollment // ignore: cast_nullable_to_non_nullable
+as bool,isStartDateSet: null == isStartDateSet ? _self.isStartDateSet : isStartDateSet // ignore: cast_nullable_to_non_nullable
 as bool,isFutureRestricted: null == isFutureRestricted ? _self.isFutureRestricted : isFutureRestricted // ignore: cast_nullable_to_non_nullable
 as bool,isBeforeStartDate: null == isBeforeStartDate ? _self.isBeforeStartDate : isBeforeStartDate // ignore: cast_nullable_to_non_nullable
 as bool,workout: freezed == workout ? _self.workout : workout // ignore: cast_nullable_to_non_nullable
