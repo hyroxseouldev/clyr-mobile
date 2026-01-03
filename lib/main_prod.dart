@@ -8,6 +8,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 Future<void> main() async {
   F.appFlavor = Flavor.prod;
 
+  await WidgetsFlutterBinding.ensureInitialized();
   // Supabase 초기화
   await Supabase.initialize(
     url: Env.supabaseUrl,

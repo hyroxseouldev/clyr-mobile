@@ -3,5 +3,6 @@ class RoutePaths {
   static const String login = '/login';
   static const String signup = '/signup';
   static const String workout = '/workout';
+  static const String workoutStartDateSetup = '/workout/start-date-setup';
   static const String settings = '/settings';
 }

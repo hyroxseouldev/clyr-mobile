@@ -2,23 +2,10 @@ import 'package:clyr_mobile/src/core/exception/exception.dart';
 import 'package:clyr_mobile/src/core/typedef/typedef.dart';
 import 'package:clyr_mobile/src/core/usecase/usecase.dart';
 import 'package:clyr_mobile/src/feature/workout/data/repository/workout_repository.dart';
-import 'package:clyr_mobile/src/feature/workout/infra/entity/workout_entity.dart';
+import 'package:clyr_mobile/src/feature/workout/infra/usecase/get_workout_daily_usecase.dart';
+import 'package:clyr_mobile/src/feature/workout/infra/usecase/set_start_date_usecase.dart';
 
-typedef GetWorkoutsParams = void;
 typedef CreateWorkoutLogParams = ({String workoutId, String log});
-
-class GetWorkoutsUseCase
-    implements Usecase<GetWorkoutsParams, List<WorkoutEntity>> {
-  final WorkoutRepository _repository;
-  GetWorkoutsUseCase(this._repository);
-
-  @override
-  FutureEither<AppException, List<WorkoutEntity>> call(
-    GetWorkoutsParams input,
-  ) {
-    return _repository.getWorkouts();
-  }
-}
 
 class CreateWorkoutLogUseCase implements Usecase<CreateWorkoutLogParams, void> {
   final WorkoutRepository _repository;
@@ -31,15 +18,21 @@ class CreateWorkoutLogUseCase implements Usecase<CreateWorkoutLogParams, void> {
 }
 
 class WorkoutUseCases {
-  final GetWorkoutsUseCase getWorkouts;
   final CreateWorkoutLogUseCase createWorkoutLog;
+  final GetWorkoutDailyUseCase getWorkoutDaily;
+  final SetStartDateUseCase setStartDate;
 
-  WorkoutUseCases({required this.getWorkouts, required this.createWorkoutLog});
+  WorkoutUseCases({
+    required this.createWorkoutLog,
+    required this.getWorkoutDaily,
+    required this.setStartDate,
+  });
 
   factory WorkoutUseCases.fromRepository(WorkoutRepository repository) {
     return WorkoutUseCases(
-      getWorkouts: GetWorkoutsUseCase(repository),
       createWorkoutLog: CreateWorkoutLogUseCase(repository),
+      getWorkoutDaily: GetWorkoutDailyUseCase(repository),
+      setStartDate: SetStartDateUseCase(repository),
     );
   }
 }

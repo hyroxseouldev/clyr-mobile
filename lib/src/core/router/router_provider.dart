@@ -5,6 +5,7 @@ import 'package:clyr_mobile/src/feature/auth/presentation/view/signup_page.dart'
 import 'package:clyr_mobile/src/feature/auth/presentation/view/splash_view.dart';
 import 'package:clyr_mobile/src/feature/settings/view/settings_page.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_page.dart';
+import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_start_date_setup_page.dart';
 import 'package:clyr_mobile/src/shared/widgets/main_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -56,6 +57,12 @@ GoRouter router(Ref ref) {
           GoRoute(
             path: RoutePaths.workout,
             builder: (context, state) => const WorkoutPage(),
+            routes: [
+              GoRoute(
+                path: 'start-date-setup',
+                builder: (context, state) => const WorkoutStartDateSetupPage(),
+              ),
+            ],
           ),
           GoRoute(
             path: RoutePaths.settings,

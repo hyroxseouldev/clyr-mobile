@@ -100,3 +100,5 @@ abstract class ProgramWeekEntity with _$ProgramWeekEntity {
     );
   }
 }
+
+class WorkoutAppEntity {}
