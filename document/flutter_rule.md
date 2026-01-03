@@ -5,23 +5,25 @@
 3. Entity 를 활용한 Widget 의 경우 factory 메서드로 fromEntity 함수를 만들어 사용합니다.
 4. 네트워크나, 패키지에서 사용되는 Client 객체들은 여러곳에서 중복하여 쓰지 않고 provider 로 최 상단에서 주입하여 사용합니다.
 
+# 비동기 에러처리
+
 # 아키텍처 및 구조
 
 - Data
 
-  - dto : JsonSerializer 로 구현합니다. 실제 데이터를 Dart 객체로 변환 합니다. . toEntity 함수를 필수적으로 생성합니다.
-  - data_source : 데이터의 주체가 되는 부분입니다. retrofit 을 사용합니다.
+  - dto: JsonSerializer 로 구현합니다. 실제 데이터를 Dart 객체로 변환 합니다. . toEntity 함수를 필수적으로 생성합니다.
+  - data_source : 데이터의 주체가 되는 부분입니다. dio 를 사용할 경우에는 사용합니다.
   - repositroy: Feature 의 CRUD 기능이 들어간 객체입니다.
 
 - Infra
 
-  - entity: 실제 앱에서 보여지는 파일 구조 입니다.
-  - usecase
+  - entity: 실제 앱에서 보여지는 데이터들로만 이루어진 객체입니다.
+  - usecase: 추상클래스를 사용하며 params 는 namedRecord 를 사용하여 컨트롤러내에서 간편하게 사용합니다.
 
 - Presentation
   - provider: view 를 컨트롤하는 컨트롤러입니다. riverpod notifier 를 알맞게 사용합니다.
   - view: 화면입니다.
-  - widget: 위젯입니다.
+  - widget: 위젯입니다. entity 를 사용할 경우 factory 메서드를 활용합니다.
 
 으로 나뉘어진 클린 아키 텍처 구조 입니다.
 
