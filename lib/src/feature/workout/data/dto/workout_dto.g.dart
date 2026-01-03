@@ -8,19 +8,91 @@ part of 'workout_dto.dart';
 
 WorkoutDto _$WorkoutDtoFromJson(Map<String, dynamic> json) => WorkoutDto(
   id: json['id'] as String,
-  name: json['name'] as String,
-  description: json['description'] as String,
-  duration: (json['duration'] as num).toInt(),
-  calories: (json['calories'] as num).toInt(),
-  createdAt: DateTime.parse(json['createdAt'] as String),
+  programId: json['program_id'] as String,
+  weekId: json['week_id'] as String,
+  dayNumber: (json['day_number'] as num).toInt(),
+  title: json['title'] as String,
+  content: json['content'] as String?,
+  createdAt: DateTime.parse(json['created_at'] as String),
+  programWeeks: json['programWeeks'] == null
+      ? null
+      : ProgramWeeksDto.fromJson(json['programWeeks'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$WorkoutDtoToJson(WorkoutDto instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'name': instance.name,
+      'program_id': instance.programId,
+      'week_id': instance.weekId,
+      'day_number': instance.dayNumber,
+      'title': instance.title,
+      'content': instance.content,
+      'created_at': instance.createdAt.toIso8601String(),
+      'programWeeks': instance.programWeeks,
+    };
+
+ProgramWeeksDto _$ProgramWeeksDtoFromJson(Map<String, dynamic> json) =>
+    ProgramWeeksDto(
+      id: json['id'] as String,
+      programId: json['program_id'] as String,
+      weekNumber: (json['week_number'] as num).toInt(),
+      title: json['title'] as String,
+      description: json['description'] as String?,
+      workouts: (json['workouts'] as List<dynamic>?)
+          ?.map((e) => WorkoutsNestedDto.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$ProgramWeeksDtoToJson(ProgramWeeksDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'program_id': instance.programId,
+      'week_number': instance.weekNumber,
+      'title': instance.title,
       'description': instance.description,
-      'duration': instance.duration,
-      'calories': instance.calories,
-      'createdAt': instance.createdAt.toIso8601String(),
+      'workouts': instance.workouts,
+    };
+
+WorkoutsNestedDto _$WorkoutsNestedDtoFromJson(Map<String, dynamic> json) =>
+    WorkoutsNestedDto(
+      id: json['id'] as String,
+      programId: json['program_id'] as String,
+      weekId: json['week_id'] as String,
+      dayNumber: (json['day_number'] as num).toInt(),
+      title: json['title'] as String,
+      content: json['content'] as String?,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      workoutSessions: (json['workout_sessions'] as List<dynamic>?)
+          ?.map((e) => WorkoutSessionsDto.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$WorkoutsNestedDtoToJson(WorkoutsNestedDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'program_id': instance.programId,
+      'week_id': instance.weekId,
+      'day_number': instance.dayNumber,
+      'title': instance.title,
+      'content': instance.content,
+      'created_at': instance.createdAt.toIso8601String(),
+      'workout_sessions': instance.workoutSessions,
+    };
+
+WorkoutSessionsDto _$WorkoutSessionsDtoFromJson(Map<String, dynamic> json) =>
+    WorkoutSessionsDto(
+      id: json['id'] as String,
+      workoutId: json['workout_id'] as String,
+      title: json['title'] as String,
+      content: json['content'] as String?,
+      orderIndex: (json['order_index'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$WorkoutSessionsDtoToJson(WorkoutSessionsDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'workout_id': instance.workoutId,
+      'title': instance.title,
+      'content': instance.content,
+      'order_index': instance.orderIndex,
     };

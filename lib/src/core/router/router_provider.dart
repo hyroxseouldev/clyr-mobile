@@ -4,7 +4,7 @@ import 'package:clyr_mobile/src/feature/auth/presentation/view/login_page.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/signup_page.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/splash_view.dart';
 import 'package:clyr_mobile/src/feature/settings/view/settings_page.dart';
-import 'package:clyr_mobile/src/feature/workout/view/workout_page.dart';
+import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_page.dart';
 import 'package:clyr_mobile/src/shared/widgets/main_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

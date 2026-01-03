@@ -15,11 +15,7 @@ class WorkoutPage extends HookConsumerWidget {
       appBar: AppBar(title: const Text('Workout')),
       body: AsyncWidget<List<WorkoutEntity>>(
         data: workoutsState,
-        builder: (workouts) => ListView.builder(
-          itemBuilder: (context, index) {
-            return Text(workouts[index].name);
-          },
-        ),
+        builder: (workouts) => Text(workouts.length.toString()),
       ),
     );
   }
