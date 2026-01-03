@@ -3,61 +3,73 @@ import 'package:clyr_mobile/src/core/supabase/supabase_provider.dart';
 import 'package:clyr_mobile/src/core/typedef/typedef.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' hide AuthException;
+import 'package:supabase_flutter/supabase_flutter.dart' as sb;
 
 part 'user_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 UserRepository userRepository(Ref ref) {
-  final supabase = ref.read(supabaseClientProvider);
+  final supabase = ref.watch(supabaseClientProvider);
   return UserRepositoryImpl(supabase: supabase);
 }
 
-abstract class UserRepository {
-  FutureEither<AppException, void> login(String email, String password);
-  FutureEither<AppException, void> signup(String email, String password);
-  FutureEither<AppException, void> logout();
+abstract interface class UserRepository {
+  FutureEither<AuthException, void> login(
+    ({String email, String password}) params,
+  );
+  FutureEither<AuthException, void> signup(
+    ({String email, String password}) params,
+  );
+  FutureEither<AuthException, void> logout();
 }
 
-class UserRepositoryImpl extends UserRepository {
-  final SupabaseClient supabase;
+class UserRepositoryImpl implements UserRepository {
+  final sb.SupabaseClient supabase;
   UserRepositoryImpl({required this.supabase});
 
   @override
-  FutureEither<AppException, void> login(String email, String password) {
-    return FutureEither(() async {
-      try {
-        final response = await supabase.auth.signInWithPassword(
-          email: email,
-          password: password,
-        );
-        return right(response.user?.toJson() ?? {});
-      } catch (e) {
-        return left(AuthException(e.toString()));
-      }
-    });
-  }
-
-  @override
-  FutureEither<AppException, void> signup(String email, String password) async {
+  FutureEither<AuthException, void> login(
+    ({String email, String password}) params,
+  ) async {
     try {
-      final response = await supabase.auth.signUp(
-        email: email,
-        password: password,
+      await supabase.auth.signInWithPassword(
+        email: params.email,
+        password: params.password,
       );
-      return right(response.user?.toJson() ?? {});
+      return right(null);
+    } on sb.AuthException catch (e) {
+      return left(AuthException(code: e.code ?? 'unknown', message: e.message));
     } catch (e) {
-      return left(AuthException(e.toString()));
+      return left(AuthException(code: 'unknown', message: e.toString()));
     }
   }
 
   @override
-  FutureEither<AppException, void> logout() async {
+  FutureEither<AuthException, void> signup(
+    ({String email, String password}) params,
+  ) async {
+    try {
+      await supabase.auth.signUp(
+        email: params.email,
+        password: params.password,
+      );
+      return right(null);
+    } on sb.AuthException catch (e) {
+      return left(AuthException(code: e.code ?? 'unknown', message: e.message));
+    } catch (e) {
+      return left(AuthException(code: 'unknown', message: e.toString()));
+    }
+  }
+
+  @override
+  FutureEither<AuthException, void> logout() async {
     try {
       await supabase.auth.signOut();
       return right(null);
+    } on sb.AuthException catch (e) {
+      return left(AuthException(code: e.code ?? 'unknown', message: e.message));
     } catch (e) {
-      return left(AuthException(e.toString()));
+      return left(AuthException(code: 'logout-error', message: e.toString()));
     }
   }
 }

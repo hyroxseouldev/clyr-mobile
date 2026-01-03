@@ -1,7 +1,9 @@
 import 'package:clyr_mobile/src/core/router/session_provider.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
+import 'package:clyr_mobile/src/feature/auth/presentation/view/login_page.dart';
+import 'package:clyr_mobile/src/feature/auth/presentation/view/signup_page.dart';
+import 'package:clyr_mobile/src/feature/auth/presentation/view/splash_view.dart';
 import 'package:clyr_mobile/src/shared/default_layout.dart';
-import 'package:clyr_mobile/src/shared/test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -34,12 +36,15 @@ GoRouter router(Ref ref) {
       // ✅ ShellRoute 밖: 로그인/스플래시 (공통 레이아웃 미적용)
       GoRoute(
         path: RoutePaths.splash,
-        builder: (context, state) => const TestPage(),
+        builder: (context, state) => const SplashView(),
       ),
       GoRoute(
         path: RoutePaths.login,
-        builder: (context, state) =>
-            const Scaffold(body: Center(child: Text('Login Page'))),
+        builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: RoutePaths.signup,
+        builder: (context, state) => const SignupPage(),
       ),
 
       // ✅ ShellRoute 안: 홈 및 내부 페이지 (공통 레이아웃 적용)
@@ -70,7 +75,9 @@ GoRouter router(Ref ref) {
       // [3] 미인증 유저 처리
       if (!isLoggedIn) {
         // 현재 위치가 로그인이나 스플래시가 아니라면 로그인으로 보냄
-        if (location != RoutePaths.login && location != RoutePaths.splash) {
+        if (location != RoutePaths.login &&
+            location != RoutePaths.splash &&
+            location != RoutePaths.signup) {
           return RoutePaths.login;
         }
         return null;
@@ -79,7 +86,9 @@ GoRouter router(Ref ref) {
       // [4] 인증된 유저 처리
       if (isLoggedIn) {
         // 이미 접속 중인 상황에서 로그인이나 스플래시에 머물러 있다면 홈으로 이동
-        if (location == RoutePaths.login || location == RoutePaths.splash) {
+        if (location == RoutePaths.login ||
+            location == RoutePaths.splash ||
+            location == RoutePaths.signup) {
           return RoutePaths.home;
         }
       }
