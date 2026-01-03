@@ -1,0 +1,28 @@
+flavorizr:
+  app:
+    name: "Clyr Mobile"
+
+flavors:
+  dev:
+    app:
+      name: "[DEV] Clyr Mobile"
+    android:
+      applicationId: "com.sunmkim.clyr_mobile.dev"
+    ios:
+      bundleId: "com.sunmkim.clyrMobile.dev"
+
+  stage:
+    app:
+      name: "[STG] Clyr Mobile"
+    android:
+      applicationId: "com.sunmkim.clyr_mobile.stage"
+    ios:
+      bundleId: "com.sunmkim.clyrMobile.stage"
+
+  prod:
+    app:
+      name: "Clyr Mobile"
+    android:
+      applicationId: "com.sunmkim.clyr_mobile"
+    ios:
+      bundleId: "com.sunmkim.clyrMobile"

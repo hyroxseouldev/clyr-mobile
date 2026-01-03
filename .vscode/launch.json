@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Clyr (Dev)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_dev.dart",
+      "args": ["--flavor", "dev"]
+    },
+    {
+      "name": "Clyr (Stage)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_stage.dart",
+      "args": ["--flavor", "stage"]
+    },
+    {
+      "name": "Clyr (Prod)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_prod.dart",
+      "args": ["--flavor", "prod"]
+    }
+  ]
+}

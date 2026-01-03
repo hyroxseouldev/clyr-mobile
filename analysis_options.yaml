@@ -1,0 +1,15 @@
+# 이 파일은 프로젝트 최상단(pubspec.yaml 옆)에 있어야 합니다.
+analyzer:
+  plugins:
+    - custom_lint
+
+# 이렇게 하면 린트가 도는지 확실히 알 수 있습니다.
+linter:
+  rules:
+    - public_member_api_docs: false # 테스트용으로 아무 규칙이나 넣어보세요.
+
+# riverpod_lint 설정 활성화
+custom_lint:
+  rules:
+    - riverpod_final_provider
+    - riverpod_avoid_manual_providers_as_parameter
