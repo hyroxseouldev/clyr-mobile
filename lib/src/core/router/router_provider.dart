@@ -3,7 +3,12 @@ import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/login_page.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/signup_page.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/splash_view.dart';
-import 'package:clyr_mobile/src/feature/settings/view/settings_page.dart';
+import 'package:clyr_mobile/src/feature/auth/presentation/view/user_profile_page.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/view/app_info_page.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/view/membership_page.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/view/purchase_history_page.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/view/terms_of_service_page.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/view/settings_page.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_page.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_start_date_setup_page.dart';
 import 'package:clyr_mobile/src/shared/widgets/main_navigation.dart';
@@ -66,7 +71,29 @@ GoRouter router(Ref ref) {
           ),
           GoRoute(
             path: RoutePaths.settings,
-            builder: (context, state) => const SettingsPage(),
+            builder: (context, state) => const SettingView(),
+            routes: [
+              GoRoute(
+                path: 'profile',
+                builder: (context, state) => const UserProfilePage(),
+              ),
+              GoRoute(
+                path: 'purchase-history',
+                builder: (context, state) => const PurchaseHistoryPage(),
+              ),
+              GoRoute(
+                path: 'membership',
+                builder: (context, state) => const MembershipPage(),
+              ),
+              GoRoute(
+                path: 'terms',
+                builder: (context, state) => const TermsOfServicePage(),
+              ),
+              GoRoute(
+                path: 'app-info',
+                builder: (context, state) => const AppInfoPage(),
+              ),
+            ],
           ),
         ],
       ),

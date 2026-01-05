@@ -2,6 +2,8 @@ import 'package:clyr_mobile/src/core/exception/exception.dart';
 import 'package:clyr_mobile/src/core/typedef/typedef.dart';
 import 'package:clyr_mobile/src/core/usecase/usecase.dart';
 import 'package:clyr_mobile/src/feature/auth/data/user_repository.dart';
+import 'package:clyr_mobile/src/feature/auth/infra/entity/user_profile_entity.dart';
+import 'package:clyr_mobile/src/feature/auth/infra/usecase/user_profile_usecase.dart';
 
 // Params 정의
 typedef LoginParams = ({String email, String password});
@@ -48,11 +50,15 @@ class AuthUseCases {
   final LoginUseCase login;
   final SignupUseCase signup;
   final LogoutUseCase logout;
+  final GetUserProfileUseCase getUserProfile;
+  final UpdateUserProfileUseCase updateUserProfile;
 
   AuthUseCases({
     required this.login,
     required this.signup,
     required this.logout,
+    required this.getUserProfile,
+    required this.updateUserProfile,
   });
 
   factory AuthUseCases.fromRepository(UserRepository repository) {
@@ -60,6 +66,8 @@ class AuthUseCases {
       login: LoginUseCase(repository),
       signup: SignupUseCase(repository),
       logout: LogoutUseCase(repository),
+      getUserProfile: GetUserProfileUseCase(repository),
+      updateUserProfile: UpdateUserProfileUseCase(repository),
     );
   }
 }

@@ -10,8 +10,8 @@ class MainNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
     final currentIndex = switch (location) {
-      '/workout' => 0,
-      '/settings' => 1,
+      final p when p.startsWith('/workout') => 0,
+      final p when p.startsWith('/settings') => 1,
       _ => 0,
     };
 

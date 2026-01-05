@@ -8,20 +8,24 @@ part of 'user_profile_dto.dart';
 
 UserProfileDto _$UserProfileDtoFromJson(Map<String, dynamic> json) =>
     UserProfileDto(
-      accountId: json['accountId'] as String,
-      nickname: json['nickname'] as String,
-      bio: json['bio'] as String,
-      profileImageUrl: json['profileImageUrl'] as String,
-      phoneNumber: json['phoneNumber'] as String,
-      fitnessGoals: (json['fitnessGoals'] as List<dynamic>)
-          .map((e) => e as String)
+      id: json['id'] as String?,
+      accountId: json['accountId'] as String?,
+      nickname: json['nickname'] as String?,
+      bio: json['bio'] as String?,
+      profileImageUrl: json['profileImageUrl'] as String?,
+      phoneNumber: json['phoneNumber'] as String?,
+      fitnessGoals: (json['fitnessGoals'] as List<dynamic>?)
+          ?.map((e) => e as String)
           .toList(),
-      fitnessLevel: json['fitnessLevel'] as String,
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      fitnessLevel: json['fitnessLevel'] as String?,
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
     );
 
 Map<String, dynamic> _$UserProfileDtoToJson(UserProfileDto instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'accountId': instance.accountId,
       'nickname': instance.nickname,
       'bio': instance.bio,
@@ -29,5 +33,5 @@ Map<String, dynamic> _$UserProfileDtoToJson(UserProfileDto instance) =>
       'phoneNumber': instance.phoneNumber,
       'fitnessGoals': instance.fitnessGoals,
       'fitnessLevel': instance.fitnessLevel,
-      'updatedAt': instance.updatedAt.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
     };

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserProfileEntity {
 
- String get accountId; String get nickname; String get bio; String get profileImageUrl; String get phoneNumber; List<String> get fitnessGoals; String get fitnessLevel; DateTime get updatedAt;
+ String? get id; String get accountId; String? get nickname; String? get bio; String? get profileImageUrl; String? get phoneNumber; List<String> get fitnessGoals; FitnessLevel? get fitnessLevel; DateTime? get updatedAt;
 /// Create a copy of UserProfileEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $UserProfileEntityCopyWith<UserProfileEntity> get copyWith => _$UserProfileEntit
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserProfileEntity&&(identical(other.accountId, accountId) || other.accountId == accountId)&&(identical(other.nickname, nickname) || other.nickname == nickname)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.profileImageUrl, profileImageUrl) || other.profileImageUrl == profileImageUrl)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&const DeepCollectionEquality().equals(other.fitnessGoals, fitnessGoals)&&(identical(other.fitnessLevel, fitnessLevel) || other.fitnessLevel == fitnessLevel)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserProfileEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.accountId, accountId) || other.accountId == accountId)&&(identical(other.nickname, nickname) || other.nickname == nickname)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.profileImageUrl, profileImageUrl) || other.profileImageUrl == profileImageUrl)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&const DeepCollectionEquality().equals(other.fitnessGoals, fitnessGoals)&&(identical(other.fitnessLevel, fitnessLevel) || other.fitnessLevel == fitnessLevel)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,accountId,nickname,bio,profileImageUrl,phoneNumber,const DeepCollectionEquality().hash(fitnessGoals),fitnessLevel,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,accountId,nickname,bio,profileImageUrl,phoneNumber,const DeepCollectionEquality().hash(fitnessGoals),fitnessLevel,updatedAt);
 
 @override
 String toString() {
-  return 'UserProfileEntity(accountId: $accountId, nickname: $nickname, bio: $bio, profileImageUrl: $profileImageUrl, phoneNumber: $phoneNumber, fitnessGoals: $fitnessGoals, fitnessLevel: $fitnessLevel, updatedAt: $updatedAt)';
+  return 'UserProfileEntity(id: $id, accountId: $accountId, nickname: $nickname, bio: $bio, profileImageUrl: $profileImageUrl, phoneNumber: $phoneNumber, fitnessGoals: $fitnessGoals, fitnessLevel: $fitnessLevel, updatedAt: $updatedAt)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $UserProfileEntityCopyWith<$Res>  {
   factory $UserProfileEntityCopyWith(UserProfileEntity value, $Res Function(UserProfileEntity) _then) = _$UserProfileEntityCopyWithImpl;
 @useResult
 $Res call({
- String accountId, String nickname, String bio, String profileImageUrl, String phoneNumber, List<String> fitnessGoals, String fitnessLevel, DateTime updatedAt
+ String? id, String accountId, String? nickname, String? bio, String? profileImageUrl, String? phoneNumber, List<String> fitnessGoals, FitnessLevel? fitnessLevel, DateTime? updatedAt
 });
 
 
@@ -62,17 +62,18 @@ class _$UserProfileEntityCopyWithImpl<$Res>
 
 /// Create a copy of UserProfileEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? accountId = null,Object? nickname = null,Object? bio = null,Object? profileImageUrl = null,Object? phoneNumber = null,Object? fitnessGoals = null,Object? fitnessLevel = null,Object? updatedAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? accountId = null,Object? nickname = freezed,Object? bio = freezed,Object? profileImageUrl = freezed,Object? phoneNumber = freezed,Object? fitnessGoals = null,Object? fitnessLevel = freezed,Object? updatedAt = freezed,}) {
   return _then(_self.copyWith(
-accountId: null == accountId ? _self.accountId : accountId // ignore: cast_nullable_to_non_nullable
-as String,nickname: null == nickname ? _self.nickname : nickname // ignore: cast_nullable_to_non_nullable
-as String,bio: null == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
-as String,profileImageUrl: null == profileImageUrl ? _self.profileImageUrl : profileImageUrl // ignore: cast_nullable_to_non_nullable
-as String,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
-as String,fitnessGoals: null == fitnessGoals ? _self.fitnessGoals : fitnessGoals // ignore: cast_nullable_to_non_nullable
-as List<String>,fitnessLevel: null == fitnessLevel ? _self.fitnessLevel : fitnessLevel // ignore: cast_nullable_to_non_nullable
-as String,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,accountId: null == accountId ? _self.accountId : accountId // ignore: cast_nullable_to_non_nullable
+as String,nickname: freezed == nickname ? _self.nickname : nickname // ignore: cast_nullable_to_non_nullable
+as String?,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+as String?,profileImageUrl: freezed == profileImageUrl ? _self.profileImageUrl : profileImageUrl // ignore: cast_nullable_to_non_nullable
+as String?,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String?,fitnessGoals: null == fitnessGoals ? _self.fitnessGoals : fitnessGoals // ignore: cast_nullable_to_non_nullable
+as List<String>,fitnessLevel: freezed == fitnessLevel ? _self.fitnessLevel : fitnessLevel // ignore: cast_nullable_to_non_nullable
+as FitnessLevel?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -157,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String accountId,  String nickname,  String bio,  String profileImageUrl,  String phoneNumber,  List<String> fitnessGoals,  String fitnessLevel,  DateTime updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String accountId,  String? nickname,  String? bio,  String? profileImageUrl,  String? phoneNumber,  List<String> fitnessGoals,  FitnessLevel? fitnessLevel,  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserProfileEntity() when $default != null:
-return $default(_that.accountId,_that.nickname,_that.bio,_that.profileImageUrl,_that.phoneNumber,_that.fitnessGoals,_that.fitnessLevel,_that.updatedAt);case _:
+return $default(_that.id,_that.accountId,_that.nickname,_that.bio,_that.profileImageUrl,_that.phoneNumber,_that.fitnessGoals,_that.fitnessLevel,_that.updatedAt);case _:
   return orElse();
 
 }
@@ -178,10 +179,10 @@ return $default(_that.accountId,_that.nickname,_that.bio,_that.profileImageUrl,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String accountId,  String nickname,  String bio,  String profileImageUrl,  String phoneNumber,  List<String> fitnessGoals,  String fitnessLevel,  DateTime updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String accountId,  String? nickname,  String? bio,  String? profileImageUrl,  String? phoneNumber,  List<String> fitnessGoals,  FitnessLevel? fitnessLevel,  DateTime? updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _UserProfileEntity():
-return $default(_that.accountId,_that.nickname,_that.bio,_that.profileImageUrl,_that.phoneNumber,_that.fitnessGoals,_that.fitnessLevel,_that.updatedAt);case _:
+return $default(_that.id,_that.accountId,_that.nickname,_that.bio,_that.profileImageUrl,_that.phoneNumber,_that.fitnessGoals,_that.fitnessLevel,_that.updatedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +199,10 @@ return $default(_that.accountId,_that.nickname,_that.bio,_that.profileImageUrl,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String accountId,  String nickname,  String bio,  String profileImageUrl,  String phoneNumber,  List<String> fitnessGoals,  String fitnessLevel,  DateTime updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String accountId,  String? nickname,  String? bio,  String? profileImageUrl,  String? phoneNumber,  List<String> fitnessGoals,  FitnessLevel? fitnessLevel,  DateTime? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _UserProfileEntity() when $default != null:
-return $default(_that.accountId,_that.nickname,_that.bio,_that.profileImageUrl,_that.phoneNumber,_that.fitnessGoals,_that.fitnessLevel,_that.updatedAt);case _:
+return $default(_that.id,_that.accountId,_that.nickname,_that.bio,_that.profileImageUrl,_that.phoneNumber,_that.fitnessGoals,_that.fitnessLevel,_that.updatedAt);case _:
   return null;
 
 }
@@ -212,24 +213,25 @@ return $default(_that.accountId,_that.nickname,_that.bio,_that.profileImageUrl,_
 /// @nodoc
 
 
-class _UserProfileEntity implements UserProfileEntity {
-  const _UserProfileEntity({required this.accountId, required this.nickname, required this.bio, required this.profileImageUrl, required this.phoneNumber, required final  List<String> fitnessGoals, required this.fitnessLevel, required this.updatedAt}): _fitnessGoals = fitnessGoals;
+class _UserProfileEntity extends UserProfileEntity {
+  const _UserProfileEntity({this.id, required this.accountId, this.nickname, this.bio, this.profileImageUrl, this.phoneNumber, final  List<String> fitnessGoals = const [], this.fitnessLevel, this.updatedAt}): _fitnessGoals = fitnessGoals,super._();
   
 
+@override final  String? id;
 @override final  String accountId;
-@override final  String nickname;
-@override final  String bio;
-@override final  String profileImageUrl;
-@override final  String phoneNumber;
+@override final  String? nickname;
+@override final  String? bio;
+@override final  String? profileImageUrl;
+@override final  String? phoneNumber;
  final  List<String> _fitnessGoals;
-@override List<String> get fitnessGoals {
+@override@JsonKey() List<String> get fitnessGoals {
   if (_fitnessGoals is EqualUnmodifiableListView) return _fitnessGoals;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_fitnessGoals);
 }
 
-@override final  String fitnessLevel;
-@override final  DateTime updatedAt;
+@override final  FitnessLevel? fitnessLevel;
+@override final  DateTime? updatedAt;
 
 /// Create a copy of UserProfileEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -241,16 +243,16 @@ _$UserProfileEntityCopyWith<_UserProfileEntity> get copyWith => __$UserProfileEn
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserProfileEntity&&(identical(other.accountId, accountId) || other.accountId == accountId)&&(identical(other.nickname, nickname) || other.nickname == nickname)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.profileImageUrl, profileImageUrl) || other.profileImageUrl == profileImageUrl)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&const DeepCollectionEquality().equals(other._fitnessGoals, _fitnessGoals)&&(identical(other.fitnessLevel, fitnessLevel) || other.fitnessLevel == fitnessLevel)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserProfileEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.accountId, accountId) || other.accountId == accountId)&&(identical(other.nickname, nickname) || other.nickname == nickname)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.profileImageUrl, profileImageUrl) || other.profileImageUrl == profileImageUrl)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&const DeepCollectionEquality().equals(other._fitnessGoals, _fitnessGoals)&&(identical(other.fitnessLevel, fitnessLevel) || other.fitnessLevel == fitnessLevel)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,accountId,nickname,bio,profileImageUrl,phoneNumber,const DeepCollectionEquality().hash(_fitnessGoals),fitnessLevel,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,accountId,nickname,bio,profileImageUrl,phoneNumber,const DeepCollectionEquality().hash(_fitnessGoals),fitnessLevel,updatedAt);
 
 @override
 String toString() {
-  return 'UserProfileEntity(accountId: $accountId, nickname: $nickname, bio: $bio, profileImageUrl: $profileImageUrl, phoneNumber: $phoneNumber, fitnessGoals: $fitnessGoals, fitnessLevel: $fitnessLevel, updatedAt: $updatedAt)';
+  return 'UserProfileEntity(id: $id, accountId: $accountId, nickname: $nickname, bio: $bio, profileImageUrl: $profileImageUrl, phoneNumber: $phoneNumber, fitnessGoals: $fitnessGoals, fitnessLevel: $fitnessLevel, updatedAt: $updatedAt)';
 }
 
 
@@ -261,7 +263,7 @@ abstract mixin class _$UserProfileEntityCopyWith<$Res> implements $UserProfileEn
   factory _$UserProfileEntityCopyWith(_UserProfileEntity value, $Res Function(_UserProfileEntity) _then) = __$UserProfileEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String accountId, String nickname, String bio, String profileImageUrl, String phoneNumber, List<String> fitnessGoals, String fitnessLevel, DateTime updatedAt
+ String? id, String accountId, String? nickname, String? bio, String? profileImageUrl, String? phoneNumber, List<String> fitnessGoals, FitnessLevel? fitnessLevel, DateTime? updatedAt
 });
 
 
@@ -278,17 +280,18 @@ class __$UserProfileEntityCopyWithImpl<$Res>
 
 /// Create a copy of UserProfileEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? accountId = null,Object? nickname = null,Object? bio = null,Object? profileImageUrl = null,Object? phoneNumber = null,Object? fitnessGoals = null,Object? fitnessLevel = null,Object? updatedAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? accountId = null,Object? nickname = freezed,Object? bio = freezed,Object? profileImageUrl = freezed,Object? phoneNumber = freezed,Object? fitnessGoals = null,Object? fitnessLevel = freezed,Object? updatedAt = freezed,}) {
   return _then(_UserProfileEntity(
-accountId: null == accountId ? _self.accountId : accountId // ignore: cast_nullable_to_non_nullable
-as String,nickname: null == nickname ? _self.nickname : nickname // ignore: cast_nullable_to_non_nullable
-as String,bio: null == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
-as String,profileImageUrl: null == profileImageUrl ? _self.profileImageUrl : profileImageUrl // ignore: cast_nullable_to_non_nullable
-as String,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
-as String,fitnessGoals: null == fitnessGoals ? _self._fitnessGoals : fitnessGoals // ignore: cast_nullable_to_non_nullable
-as List<String>,fitnessLevel: null == fitnessLevel ? _self.fitnessLevel : fitnessLevel // ignore: cast_nullable_to_non_nullable
-as String,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,accountId: null == accountId ? _self.accountId : accountId // ignore: cast_nullable_to_non_nullable
+as String,nickname: freezed == nickname ? _self.nickname : nickname // ignore: cast_nullable_to_non_nullable
+as String?,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+as String?,profileImageUrl: freezed == profileImageUrl ? _self.profileImageUrl : profileImageUrl // ignore: cast_nullable_to_non_nullable
+as String?,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String?,fitnessGoals: null == fitnessGoals ? _self._fitnessGoals : fitnessGoals // ignore: cast_nullable_to_non_nullable
+as List<String>,fitnessLevel: freezed == fitnessLevel ? _self.fitnessLevel : fitnessLevel // ignore: cast_nullable_to_non_nullable
+as FitnessLevel?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
