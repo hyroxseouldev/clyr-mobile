@@ -6,6 +6,23 @@ part of 'workout_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+ProgramDto _$ProgramDtoFromJson(Map<String, dynamic> json) => ProgramDto(
+  id: json['id'] as String,
+  name: json['name'] as String,
+  thumbnailUrl: json['thumbnail_url'] as String?,
+  description: json['description'] as String?,
+  shortDescription: json['short_description'] as String?,
+);
+
+Map<String, dynamic> _$ProgramDtoToJson(ProgramDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'thumbnail_url': instance.thumbnailUrl,
+      'description': instance.description,
+      'short_description': instance.shortDescription,
+    };
+
 WorkoutDto _$WorkoutDtoFromJson(Map<String, dynamic> json) => WorkoutDto(
   id: json['id'] as String,
   programId: json['program_id'] as String,
@@ -17,6 +34,9 @@ WorkoutDto _$WorkoutDtoFromJson(Map<String, dynamic> json) => WorkoutDto(
   programWeeks: json['programWeeks'] == null
       ? null
       : ProgramWeeksDto.fromJson(json['programWeeks'] as Map<String, dynamic>),
+  program: json['program'] == null
+      ? null
+      : ProgramDto.fromJson(json['program'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$WorkoutDtoToJson(WorkoutDto instance) =>
@@ -29,6 +49,7 @@ Map<String, dynamic> _$WorkoutDtoToJson(WorkoutDto instance) =>
       'content': instance.content,
       'created_at': instance.createdAt.toIso8601String(),
       'programWeeks': instance.programWeeks,
+      'program': instance.program,
     };
 
 ProgramWeeksDto _$ProgramWeeksDtoFromJson(Map<String, dynamic> json) =>

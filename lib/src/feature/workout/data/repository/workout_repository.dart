@@ -24,7 +24,11 @@ abstract interface class WorkoutRepository {
   );
   FutureEither<AppException, DateTime> getStartDate();
   FutureEither<AppException, void> setStartDate(DateTime date);
-  FutureEither<AppException, WorkoutDailyEntity> getWorkoutDaily(DateTime date);
+  FutureEither<AppException, WorkoutDailyEntity> getWorkoutDaily({
+    required DateTime date,
+    required String programId,
+  });
+  FutureEither<AppException, List<ProgramEntity>> getProgramInfo();
 }
 
 class WorkoutRepositoryImpl implements WorkoutRepository {
@@ -32,9 +36,10 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
   WorkoutRepositoryImpl({required this.supabase});
 
   @override
-  FutureEither<AppException, WorkoutDailyEntity> getWorkoutDaily(
-    DateTime date,
-  ) async {
+  FutureEither<AppException, WorkoutDailyEntity> getWorkoutDaily({
+    required DateTime date,
+    required String programId,
+  }) async {
     final userId = supabase.auth.currentUser?.id;
     if (userId == null) {
       return left(
@@ -60,28 +65,28 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
         return right(WorkoutDailyEntity.futureRestricted());
       }
 
-      // 2. enrollment 조회
+      // 2. programId로 enrollment 조회 (단일)
       final enrollmentResult = await supabase
           .from('enrollments')
-          .select('start_date, program_id')
+          .select('start_date, program_id, created_at')
           .eq('user_id', userId)
+          .eq('program_id', programId)
           .eq('status', 'ACTIVE')
           .maybeSingle();
 
-      // enrollment가 없는 경우 (구매한 프로그램 없음)
+      // enrollment가 없는 경우 (구매하지 않은 프로그램)
       if (enrollmentResult == null) {
-        log('getWorkoutDaily: enrollment 레코드 없음 (구매한 프로그램 없음)');
+        log('getWorkoutDaily: enrollment 레코드 없음 (프로그램 미구매)');
         return right(WorkoutDailyEntity.noEnrollment());
       }
 
-      // start_date 또는 program_id가 없는 경우
-      if (enrollmentResult['start_date'] == null ||
-          enrollmentResult['program_id'] == null) {
-        log('getWorkoutDaily: start_date 또는 program_id 없음');
+      // start_date가 없는 경우
+      if (enrollmentResult['start_date'] == null) {
+        log('getWorkoutDaily: start_date 없음');
         return right(WorkoutDailyEntity.noStartDate());
       }
 
-      // 3. 시작 날짜 추출
+      // 시작 날짜 추출
       final enrollmentStartDate = enrollmentResult['start_date'] is String
           ? DateTime.parse(enrollmentResult['start_date'])
           : enrollmentResult['start_date'];
@@ -90,13 +95,12 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
         enrollmentStartDate.month,
         enrollmentStartDate.day,
       );
-      final programId = enrollmentResult['program_id'];
 
       log(
         'getWorkoutDaily: enrollmentStartDate=$enrollmentStartDate, programId=$programId',
       );
 
-      // 4. 시작 날짜 이전 체크
+      // 시작 날짜 이전 체크
       if (targetDateAtMidnight.isBefore(enrollmentStartDateAtMidnight)) {
         log(
           'getWorkoutDaily: 시작 날짜 이전 ($targetDateAtMidnight < $enrollmentStartDateAtMidnight)',
@@ -104,7 +108,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
         return right(WorkoutDailyEntity.beforeStartDate());
       }
 
-      // 5. relativeDayNumber 계산
+      // relativeDayNumber 계산
       final relativeDayNumber =
           targetDateAtMidnight
               .difference(enrollmentStartDateAtMidnight)
@@ -115,7 +119,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
         'getWorkoutDaily: targetDate=$targetDateAtMidnight, relativeDayNumber=$relativeDayNumber',
       );
 
-      // 6. 특정 dayNumber의 워크아웃 조회
+      // 특정 dayNumber의 워크아웃 조회
       final response = await supabase
           .from('workouts')
           .select('''
@@ -126,6 +130,12 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
             title,
             content,
             created_at,
+            programs (
+              id,
+              title,
+              thumbnail_url,
+              description
+            ),
             program_weeks (
               id,
               program_id,
@@ -150,8 +160,9 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
         return right(WorkoutDailyEntity.withStartDate(workout: null));
       }
 
-      // 7. DTO → Entity 변환
+      // DTO → Entity 변환
       final weekData = response['program_weeks'] as Map<String, dynamic>?;
+      final programData = response['programs'] as Map<String, dynamic>?;
       final workoutEntity = WorkoutEntity(
         id: response['id'],
         programId: response['program_id'],
@@ -167,6 +178,14 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
                 weekNumber: weekData['week_number'],
                 title: weekData['title'],
                 description: weekData['description'],
+              )
+            : null,
+        program: programData != null
+            ? ProgramEntity(
+                id: programData['id'],
+                name: programData['title'],
+                thumbnailUrl: programData['thumbnail_url'],
+                description: programData['description'],
               )
             : null,
         sessions: (response['workout_sessions'] as List<dynamic>?)
@@ -190,9 +209,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
 
       log('getWorkoutDaily: 워크아웃 찾음 = ${workoutEntity.title}');
 
-      return right(
-        WorkoutDailyEntity.withStartDate(workout: workoutWithSession),
-      );
+      return right(WorkoutDailyEntity.withStartDate(workout: workoutWithSession));
     } catch (e) {
       log('getWorkoutDaily: 에러 = $e');
       return left(WorkoutException(code: 'unknown', message: e.toString()));
@@ -267,6 +284,52 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       });
       return right(WorkoutEntity.fromDto(WorkoutDto.fromJson(response)));
     } catch (e) {
+      return left(WorkoutException(code: 'unknown', message: e.toString()));
+    }
+  }
+
+  // 내가 현재 가지고 있는 활성화된 enrollments 들의 program 정보를 조회합니다.
+  @override
+  FutureEither<AppException, List<ProgramEntity>> getProgramInfo() async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) {
+      return left(
+        WorkoutException(
+          code: 'not_authenticated',
+          message: 'User not authenticated',
+        ),
+      );
+    }
+    try {
+      // enrollments와 programs를 join하여 program 정보 조회
+      final response = await supabase
+          .from('enrollments')
+          .select('''
+            programs(
+              id,
+              title,
+              thumbnail_url,
+              short_description,
+              description
+            )
+          ''')
+          .eq('user_id', userId);
+
+      // 응답 구조: [{programs: {...}}, ...]
+      final programs = response.map<ProgramEntity>((e) {
+        final programData = e['programs'] as Map<String, dynamic>;
+        return ProgramEntity(
+          id: programData['id'],
+          name: programData['title'], // title → name 매핑
+          thumbnailUrl: programData['thumbnail_url'],
+          description:
+              programData['short_description'] ?? programData['description'],
+        );
+      }).toList();
+
+      return right(programs);
+    } catch (e) {
+      log('getProgramInfo: 에러 = $e');
       return left(WorkoutException(code: 'unknown', message: e.toString()));
     }
   }

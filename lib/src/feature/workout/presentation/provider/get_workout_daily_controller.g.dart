@@ -10,23 +10,23 @@ part of 'get_workout_daily_controller.dart';
 // ignore_for_file: type=lint, type=warning
 /// 특정 날짜의 워크아웃 일일 정보 조회 컨트롤러
 ///
-/// 날짜 파라미터를 받아 해당 날짜의 워크아웃 정보를 반환
+/// 날짜와 프로그램 ID를 받아 해당 프로그램의 enrollment에 대한 워크아웃 정보를 반환
 
 @ProviderFor(GetWorkoutDailyController)
 final getWorkoutDailyControllerProvider = GetWorkoutDailyControllerFamily._();
 
 /// 특정 날짜의 워크아웃 일일 정보 조회 컨트롤러
 ///
-/// 날짜 파라미터를 받아 해당 날짜의 워크아웃 정보를 반환
+/// 날짜와 프로그램 ID를 받아 해당 프로그램의 enrollment에 대한 워크아웃 정보를 반환
 final class GetWorkoutDailyControllerProvider
     extends
         $AsyncNotifierProvider<GetWorkoutDailyController, WorkoutDailyEntity> {
   /// 특정 날짜의 워크아웃 일일 정보 조회 컨트롤러
   ///
-  /// 날짜 파라미터를 받아 해당 날짜의 워크아웃 정보를 반환
+  /// 날짜와 프로그램 ID를 받아 해당 프로그램의 enrollment에 대한 워크아웃 정보를 반환
   GetWorkoutDailyControllerProvider._({
     required GetWorkoutDailyControllerFamily super.from,
-    required DateTime super.argument,
+    required (DateTime, String) super.argument,
   }) : super(
          retry: null,
          name: r'getWorkoutDailyControllerProvider',
@@ -42,7 +42,7 @@ final class GetWorkoutDailyControllerProvider
   String toString() {
     return r'getWorkoutDailyControllerProvider'
         ''
-        '($argument)';
+        '$argument';
   }
 
   @$internal
@@ -62,11 +62,11 @@ final class GetWorkoutDailyControllerProvider
 }
 
 String _$getWorkoutDailyControllerHash() =>
-    r'16c2e6ad0d598906796f3d84e9f8045d611861e2';
+    r'8bdbbe2fb520eb9abc2b91f6a72c1f4a063929ba';
 
 /// 특정 날짜의 워크아웃 일일 정보 조회 컨트롤러
 ///
-/// 날짜 파라미터를 받아 해당 날짜의 워크아웃 정보를 반환
+/// 날짜와 프로그램 ID를 받아 해당 프로그램의 enrollment에 대한 워크아웃 정보를 반환
 
 final class GetWorkoutDailyControllerFamily extends $Family
     with
@@ -75,7 +75,7 @@ final class GetWorkoutDailyControllerFamily extends $Family
           AsyncValue<WorkoutDailyEntity>,
           WorkoutDailyEntity,
           FutureOr<WorkoutDailyEntity>,
-          DateTime
+          (DateTime, String)
         > {
   GetWorkoutDailyControllerFamily._()
     : super(
@@ -88,10 +88,15 @@ final class GetWorkoutDailyControllerFamily extends $Family
 
   /// 특정 날짜의 워크아웃 일일 정보 조회 컨트롤러
   ///
-  /// 날짜 파라미터를 받아 해당 날짜의 워크아웃 정보를 반환
+  /// 날짜와 프로그램 ID를 받아 해당 프로그램의 enrollment에 대한 워크아웃 정보를 반환
 
-  GetWorkoutDailyControllerProvider call(DateTime targetDate) =>
-      GetWorkoutDailyControllerProvider._(argument: targetDate, from: this);
+  GetWorkoutDailyControllerProvider call(
+    DateTime targetDate,
+    String programId,
+  ) => GetWorkoutDailyControllerProvider._(
+    argument: (targetDate, programId),
+    from: this,
+  );
 
   @override
   String toString() => r'getWorkoutDailyControllerProvider';
@@ -99,14 +104,15 @@ final class GetWorkoutDailyControllerFamily extends $Family
 
 /// 특정 날짜의 워크아웃 일일 정보 조회 컨트롤러
 ///
-/// 날짜 파라미터를 받아 해당 날짜의 워크아웃 정보를 반환
+/// 날짜와 프로그램 ID를 받아 해당 프로그램의 enrollment에 대한 워크아웃 정보를 반환
 
 abstract class _$GetWorkoutDailyController
     extends $AsyncNotifier<WorkoutDailyEntity> {
-  late final _$args = ref.$arg as DateTime;
-  DateTime get targetDate => _$args;
+  late final _$args = ref.$arg as (DateTime, String);
+  DateTime get targetDate => _$args.$1;
+  String get programId => _$args.$2;
 
-  FutureOr<WorkoutDailyEntity> build(DateTime targetDate);
+  FutureOr<WorkoutDailyEntity> build(DateTime targetDate, String programId);
   @$mustCallSuper
   @override
   void runBuild() {
@@ -120,6 +126,6 @@ abstract class _$GetWorkoutDailyController
               Object?,
               Object?
             >;
-    element.handleCreate(ref, () => build(_$args));
+    element.handleCreate(ref, () => build(_$args.$1, _$args.$2));
   }
 }

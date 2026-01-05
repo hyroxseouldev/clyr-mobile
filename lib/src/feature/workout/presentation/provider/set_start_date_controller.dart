@@ -11,6 +11,7 @@ class SetStartDateController extends _$SetStartDateController {
 
   Future<void> setStartDate({
     required DateTime date,
+    required String programId,
     required Function() onSuccess,
   }) async {
     state = const AsyncValue.loading();
@@ -18,9 +19,7 @@ class SetStartDateController extends _$SetStartDateController {
       final usecases = ref.read(workoutUseCasesProvider);
       final result = await usecases.setStartDate((date: date));
       return result.fold((l) => throw l, (r) {
-        ref
-            .read(getWorkoutDailyControllerProvider(date).notifier)
-            .refresh(date);
+        ref.invalidate(getWorkoutDailyControllerProvider(date, programId));
         onSuccess();
         return r;
       });

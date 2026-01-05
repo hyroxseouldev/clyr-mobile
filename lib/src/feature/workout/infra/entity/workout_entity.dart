@@ -3,6 +3,28 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'workout_entity.freezed.dart';
 
+/// Program entity (workout program with metadata)
+@freezed
+abstract class ProgramEntity with _$ProgramEntity {
+  const factory ProgramEntity({
+    required String id,
+    required String name,
+    String? thumbnailUrl,
+    String? description,
+    String? shortDescription,
+  }) = _ProgramEntity;
+
+  factory ProgramEntity.fromDto(ProgramDto dto) {
+    return ProgramEntity(
+      id: dto.id,
+      name: dto.name,
+      thumbnailUrl: dto.thumbnailUrl,
+      description: dto.description,
+      shortDescription: dto.shortDescription,
+    );
+  }
+}
+
 /// Workout session entity (detail unit)
 @freezed
 abstract class WorkoutSessionEntity with _$WorkoutSessionEntity {
@@ -38,6 +60,8 @@ abstract class WorkoutEntity with _$WorkoutEntity {
     required DateTime createdAt,
     // Nested week info
     ProgramWeekEntity? programWeek,
+    // Nested program info
+    ProgramEntity? program,
     // Nested sessions (if fetched with nested query)
     List<WorkoutSessionEntity>? sessions,
   }) = _WorkoutEntity;
@@ -52,6 +76,7 @@ abstract class WorkoutEntity with _$WorkoutEntity {
       content: dto.content,
       createdAt: dto.createdAt,
       programWeek: dto.programWeeks?.toEntity(),
+      program: dto.program?.toEntity(),
       sessions: null, // Sessions are nested inside programWeeks.workouts
     );
   }

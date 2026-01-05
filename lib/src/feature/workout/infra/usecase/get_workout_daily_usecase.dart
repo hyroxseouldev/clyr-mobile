@@ -14,9 +14,15 @@ class GetWorkoutDailyUseCase
   FutureEither<AppException, WorkoutDailyEntity> call(
     GetWorkoutDailyParams input,
   ) async {
-    return await _repository.getWorkoutDaily(input.targetDate);
+    return await _repository.getWorkoutDaily(
+      date: input.targetDate,
+      programId: input.programId,
+    );
   }
 }
 
 /// GetWorkoutDailyUseCase 파라미터
-typedef GetWorkoutDailyParams = ({DateTime targetDate});
+typedef GetWorkoutDailyParams = ({
+  DateTime targetDate,
+  String programId,
+});

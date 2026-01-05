@@ -12,6 +12,275 @@ part of 'workout_entity.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
+mixin _$ProgramEntity {
+
+ String get id; String get name; String? get thumbnailUrl; String? get description; String? get shortDescription;
+/// Create a copy of ProgramEntity
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ProgramEntityCopyWith<ProgramEntity> get copyWith => _$ProgramEntityCopyWithImpl<ProgramEntity>(this as ProgramEntity, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProgramEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.description, description) || other.description == description)&&(identical(other.shortDescription, shortDescription) || other.shortDescription == shortDescription));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id,name,thumbnailUrl,description,shortDescription);
+
+@override
+String toString() {
+  return 'ProgramEntity(id: $id, name: $name, thumbnailUrl: $thumbnailUrl, description: $description, shortDescription: $shortDescription)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ProgramEntityCopyWith<$Res>  {
+  factory $ProgramEntityCopyWith(ProgramEntity value, $Res Function(ProgramEntity) _then) = _$ProgramEntityCopyWithImpl;
+@useResult
+$Res call({
+ String id, String name, String? thumbnailUrl, String? description, String? shortDescription
+});
+
+
+
+
+}
+/// @nodoc
+class _$ProgramEntityCopyWithImpl<$Res>
+    implements $ProgramEntityCopyWith<$Res> {
+  _$ProgramEntityCopyWithImpl(this._self, this._then);
+
+  final ProgramEntity _self;
+  final $Res Function(ProgramEntity) _then;
+
+/// Create a copy of ProgramEntity
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? thumbnailUrl = freezed,Object? description = freezed,Object? shortDescription = freezed,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,thumbnailUrl: freezed == thumbnailUrl ? _self.thumbnailUrl : thumbnailUrl // ignore: cast_nullable_to_non_nullable
+as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,shortDescription: freezed == shortDescription ? _self.shortDescription : shortDescription // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [ProgramEntity].
+extension ProgramEntityPatterns on ProgramEntity {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ProgramEntity value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _ProgramEntity() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ProgramEntity value)  $default,){
+final _that = this;
+switch (_that) {
+case _ProgramEntity():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ProgramEntity value)?  $default,){
+final _that = this;
+switch (_that) {
+case _ProgramEntity() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String? thumbnailUrl,  String? description,  String? shortDescription)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _ProgramEntity() when $default != null:
+return $default(_that.id,_that.name,_that.thumbnailUrl,_that.description,_that.shortDescription);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String? thumbnailUrl,  String? description,  String? shortDescription)  $default,) {final _that = this;
+switch (_that) {
+case _ProgramEntity():
+return $default(_that.id,_that.name,_that.thumbnailUrl,_that.description,_that.shortDescription);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String? thumbnailUrl,  String? description,  String? shortDescription)?  $default,) {final _that = this;
+switch (_that) {
+case _ProgramEntity() when $default != null:
+return $default(_that.id,_that.name,_that.thumbnailUrl,_that.description,_that.shortDescription);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _ProgramEntity implements ProgramEntity {
+  const _ProgramEntity({required this.id, required this.name, this.thumbnailUrl, this.description, this.shortDescription});
+  
+
+@override final  String id;
+@override final  String name;
+@override final  String? thumbnailUrl;
+@override final  String? description;
+@override final  String? shortDescription;
+
+/// Create a copy of ProgramEntity
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ProgramEntityCopyWith<_ProgramEntity> get copyWith => __$ProgramEntityCopyWithImpl<_ProgramEntity>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProgramEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.description, description) || other.description == description)&&(identical(other.shortDescription, shortDescription) || other.shortDescription == shortDescription));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id,name,thumbnailUrl,description,shortDescription);
+
+@override
+String toString() {
+  return 'ProgramEntity(id: $id, name: $name, thumbnailUrl: $thumbnailUrl, description: $description, shortDescription: $shortDescription)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ProgramEntityCopyWith<$Res> implements $ProgramEntityCopyWith<$Res> {
+  factory _$ProgramEntityCopyWith(_ProgramEntity value, $Res Function(_ProgramEntity) _then) = __$ProgramEntityCopyWithImpl;
+@override @useResult
+$Res call({
+ String id, String name, String? thumbnailUrl, String? description, String? shortDescription
+});
+
+
+
+
+}
+/// @nodoc
+class __$ProgramEntityCopyWithImpl<$Res>
+    implements _$ProgramEntityCopyWith<$Res> {
+  __$ProgramEntityCopyWithImpl(this._self, this._then);
+
+  final _ProgramEntity _self;
+  final $Res Function(_ProgramEntity) _then;
+
+/// Create a copy of ProgramEntity
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? thumbnailUrl = freezed,Object? description = freezed,Object? shortDescription = freezed,}) {
+  return _then(_ProgramEntity(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,thumbnailUrl: freezed == thumbnailUrl ? _self.thumbnailUrl : thumbnailUrl // ignore: cast_nullable_to_non_nullable
+as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,shortDescription: freezed == shortDescription ? _self.shortDescription : shortDescription // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+/// @nodoc
 mixin _$WorkoutSessionEntity {
 
  String get id; String get workoutId; String get title; String? get content; int get orderIndex;
@@ -284,7 +553,8 @@ as int,
 mixin _$WorkoutEntity {
 
  String get id; String get programId; String get weekId; int get dayNumber; String get title; String? get content; DateTime get createdAt;// Nested week info
- ProgramWeekEntity? get programWeek;// Nested sessions (if fetched with nested query)
+ ProgramWeekEntity? get programWeek;// Nested program info
+ ProgramEntity? get program;// Nested sessions (if fetched with nested query)
  List<WorkoutSessionEntity>? get sessions;
 /// Create a copy of WorkoutEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -296,16 +566,16 @@ $WorkoutEntityCopyWith<WorkoutEntity> get copyWith => _$WorkoutEntityCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WorkoutEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.programId, programId) || other.programId == programId)&&(identical(other.weekId, weekId) || other.weekId == weekId)&&(identical(other.dayNumber, dayNumber) || other.dayNumber == dayNumber)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.programWeek, programWeek) || other.programWeek == programWeek)&&const DeepCollectionEquality().equals(other.sessions, sessions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WorkoutEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.programId, programId) || other.programId == programId)&&(identical(other.weekId, weekId) || other.weekId == weekId)&&(identical(other.dayNumber, dayNumber) || other.dayNumber == dayNumber)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.programWeek, programWeek) || other.programWeek == programWeek)&&(identical(other.program, program) || other.program == program)&&const DeepCollectionEquality().equals(other.sessions, sessions));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,programId,weekId,dayNumber,title,content,createdAt,programWeek,const DeepCollectionEquality().hash(sessions));
+int get hashCode => Object.hash(runtimeType,id,programId,weekId,dayNumber,title,content,createdAt,programWeek,program,const DeepCollectionEquality().hash(sessions));
 
 @override
 String toString() {
-  return 'WorkoutEntity(id: $id, programId: $programId, weekId: $weekId, dayNumber: $dayNumber, title: $title, content: $content, createdAt: $createdAt, programWeek: $programWeek, sessions: $sessions)';
+  return 'WorkoutEntity(id: $id, programId: $programId, weekId: $weekId, dayNumber: $dayNumber, title: $title, content: $content, createdAt: $createdAt, programWeek: $programWeek, program: $program, sessions: $sessions)';
 }
 
 
@@ -316,11 +586,11 @@ abstract mixin class $WorkoutEntityCopyWith<$Res>  {
   factory $WorkoutEntityCopyWith(WorkoutEntity value, $Res Function(WorkoutEntity) _then) = _$WorkoutEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, String programId, String weekId, int dayNumber, String title, String? content, DateTime createdAt, ProgramWeekEntity? programWeek, List<WorkoutSessionEntity>? sessions
+ String id, String programId, String weekId, int dayNumber, String title, String? content, DateTime createdAt, ProgramWeekEntity? programWeek, ProgramEntity? program, List<WorkoutSessionEntity>? sessions
 });
 
 
-$ProgramWeekEntityCopyWith<$Res>? get programWeek;
+$ProgramWeekEntityCopyWith<$Res>? get programWeek;$ProgramEntityCopyWith<$Res>? get program;
 
 }
 /// @nodoc
@@ -333,7 +603,7 @@ class _$WorkoutEntityCopyWithImpl<$Res>
 
 /// Create a copy of WorkoutEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? programId = null,Object? weekId = null,Object? dayNumber = null,Object? title = null,Object? content = freezed,Object? createdAt = null,Object? programWeek = freezed,Object? sessions = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? programId = null,Object? weekId = null,Object? dayNumber = null,Object? title = null,Object? content = freezed,Object? createdAt = null,Object? programWeek = freezed,Object? program = freezed,Object? sessions = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,programId: null == programId ? _self.programId : programId // ignore: cast_nullable_to_non_nullable
@@ -343,7 +613,8 @@ as int,title: null == title ? _self.title : title // ignore: cast_nullable_to_no
 as String,content: freezed == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,programWeek: freezed == programWeek ? _self.programWeek : programWeek // ignore: cast_nullable_to_non_nullable
-as ProgramWeekEntity?,sessions: freezed == sessions ? _self.sessions : sessions // ignore: cast_nullable_to_non_nullable
+as ProgramWeekEntity?,program: freezed == program ? _self.program : program // ignore: cast_nullable_to_non_nullable
+as ProgramEntity?,sessions: freezed == sessions ? _self.sessions : sessions // ignore: cast_nullable_to_non_nullable
 as List<WorkoutSessionEntity>?,
   ));
 }
@@ -358,6 +629,18 @@ $ProgramWeekEntityCopyWith<$Res>? get programWeek {
 
   return $ProgramWeekEntityCopyWith<$Res>(_self.programWeek!, (value) {
     return _then(_self.copyWith(programWeek: value));
+  });
+}/// Create a copy of WorkoutEntity
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProgramEntityCopyWith<$Res>? get program {
+    if (_self.program == null) {
+    return null;
+  }
+
+  return $ProgramEntityCopyWith<$Res>(_self.program!, (value) {
+    return _then(_self.copyWith(program: value));
   });
 }
 }
@@ -441,10 +724,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String programId,  String weekId,  int dayNumber,  String title,  String? content,  DateTime createdAt,  ProgramWeekEntity? programWeek,  List<WorkoutSessionEntity>? sessions)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String programId,  String weekId,  int dayNumber,  String title,  String? content,  DateTime createdAt,  ProgramWeekEntity? programWeek,  ProgramEntity? program,  List<WorkoutSessionEntity>? sessions)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _WorkoutEntity() when $default != null:
-return $default(_that.id,_that.programId,_that.weekId,_that.dayNumber,_that.title,_that.content,_that.createdAt,_that.programWeek,_that.sessions);case _:
+return $default(_that.id,_that.programId,_that.weekId,_that.dayNumber,_that.title,_that.content,_that.createdAt,_that.programWeek,_that.program,_that.sessions);case _:
   return orElse();
 
 }
@@ -462,10 +745,10 @@ return $default(_that.id,_that.programId,_that.weekId,_that.dayNumber,_that.titl
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String programId,  String weekId,  int dayNumber,  String title,  String? content,  DateTime createdAt,  ProgramWeekEntity? programWeek,  List<WorkoutSessionEntity>? sessions)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String programId,  String weekId,  int dayNumber,  String title,  String? content,  DateTime createdAt,  ProgramWeekEntity? programWeek,  ProgramEntity? program,  List<WorkoutSessionEntity>? sessions)  $default,) {final _that = this;
 switch (_that) {
 case _WorkoutEntity():
-return $default(_that.id,_that.programId,_that.weekId,_that.dayNumber,_that.title,_that.content,_that.createdAt,_that.programWeek,_that.sessions);case _:
+return $default(_that.id,_that.programId,_that.weekId,_that.dayNumber,_that.title,_that.content,_that.createdAt,_that.programWeek,_that.program,_that.sessions);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -482,10 +765,10 @@ return $default(_that.id,_that.programId,_that.weekId,_that.dayNumber,_that.titl
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String programId,  String weekId,  int dayNumber,  String title,  String? content,  DateTime createdAt,  ProgramWeekEntity? programWeek,  List<WorkoutSessionEntity>? sessions)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String programId,  String weekId,  int dayNumber,  String title,  String? content,  DateTime createdAt,  ProgramWeekEntity? programWeek,  ProgramEntity? program,  List<WorkoutSessionEntity>? sessions)?  $default,) {final _that = this;
 switch (_that) {
 case _WorkoutEntity() when $default != null:
-return $default(_that.id,_that.programId,_that.weekId,_that.dayNumber,_that.title,_that.content,_that.createdAt,_that.programWeek,_that.sessions);case _:
+return $default(_that.id,_that.programId,_that.weekId,_that.dayNumber,_that.title,_that.content,_that.createdAt,_that.programWeek,_that.program,_that.sessions);case _:
   return null;
 
 }
@@ -497,7 +780,7 @@ return $default(_that.id,_that.programId,_that.weekId,_that.dayNumber,_that.titl
 
 
 class _WorkoutEntity implements WorkoutEntity {
-  const _WorkoutEntity({required this.id, required this.programId, required this.weekId, required this.dayNumber, required this.title, this.content, required this.createdAt, this.programWeek, final  List<WorkoutSessionEntity>? sessions}): _sessions = sessions;
+  const _WorkoutEntity({required this.id, required this.programId, required this.weekId, required this.dayNumber, required this.title, this.content, required this.createdAt, this.programWeek, this.program, final  List<WorkoutSessionEntity>? sessions}): _sessions = sessions;
   
 
 @override final  String id;
@@ -509,6 +792,8 @@ class _WorkoutEntity implements WorkoutEntity {
 @override final  DateTime createdAt;
 // Nested week info
 @override final  ProgramWeekEntity? programWeek;
+// Nested program info
+@override final  ProgramEntity? program;
 // Nested sessions (if fetched with nested query)
  final  List<WorkoutSessionEntity>? _sessions;
 // Nested sessions (if fetched with nested query)
@@ -531,16 +816,16 @@ _$WorkoutEntityCopyWith<_WorkoutEntity> get copyWith => __$WorkoutEntityCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WorkoutEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.programId, programId) || other.programId == programId)&&(identical(other.weekId, weekId) || other.weekId == weekId)&&(identical(other.dayNumber, dayNumber) || other.dayNumber == dayNumber)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.programWeek, programWeek) || other.programWeek == programWeek)&&const DeepCollectionEquality().equals(other._sessions, _sessions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WorkoutEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.programId, programId) || other.programId == programId)&&(identical(other.weekId, weekId) || other.weekId == weekId)&&(identical(other.dayNumber, dayNumber) || other.dayNumber == dayNumber)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.programWeek, programWeek) || other.programWeek == programWeek)&&(identical(other.program, program) || other.program == program)&&const DeepCollectionEquality().equals(other._sessions, _sessions));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,programId,weekId,dayNumber,title,content,createdAt,programWeek,const DeepCollectionEquality().hash(_sessions));
+int get hashCode => Object.hash(runtimeType,id,programId,weekId,dayNumber,title,content,createdAt,programWeek,program,const DeepCollectionEquality().hash(_sessions));
 
 @override
 String toString() {
-  return 'WorkoutEntity(id: $id, programId: $programId, weekId: $weekId, dayNumber: $dayNumber, title: $title, content: $content, createdAt: $createdAt, programWeek: $programWeek, sessions: $sessions)';
+  return 'WorkoutEntity(id: $id, programId: $programId, weekId: $weekId, dayNumber: $dayNumber, title: $title, content: $content, createdAt: $createdAt, programWeek: $programWeek, program: $program, sessions: $sessions)';
 }
 
 
@@ -551,11 +836,11 @@ abstract mixin class _$WorkoutEntityCopyWith<$Res> implements $WorkoutEntityCopy
   factory _$WorkoutEntityCopyWith(_WorkoutEntity value, $Res Function(_WorkoutEntity) _then) = __$WorkoutEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String programId, String weekId, int dayNumber, String title, String? content, DateTime createdAt, ProgramWeekEntity? programWeek, List<WorkoutSessionEntity>? sessions
+ String id, String programId, String weekId, int dayNumber, String title, String? content, DateTime createdAt, ProgramWeekEntity? programWeek, ProgramEntity? program, List<WorkoutSessionEntity>? sessions
 });
 
 
-@override $ProgramWeekEntityCopyWith<$Res>? get programWeek;
+@override $ProgramWeekEntityCopyWith<$Res>? get programWeek;@override $ProgramEntityCopyWith<$Res>? get program;
 
 }
 /// @nodoc
@@ -568,7 +853,7 @@ class __$WorkoutEntityCopyWithImpl<$Res>
 
 /// Create a copy of WorkoutEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? programId = null,Object? weekId = null,Object? dayNumber = null,Object? title = null,Object? content = freezed,Object? createdAt = null,Object? programWeek = freezed,Object? sessions = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? programId = null,Object? weekId = null,Object? dayNumber = null,Object? title = null,Object? content = freezed,Object? createdAt = null,Object? programWeek = freezed,Object? program = freezed,Object? sessions = freezed,}) {
   return _then(_WorkoutEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,programId: null == programId ? _self.programId : programId // ignore: cast_nullable_to_non_nullable
@@ -578,7 +863,8 @@ as int,title: null == title ? _self.title : title // ignore: cast_nullable_to_no
 as String,content: freezed == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,programWeek: freezed == programWeek ? _self.programWeek : programWeek // ignore: cast_nullable_to_non_nullable
-as ProgramWeekEntity?,sessions: freezed == sessions ? _self._sessions : sessions // ignore: cast_nullable_to_non_nullable
+as ProgramWeekEntity?,program: freezed == program ? _self.program : program // ignore: cast_nullable_to_non_nullable
+as ProgramEntity?,sessions: freezed == sessions ? _self._sessions : sessions // ignore: cast_nullable_to_non_nullable
 as List<WorkoutSessionEntity>?,
   ));
 }
@@ -594,6 +880,18 @@ $ProgramWeekEntityCopyWith<$Res>? get programWeek {
 
   return $ProgramWeekEntityCopyWith<$Res>(_self.programWeek!, (value) {
     return _then(_self.copyWith(programWeek: value));
+  });
+}/// Create a copy of WorkoutEntity
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProgramEntityCopyWith<$Res>? get program {
+    if (_self.program == null) {
+    return null;
+  }
+
+  return $ProgramEntityCopyWith<$Res>(_self.program!, (value) {
+    return _then(_self.copyWith(program: value));
   });
 }
 }

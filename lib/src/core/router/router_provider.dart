@@ -9,6 +9,7 @@ import 'package:clyr_mobile/src/feature/settings/presentation/view/membership_vi
 import 'package:clyr_mobile/src/feature/settings/presentation/view/purchase_history_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/terms_of_service_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/settings_view.dart';
+import 'package:clyr_mobile/src/feature/workout/presentation/view/program_detail_view.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_view.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_start_date_setup_view.dart';
 import 'package:clyr_mobile/src/shared/widgets/main_navigation.dart';
@@ -64,8 +65,24 @@ GoRouter router(Ref ref) {
             builder: (context, state) => const WorkoutView(),
             routes: [
               GoRoute(
-                path: 'start-date-setup',
-                builder: (context, state) => const WorkoutStartDateSetupView(),
+                path: 'program/:id',
+                builder: (context, state) {
+                  final programId = state.pathParameters['id']!;
+                  final workoutId = state.uri.queryParameters['workoutId'];
+                  return ProgramDetailView(
+                    programId: programId,
+                    workoutId: workoutId,
+                  );
+                },
+                routes: [
+                  GoRoute(
+                    path: 'start-date-setup',
+                    builder: (context, state) {
+                      final programId = state.pathParameters['id']!;
+                      return WorkoutStartDateSetupView(programId: programId);
+                    },
+                  ),
+                ],
               ),
             ],
           ),

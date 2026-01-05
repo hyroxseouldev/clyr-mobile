@@ -1,4 +1,5 @@
 import 'package:clyr_mobile/src/core/router/router_path.dart';
+import 'package:clyr_mobile/src/feature/workout/presentation/provider/get_workout_daily_controller.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/provider/set_start_date_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -7,7 +8,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 
 class WorkoutStartDateSetupView extends HookConsumerWidget {
-  const WorkoutStartDateSetupView({super.key});
+  const WorkoutStartDateSetupView({super.key, required this.programId});
+  final String programId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,6 +44,7 @@ class WorkoutStartDateSetupView extends HookConsumerWidget {
           .read(setStartDateControllerProvider.notifier)
           .setStartDate(
             date: dateAtMidnight,
+            programId: programId,
             onSuccess: () {
               if (context.mounted) {
                 context.go(RoutePaths.workout);

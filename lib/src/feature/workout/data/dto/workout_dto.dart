@@ -3,6 +3,32 @@ import 'package:clyr_mobile/src/feature/workout/infra/entity/workout_entity.dart
 
 part 'workout_dto.g.dart';
 
+// Program DTO (from programs table)
+@JsonSerializable()
+class ProgramDto {
+  final String id;
+  final String name;
+  @JsonKey(name: 'thumbnail_url')
+  final String? thumbnailUrl;
+  final String? description;
+  @JsonKey(name: 'short_description')
+  final String? shortDescription;
+
+  ProgramDto({
+    required this.id,
+    required this.name,
+    this.thumbnailUrl,
+    this.description,
+    this.shortDescription,
+  });
+
+  factory ProgramDto.fromJson(Map<String, dynamic> json) =>
+      _$ProgramDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$ProgramDtoToJson(this);
+
+  ProgramEntity toEntity() => ProgramEntity.fromDto(this);
+}
+
 // Main DTO for workouts with nested week and sessions
 @JsonSerializable()
 class WorkoutDto {
@@ -21,6 +47,9 @@ class WorkoutDto {
   // Nested program week info (from query)
   final ProgramWeeksDto? programWeeks;
 
+  // Nested program info (from query)
+  final ProgramDto? program;
+
   WorkoutDto({
     required this.id,
     required this.programId,
@@ -30,6 +59,7 @@ class WorkoutDto {
     this.content,
     required this.createdAt,
     this.programWeeks,
+    this.program,
   });
 
   factory WorkoutDto.fromJson(Map<String, dynamic> json) =>
