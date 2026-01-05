@@ -7,6 +7,7 @@ import 'package:clyr_mobile/src/feature/workout/presentation/widget/session_card
 import 'package:clyr_mobile/src/shared/async_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -68,7 +69,9 @@ class ProgramDetailView extends HookConsumerWidget {
                 }
 
                 // 워크아웃 상세
-                return _buildWorkoutCard(context, daily.workout!);
+                return SingleChildScrollView(
+                  child: _buildWorkoutCard(context, daily.workout!),
+                );
               },
             ),
           ),
@@ -259,7 +262,8 @@ class ProgramDetailView extends HookConsumerWidget {
     WorkoutWithSession workoutWithSession,
   ) {
     final workout = workoutWithSession.workout;
-    final sessions = workoutWithSession.sessions;
+    final sessions = [...workoutWithSession.sessions]
+      ..sort((a, b) => a.orderIndex.compareTo(b.orderIndex));
     final dayNumber = workoutWithSession.relativeDayNumber;
 
     return Card(
@@ -326,6 +330,7 @@ class ProgramDetailView extends HookConsumerWidget {
                 child: Text('등록된 세션이 없습니다.', style: TextStyle(fontSize: 14)),
               )
             else
+              // indexing ordering
               ...sessions.map(
                 (session) => SessionCard(session: session, compact: true),
               ),
