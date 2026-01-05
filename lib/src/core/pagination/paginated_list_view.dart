@@ -40,6 +40,7 @@ class PaginatedData<T> {
 ///   hasMore: data.hasMore,
 ///   isLoading: data.isLoading,
 ///   onLoadMore: () => ref.read(provider.notifier).loadNext(),
+///   onRefresh: () => ref.read(provider.notifier).refresh(),
 ///   itemBuilder: (context, item, index) => ItemCard(item: item),
 /// )
 /// ```
@@ -49,6 +50,7 @@ class PaginatedListView<T> extends HookWidget {
   final bool isLoading;
   final Object? error;
   final VoidCallback onLoadMore;
+  final Future<void> Function()? onRefresh;
   final Widget Function(BuildContext context, T item, int index) itemBuilder;
   final Widget Function(BuildContext context, int index)? separatorBuilder;
   final Widget Function(BuildContext context)? headerBuilder;
@@ -65,6 +67,7 @@ class PaginatedListView<T> extends HookWidget {
     required this.hasMore,
     required this.isLoading,
     required this.onLoadMore,
+    this.onRefresh,
     required this.itemBuilder,
     this.error,
     this.separatorBuilder,
@@ -120,7 +123,7 @@ class PaginatedListView<T> extends HookWidget {
 
     // 데이터 표시
     return RefreshIndicator(
-      onRefresh: () async => onLoadMore(),
+      onRefresh: onRefresh ?? () async => onLoadMore(),
       child: ListView.separated(
         controller: scrollController,
         physics: physics,
