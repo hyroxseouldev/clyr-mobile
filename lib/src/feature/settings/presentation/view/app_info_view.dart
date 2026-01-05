@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class TermsOfServicePage extends StatelessWidget {
-  const TermsOfServicePage({super.key});
+class AppInfoView extends StatelessWidget {
+  const AppInfoView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('약관'),
+        title: const Text('앱정보'),
       ),
       body: const Center(
-        child: Text('약관 페이지 - 준비 중'),
+        child: Text('앱정보 - 준비 중'),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PurchaseHistoryPage extends StatelessWidget {
-  const PurchaseHistoryPage({super.key});
+class PurchaseHistoryView extends StatelessWidget {
+  const PurchaseHistoryView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class PurchaseHistoryPage extends StatelessWidget {
         title: const Text('구매내역'),
       ),
       body: const Center(
-        child: Text('구매내역 페이지 - 준비 중'),
+        child: Text('구매내역 - 준비 중'),
       ),
     );
   }

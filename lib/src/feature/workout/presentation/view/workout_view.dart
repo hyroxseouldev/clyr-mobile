@@ -9,8 +9,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 
-class WorkoutPage extends HookConsumerWidget {
-  const WorkoutPage({super.key});
+class WorkoutView extends HookConsumerWidget {
+  const WorkoutView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -15,7 +15,7 @@
 ### Presentation Layer
 
 - 모든 디렉토리와 파일명은 소문자와 언더스코어(snake_case)를 사용합니다.
-- 모든 화면(Page/Screen) 단위의 파일은 \_view.dart 접미사를 사용합니다.
+- 모든 화면(Page/Screen) 단위의 파일은 \_view.dart 접미사를 사용합니다. 클래스명은 View 를 사용합니다.
 - 단순 컴포넌트는 **\_widget.dart**를 사용하여 View와 위젯의 위계를 분리합니다.
 
 ## 이는 라우팅(Routing) 설정 시 어떤 파일이 실제 화면인지 빠르게 식별하기 위함입니다.

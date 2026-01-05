@@ -7,8 +7,8 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class SignupPage extends HookConsumerWidget {
-  const SignupPage({super.key});
+class SignupView extends HookConsumerWidget {
+  const SignupView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

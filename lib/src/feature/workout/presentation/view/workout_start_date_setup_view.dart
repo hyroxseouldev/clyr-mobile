@@ -6,8 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 
-class WorkoutStartDateSetupPage extends HookConsumerWidget {
-  const WorkoutStartDateSetupPage({super.key});
+class WorkoutStartDateSetupView extends HookConsumerWidget {
+  const WorkoutStartDateSetupView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

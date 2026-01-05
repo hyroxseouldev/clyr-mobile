@@ -1,16 +1,16 @@
 import 'package:clyr_mobile/src/core/router/session_provider.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
-import 'package:clyr_mobile/src/feature/auth/presentation/view/login_page.dart';
-import 'package:clyr_mobile/src/feature/auth/presentation/view/signup_page.dart';
+import 'package:clyr_mobile/src/feature/auth/presentation/view/login_view.dart';
+import 'package:clyr_mobile/src/feature/auth/presentation/view/signup_view.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/splash_view.dart';
-import 'package:clyr_mobile/src/feature/auth/presentation/view/user_profile_page.dart';
-import 'package:clyr_mobile/src/feature/settings/presentation/view/app_info_page.dart';
-import 'package:clyr_mobile/src/feature/settings/presentation/view/membership_page.dart';
-import 'package:clyr_mobile/src/feature/settings/presentation/view/purchase_history_page.dart';
-import 'package:clyr_mobile/src/feature/settings/presentation/view/terms_of_service_page.dart';
-import 'package:clyr_mobile/src/feature/settings/presentation/view/settings_page.dart';
-import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_page.dart';
-import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_start_date_setup_page.dart';
+import 'package:clyr_mobile/src/feature/auth/presentation/view/user_profile_view.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/view/app_info_view.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/view/membership_view.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/view/purchase_history_view.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/view/terms_of_service_view.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/view/settings_view.dart';
+import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_view.dart';
+import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_start_date_setup_view.dart';
 import 'package:clyr_mobile/src/shared/widgets/main_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -48,11 +48,11 @@ GoRouter router(Ref ref) {
       ),
       GoRoute(
         path: RoutePaths.login,
-        builder: (context, state) => const LoginPage(),
+        builder: (context, state) => const LoginView(),
       ),
       GoRoute(
         path: RoutePaths.signup,
-        builder: (context, state) => const SignupPage(),
+        builder: (context, state) => const SignupView(),
       ),
 
       // ✅ ShellRoute: 바텀 네비게이션
@@ -61,11 +61,11 @@ GoRouter router(Ref ref) {
         routes: [
           GoRoute(
             path: RoutePaths.workout,
-            builder: (context, state) => const WorkoutPage(),
+            builder: (context, state) => const WorkoutView(),
             routes: [
               GoRoute(
                 path: 'start-date-setup',
-                builder: (context, state) => const WorkoutStartDateSetupPage(),
+                builder: (context, state) => const WorkoutStartDateSetupView(),
               ),
             ],
           ),
@@ -75,23 +75,23 @@ GoRouter router(Ref ref) {
             routes: [
               GoRoute(
                 path: 'profile',
-                builder: (context, state) => const UserProfilePage(),
+                builder: (context, state) => const UserProfileView(),
               ),
               GoRoute(
                 path: 'purchase-history',
-                builder: (context, state) => const PurchaseHistoryPage(),
+                builder: (context, state) => const PurchaseHistoryView(),
               ),
               GoRoute(
                 path: 'membership',
-                builder: (context, state) => const MembershipPage(),
+                builder: (context, state) => const MembershipView(),
               ),
               GoRoute(
                 path: 'terms',
-                builder: (context, state) => const TermsOfServicePage(),
+                builder: (context, state) => const TermsOfServiceView(),
               ),
               GoRoute(
                 path: 'app-info',
-                builder: (context, state) => const AppInfoPage(),
+                builder: (context, state) => const AppInfoView(),
               ),
             ],
           ),
