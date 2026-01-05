@@ -1,4 +1,5 @@
 import 'package:clyr_mobile/src/core/pagination/paginated_list_view.dart';
+import 'package:clyr_mobile/src/core/typedef/typedef.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/entity/enrollment_entity.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/usecase/setting_usecase_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -47,12 +48,14 @@ class EnrollmentsController extends _$EnrollmentsController {
     });
   }
 
-  Future<PaginatedData<EnrollmentEntity>> _fetchEnrollments(
-      {required int page}) async {
+  Future<PaginatedData<EnrollmentEntity>> _fetchEnrollments({
+    required int page,
+  }) async {
     final usecases = ref.read(settingUseCasesProvider);
-    final result = await usecases.getEnrollments(
-      (page: page, limit: _pageSize),
-    );
+    final result = await usecases.getEnrollments((
+      page: page,
+      limit: _pageSize,
+    ));
 
     return result.fold((l) => throw l, (enrollments) {
       _currentPage = page;
