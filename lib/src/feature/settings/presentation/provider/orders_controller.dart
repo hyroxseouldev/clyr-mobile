@@ -1,5 +1,4 @@
 import 'package:clyr_mobile/src/core/pagination/paginated_list_view.dart';
-import 'package:clyr_mobile/src/core/typedef/typedef.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/entity/order_entity.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/usecase/setting_usecase_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -50,8 +49,7 @@ class OrdersController extends _$OrdersController {
 
   Future<PaginatedData<OrderEntity>> _fetchOrders({required int page}) async {
     final usecases = ref.read(settingUseCasesProvider);
-    final result =
-        await usecases.getOrders((page: page, limit: _pageSize));
+    final result = await usecases.getOrders((page: page, limit: _pageSize));
 
     return result.fold((l) => throw l, (orders) {
       _currentPage = page;

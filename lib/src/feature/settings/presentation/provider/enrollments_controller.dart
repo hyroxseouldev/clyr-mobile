@@ -1,5 +1,4 @@
 import 'package:clyr_mobile/src/core/pagination/paginated_list_view.dart';
-import 'package:clyr_mobile/src/core/typedef/typedef.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/entity/enrollment_entity.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/usecase/setting_usecase_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

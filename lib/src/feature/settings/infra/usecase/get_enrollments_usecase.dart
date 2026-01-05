@@ -1,7 +1,7 @@
 import 'package:clyr_mobile/src/core/exception/exception.dart';
 import 'package:clyr_mobile/src/core/typedef/typedef.dart';
 import 'package:clyr_mobile/src/core/usecase/usecase.dart';
-import 'package:clyr_mobile/src/feature/settings/data/setting_repository.dart';
+import 'package:clyr_mobile/src/feature/settings/data/repository/setting_repository.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/entity/enrollment_entity.dart';
 
 class GetEnrollmentsUseCase
