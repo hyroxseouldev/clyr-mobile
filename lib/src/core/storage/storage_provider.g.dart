@@ -8,17 +8,17 @@ part of 'storage_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// 스토리지 서비스 프로바이더;
+/// 스토리지 서비스 프로바이더
 
 @ProviderFor(storageService)
 final storageServiceProvider = StorageServiceProvider._();
 
-/// 스토리지 서비스 프로바이더;
+/// 스토리지 서비스 프로바이더
 
 final class StorageServiceProvider
     extends $FunctionalProvider<StorageService, StorageService, StorageService>
     with $Provider<StorageService> {
-  /// 스토리지 서비스 프로바이더;
+  /// 스토리지 서비스 프로바이더
   StorageServiceProvider._()
     : super(
         from: null,

@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/src/core/storage/storage.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/entity/user_profile_entity.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/provider/user_profile_controller.dart';
 import 'package:clyr_mobile/src/shared/async_widget.dart';
@@ -25,6 +26,7 @@ class UserProfileView extends HookConsumerWidget {
     final phoneController = useTextEditingController();
     final selectedFitnessLevel = useState<FitnessLevel?>(null);
     final selectedGoals = useState<Set<String>>({});
+    final profileImageUrl = useState<String?>(null);
 
     // 초기 데이터 설정
     useEffect(() {
@@ -34,6 +36,7 @@ class UserProfileView extends HookConsumerWidget {
         phoneController.text = profile.phoneNumber ?? '';
         selectedFitnessLevel.value = profile.fitnessLevel;
         selectedGoals.value = profile.fitnessGoals.toSet();
+        profileImageUrl.value = profile.profileImageUrl;
       });
       return null;
     }, [profileState]);
@@ -56,6 +59,7 @@ class UserProfileView extends HookConsumerWidget {
             phoneNumber: phoneController.text.trim().isEmpty
                 ? null
                 : phoneController.text.trim(),
+            profileImageUrl: profileImageUrl.value,
             fitnessGoals: selectedGoals.value.toList(),
             fitnessLevel: selectedFitnessLevel.value,
           );
@@ -87,37 +91,21 @@ class UserProfileView extends HookConsumerWidget {
               children: [
                 // 프로필 이미지
                 Center(
-                  child: Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundImage: profile.profileImageUrl != null
-                            ? NetworkImage(profile.profileImageUrl!)
-                            : null,
-                        child: profile.profileImageUrl == null
-                            ? const Icon(Icons.person, size: 50)
-                            : null,
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            shape: BoxShape.circle,
-                          ),
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.camera_alt,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              // TODO: 이미지 업로드 구현
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: ImageUploadWidget(
+                    bucket: StorageBuckets.publicAssets,
+                    path: StoragePaths.userProfile(profile.id ?? ''),
+                    initialImageUrl: profileImageUrl.value,
+                    onImageUrlChanged: (url) {
+                      if (url.isEmpty) {
+                        profileImageUrl.value = null;
+                      } else {
+                        profileImageUrl.value = url;
+                      }
+                    },
+                    width: 120,
+                    height: 120,
+                    isCircle: true,
+                    placeholderText: '프로필\n이미지',
                   ),
                 ),
 

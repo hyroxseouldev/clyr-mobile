@@ -7,6 +7,9 @@ library;
 ///
 /// Supabase Console에서 생성한 버킷 이름과 일치해야 함
 class StorageBuckets {
+  /// 공개 에셋 버킷 (프로필 이미지 등)
+  static const String publicAssets = 'public-assets';
+
   /// 프로필 이미지 버킷
   static const String profiles = 'profiles';
 
@@ -27,6 +30,7 @@ class StoragePaths {
   // 프로필 관련 경로
   static const String _profileAvatars = 'avatars';
   static const String _profileBanners = 'banners';
+  static const String _userProfile = 'user/profile';
 
   // 워크아웃 관련 경로
   static const String _workoutThumbnails = 'thumbnails';
@@ -35,6 +39,19 @@ class StoragePaths {
   // 프로그램 관련 경로
   static const String _programThumbnails = 'thumbnails';
   static const String _programBanners = 'banners';
+
+  /// 사용자 프로필 이미지 경로 생성
+  ///
+  /// [userId] 사용자 ID
+  /// [fileName] 파일 이름 (선택사항, null이면 랜덤 생성)
+  ///
+  /// 예시: `user/profile/user123.jpg`
+  static String userProfile(String userId, [String? fileName]) {
+    if (fileName != null) {
+      return '$_userProfile/$userId/$fileName';
+    }
+    return '$_userProfile/$userId';
+  }
 
   /// 프로필 아바타 경로 생성
   ///
