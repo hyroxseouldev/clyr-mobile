@@ -5,6 +5,11 @@ class RoutePaths {
   static const String workout = '/workout';
   static const String workoutStartDateSetup = '/workout/start-date-setup';
   static const String workoutProgramDetail = '/workout/program/:id';
+  static const String workoutProgramLogCreate = '/workout/program/:id/workout-log-create';
+  static const String workoutLog = '/workout/log';
+  static const String workoutLogCreate = '/workout/log/create';
+  static const String workoutLogDetail = '/workout/log/detail';
+  static const String workoutLogEdit = '/workout/log/edit';
   static const String settings = '/settings';
   static const String userProfile = '/settings/profile';
   static const String purchaseHistory = '/settings/purchase-history';

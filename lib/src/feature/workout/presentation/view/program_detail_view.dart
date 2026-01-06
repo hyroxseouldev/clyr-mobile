@@ -2,12 +2,10 @@ import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/feature/workout/infra/entity/workout_daily_entity.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/provider/get_workout_daily_controller.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/widget/date_selector.dart';
-import 'package:clyr_mobile/src/feature/workout/presentation/widget/program_card.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/widget/session_card.dart';
 import 'package:clyr_mobile/src/shared/async_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -29,6 +27,14 @@ class ProgramDetailView extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('프로그램 상세')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.go(
+            '${RoutePaths.workout}/program/$programId/workout-log-create',
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
       body: Column(
         children: [
           // 가로 스크롤 날짜 선택 위젯

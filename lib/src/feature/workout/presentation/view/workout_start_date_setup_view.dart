@@ -1,5 +1,4 @@
 import 'package:clyr_mobile/src/core/router/router_path.dart';
-import 'package:clyr_mobile/src/feature/workout/presentation/provider/get_workout_daily_controller.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/provider/set_start_date_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

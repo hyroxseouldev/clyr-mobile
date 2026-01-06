@@ -10,6 +10,10 @@ import 'package:clyr_mobile/src/feature/settings/presentation/view/purchase_hist
 import 'package:clyr_mobile/src/feature/settings/presentation/view/terms_of_service_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/settings_view.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/program_detail_view.dart';
+import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_create_view.dart';
+import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_detail_view.dart';
+import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_edit_view.dart';
+import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_view.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_view.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_start_date_setup_view.dart';
 import 'package:clyr_mobile/src/shared/widgets/main_navigation.dart';
@@ -76,6 +80,13 @@ GoRouter router(Ref ref) {
                 },
                 routes: [
                   GoRoute(
+                    path: 'workout-log-create',
+                    builder: (context, state) {
+                      final programId = state.pathParameters['id']!;
+                      return WorkoutLogCreateView(programId: programId);
+                    },
+                  ),
+                  GoRoute(
                     path: 'start-date-setup',
                     builder: (context, state) {
                       final programId = state.pathParameters['id']!;
@@ -83,6 +94,35 @@ GoRouter router(Ref ref) {
                     },
                   ),
                 ],
+              ),
+            ],
+          ),
+          GoRoute(
+            path: RoutePaths.workoutLog,
+            builder: (context, state) => const WorkoutLogView(),
+            routes: [
+              GoRoute(
+                path: 'detail/:id',
+                builder: (context, state) {
+                  final logId = state.pathParameters['id']!;
+                  return WorkoutLogDetailView(logId: logId);
+                },
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    builder: (context, state) {
+                      final logId = state.pathParameters['id']!;
+                      return WorkoutLogEditView(logId: logId);
+                    },
+                  ),
+                ],
+              ),
+              GoRoute(
+                path: 'edit/:id',
+                builder: (context, state) {
+                  final logId = state.pathParameters['id']!;
+                  return WorkoutLogEditView(logId: logId);
+                },
               ),
             ],
           ),

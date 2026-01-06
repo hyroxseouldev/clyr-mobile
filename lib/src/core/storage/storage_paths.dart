@@ -180,7 +180,6 @@ class StoragePathBuilder {
 
   /// 타임스탬프 파일명으로 빌드
   String buildWithTimestamp() {
-    final timestamp = DateTime.now().millisecondsSinceEpoch;
     final ext = _extension ?? 'jpg';
     final fileName = StoragePaths.generateFileName(ext);
     return '${_segments.join('/')}/$fileName';
