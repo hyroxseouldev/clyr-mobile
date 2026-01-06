@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/src/core/pagination/paginated_list_view.dart';
 import 'package:clyr_mobile/src/feature/workout/infra/entity/workout_entity.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/provider/get_program_info_controller.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/widget/program_list_card.dart';
@@ -10,27 +11,34 @@ class WorkoutView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Program 정보 조회 (사용자의 모든 프로그램 조회)
     final programState = ref.watch(getProgramInfoControllerProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Workout')),
-      body: AsyncWidget<List<ProgramEntity>>(
+      body: AsyncWidget<PaginatedData<ProgramEntity>>(
         data: programState,
-        builder: (programs) {
-          if (programs.isEmpty) {
-            return _buildNoEnrollmentPrompt(context);
-          }
-          return ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: programs.length,
-            itemBuilder: (context, index) {
-              final program = programs[index];
+        builder: (data) {
+          return PaginatedListView<ProgramEntity>(
+            items: data.items,
+            hasMore: data.hasMore,
+            isLoading: data.isLoading,
+            error: data.error,
+            onRefresh: () async {
+              await ref
+                  .read(getProgramInfoControllerProvider.notifier)
+                  .refresh();
+            },
+            onLoadMore: () {
+              ref.read(getProgramInfoControllerProvider.notifier).loadNext();
+            },
+            itemBuilder: (context, program, index) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: ProgramListCard(program: program),
               );
             },
+            separatorBuilder: (context, index) => const SizedBox.shrink(),
+            emptyWidget: _buildNoEnrollmentPrompt(context),
           );
         },
       ),

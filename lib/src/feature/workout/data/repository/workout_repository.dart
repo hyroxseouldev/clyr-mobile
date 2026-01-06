@@ -28,7 +28,10 @@ abstract interface class WorkoutRepository {
     required DateTime date,
     required String programId,
   });
-  FutureEither<AppException, List<ProgramEntity>> getProgramInfo();
+  FutureEither<AppException, List<ProgramEntity>> getProgramInfo({
+    required int page,
+    required int limit,
+  });
 }
 
 class WorkoutRepositoryImpl implements WorkoutRepository {
@@ -209,7 +212,9 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
 
       log('getWorkoutDaily: 워크아웃 찾음 = ${workoutEntity.title}');
 
-      return right(WorkoutDailyEntity.withStartDate(workout: workoutWithSession));
+      return right(
+        WorkoutDailyEntity.withStartDate(workout: workoutWithSession),
+      );
     } catch (e) {
       log('getWorkoutDaily: 에러 = $e');
       return left(WorkoutException(code: 'unknown', message: e.toString()));
@@ -290,7 +295,10 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
 
   // 내가 현재 가지고 있는 활성화된 enrollments 들의 program 정보를 조회합니다.
   @override
-  FutureEither<AppException, List<ProgramEntity>> getProgramInfo() async {
+  FutureEither<AppException, List<ProgramEntity>> getProgramInfo({
+    required int page,
+    required int limit,
+  }) async {
     final userId = supabase.auth.currentUser?.id;
     if (userId == null) {
       return left(
@@ -300,7 +308,12 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
         ),
       );
     }
+    log('getProgramInfo: page=$page, limit=$limit');
     try {
+      // Supabase range는 0-based, page는 1-based라고 가정
+      final from = (page - 1) * limit;
+      final to = from + limit - 1;
+
       // enrollments와 programs를 join하여 program 정보 조회
       final response = await supabase
           .from('enrollments')
@@ -313,7 +326,8 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
               description
             )
           ''')
-          .eq('user_id', userId);
+          .eq('user_id', userId)
+          .range(from, to);
 
       // 응답 구조: [{programs: {...}}, ...]
       final programs = response.map<ProgramEntity>((e) {

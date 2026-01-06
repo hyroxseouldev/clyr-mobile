@@ -117,7 +117,18 @@ class PaginatedListView<T> extends HookWidget {
 
     // 빈 상태
     if (items.isEmpty && !isLoading) {
-      return emptyWidget ?? _defaultEmptyWidget(context);
+      final empty = emptyWidget ?? _defaultEmptyWidget(context);
+      // 빈 상태에서도 refresh 가능하도록
+      return onRefresh != null
+          ? RefreshIndicator(
+              onRefresh: onRefresh ?? () async => onLoadMore(),
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                shrinkWrap: true,
+                children: [empty],
+              ),
+            )
+          : empty;
     }
 
     // 데이터 표시
@@ -125,7 +136,7 @@ class PaginatedListView<T> extends HookWidget {
       onRefresh: onRefresh ?? () async => onLoadMore(),
       child: ListView.separated(
         controller: scrollController,
-        physics: physics,
+        physics: physics ?? const AlwaysScrollableScrollPhysics(),
         padding: padding,
         itemCount:
             items.length + (hasMore ? 1 : 0) + (headerBuilder != null ? 1 : 0),
