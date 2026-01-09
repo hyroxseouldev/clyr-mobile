@@ -4,12 +4,16 @@ import 'package:clyr_mobile/src/feature/auth/presentation/view/login_view.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/signup_view.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/splash_view.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/user_profile_view.dart';
+import 'package:clyr_mobile/src/feature/community/presentation/view/commnunity_view.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/home_view.dart';
+import 'package:clyr_mobile/src/feature/log/presentation/view/log_view.dart';
+import 'package:clyr_mobile/src/feature/ranking/presentation/view/ranking_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/app_info_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/membership_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/purchase_history_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/terms_of_service_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/settings_view.dart';
+import 'package:clyr_mobile/src/feature/stats/presentation/view/stats_view.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/program_detail_view.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_create_view.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_detail_view.dart';
@@ -69,6 +73,23 @@ GoRouter router(Ref ref) {
             path: RoutePaths.home,
             builder: (context, state) => const HomeView(),
           ),
+          GoRoute(
+            path: RoutePaths.ranking,
+            builder: (context, state) => const RankingView(),
+          ),
+          GoRoute(
+            path: RoutePaths.log,
+            builder: (context, state) => const LogView(),
+          ),
+          GoRoute(
+            path: RoutePaths.community,
+            builder: (context, state) => const CommunityView(),
+          ),
+          GoRoute(
+            path: RoutePaths.stats,
+            builder: (context, state) => const StatsView(),
+          ),
+
           GoRoute(
             path: RoutePaths.workout,
             builder: (context, state) => const WorkoutView(),
@@ -188,7 +209,7 @@ GoRouter router(Ref ref) {
         if (location == RoutePaths.login ||
             location == RoutePaths.splash ||
             location == RoutePaths.signup) {
-          return RoutePaths.workout;
+          return RoutePaths.home;
         }
       }
 

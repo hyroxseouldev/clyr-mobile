@@ -1,9 +1,13 @@
 class RoutePaths {
   static const String splash = '/';
   static const String home = '/home';
+  static const String ranking = '/ranking';
+  static const String log = '/log';
+  static const String community = '/community';
   static const String login = '/login';
   static const String signup = '/signup';
   static const String workout = '/workout';
+  static const String stats = '/stats';
   static const String workoutStartDateSetup = '/workout/start-date-setup';
   static const String workoutProgramDetail = '/workout/program/:id';
   static const String workoutProgramLogCreate =
