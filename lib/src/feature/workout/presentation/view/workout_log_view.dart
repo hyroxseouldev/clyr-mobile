@@ -9,13 +9,21 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class WorkoutLogView extends ConsumerWidget {
   const WorkoutLogView({super.key});
-
+  static const String routeName = 'workoutLog';
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final logsState = ref.watch(getWorkoutLogsControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('운동 일지')),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Icon(Icons.description_outlined),
+            const SizedBox(width: 8),
+            const Text('운동 기록', style: TextStyle(fontWeight: FontWeight.w600)),
+          ],
+        ),
+      ),
       body: AsyncWidget<PaginatedData<WorkoutLogEntity>>(
         data: logsState,
         builder: (data) {
@@ -77,10 +85,14 @@ class WorkoutLogView extends ConsumerWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
+    // 1. SafeArea와 Expanded를 모두 제거합니다.
+    // 2. 부모(PaginatedListView)가 제공하는 공간 내에서 중앙 정렬을 수행합니다.
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
+          // Column이 수직으로 꽉 차지 않게 최소한의 크기만 갖도록 설정
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(

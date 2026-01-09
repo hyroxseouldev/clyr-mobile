@@ -11,7 +11,8 @@ class MainNavigation extends StatelessWidget {
     final location = GoRouterState.of(context).uri.path;
     final currentIndex = switch (location) {
       final p when p.startsWith('/workout/log') => 1,
-      final p when p.startsWith('/settings') => 2,
+      final p when p.startsWith('/home') => 2,
+      final p when p.startsWith('/settings') => 3,
       _ => 0,
     };
 
@@ -23,7 +24,8 @@ class MainNavigation extends StatelessWidget {
           final route = switch (index) {
             0 => '/workout',
             1 => '/workout/log',
-            2 => '/settings',
+            2 => '/home',
+            3 => '/settings',
             _ => '/workout',
           };
           context.go(route);
@@ -33,10 +35,8 @@ class MainNavigation extends StatelessWidget {
             icon: Icon(Icons.fitness_center),
             label: 'Workout',
           ),
-          NavigationDestination(
-            icon: Icon(Icons.description),
-            label: '일지',
-          ),
+          NavigationDestination(icon: Icon(Icons.description), label: '일지'),
+          NavigationDestination(icon: Icon(Icons.home), label: '홈'),
           NavigationDestination(icon: Icon(Icons.settings), label: '설정'),
         ],
       ),

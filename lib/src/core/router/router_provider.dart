@@ -4,6 +4,7 @@ import 'package:clyr_mobile/src/feature/auth/presentation/view/login_view.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/signup_view.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/splash_view.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/user_profile_view.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/view/home_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/app_info_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/membership_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/purchase_history_view.dart';
@@ -64,6 +65,10 @@ GoRouter router(Ref ref) {
       ShellRoute(
         builder: (context, state, child) => MainNavigation(child: child),
         routes: [
+          GoRoute(
+            path: RoutePaths.home,
+            builder: (context, state) => const HomeView(),
+          ),
           GoRoute(
             path: RoutePaths.workout,
             builder: (context, state) => const WorkoutView(),

@@ -1,4 +1,5 @@
 import 'package:clyr_mobile/src/core/router/router_path.dart';
+import 'package:clyr_mobile/src/core/theme/theme.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/widget/singout_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -45,6 +46,11 @@ class SettingView extends HookConsumerWidget {
       appBar: AppBar(title: const Text('설정')),
       body: ListView(
         children: [
+          // 테마 설정
+          const ThemeModeToggle(),
+          const Divider(height: 32),
+
+          // 기존 메뉴들
           ...settingMenus.map(
             (menu) => ListTile(
               leading: Icon(menu.icon),

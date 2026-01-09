@@ -1,4 +1,5 @@
 import 'package:clyr_mobile/src/core/router/router_provider.dart';
+import 'package:clyr_mobile/src/core/theme/theme.dart';
 import 'package:clyr_mobile/src/shared/default_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:clyr_mobile/flavors.dart';
@@ -11,9 +12,22 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+
+    // 테마 모드 감시
+    final themeModeAsync = ref.watch(themeModeProvider);
+
+    // 현재 테마 모드 결정 (로딩/에러 시 시스템 기본값)
+    final themeMode = themeModeAsync.when(
+      data: (mode) => mode,
+      loading: () => ThemeMode.system,
+      error: (_, __) => ThemeMode.system,
+    );
+
     return MaterialApp.router(
       title: F.title,
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

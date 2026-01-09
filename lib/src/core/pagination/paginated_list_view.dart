@@ -115,20 +115,45 @@ class PaginatedListView<T> extends HookWidget {
       return loadingWidget ?? _defaultLoadingWidget(context);
     }
 
-    // 빈 상태
+    // // 빈 상태
+    // if (items.isEmpty && !isLoading) {
+    //   final empty = emptyWidget ?? _defaultEmptyWidget(context);
+    //   // 빈 상태에서도 refresh 가능하도록
+    //   return onRefresh != null
+    //       ? RefreshIndicator(
+    //           onRefresh: onRefresh ?? () async => onLoadMore(),
+    //           child: ListView(
+    //             physics: const AlwaysScrollableScrollPhysics(),
+    //             shrinkWrap: true,
+    //             children: [empty],
+    //           ),
+    //         )
+    //       : empty;
+    // }
+    // 빈 상태 처리부 (교체용 코드)
     if (items.isEmpty && !isLoading) {
       final empty = emptyWidget ?? _defaultEmptyWidget(context);
-      // 빈 상태에서도 refresh 가능하도록
-      return onRefresh != null
-          ? RefreshIndicator(
-              onRefresh: onRefresh ?? () async => onLoadMore(),
-              child: ListView(
+
+      if (onRefresh != null) {
+        return RefreshIndicator(
+          onRefresh: onRefresh!,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                // AlwaysScrollableScrollPhysics가 있어야 데이터가 없어도 아래로 당겨집니다.
                 physics: const AlwaysScrollableScrollPhysics(),
-                shrinkWrap: true,
-                children: [empty],
-              ),
-            )
-          : empty;
+                child: Container(
+                  // Viewport의 전체 높이를 확보하여 empty를 중앙에 배치합니다.
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  alignment: Alignment.center,
+                  child: empty,
+                ),
+              );
+            },
+          ),
+        );
+      }
+      return Center(child: empty);
     }
 
     // 데이터 표시
