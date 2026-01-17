@@ -1,5 +1,8 @@
 import 'package:clyr_mobile/l10n/app_localizations.dart';
+import 'package:clyr_mobile/src/feature/home/infra/entity/home_entity.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/provider/home_controller.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/widget/program_selector.dart';
+import 'package:clyr_mobile/src/shared/async_widget.dart';
 import 'package:clyr_mobile/src/shared/widgets/date_selection/date_selection_type.dart';
 import 'package:clyr_mobile/src/shared/widgets/date_selection/date_selection_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -15,6 +18,10 @@ class HomeView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final selectedDate = useState<DateTime>(DateTime.now());
+
+    // 현재 활성화된 프로그램 상태 감지
+    final activeProgramState = ref.watch(homeControllerProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Column(
@@ -39,7 +46,7 @@ class HomeView extends HookConsumerWidget {
 
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -52,12 +59,19 @@ class HomeView extends HookConsumerWidget {
                 endDate: DateTime.now().add(const Duration(days: 7)),
               ),
               Text(l10n.currentProgram),
-
-              // 현재 등록된 프로그램의 이름과 설명이 나오고 클릭하면 바텀시트에 내가 가지고 있는 프로그램 목록이 나옴
-              ProgramSelector(
-                programList: [],
-                selectedProgram: null,
-                onSelected: (program) {},
+              SizedBox(height: 12),
+              // 현재 등록된 프로그램 표시
+              AsyncWidget<ActiveProgramEntity?>(
+                data: activeProgramState,
+                builder: (activeProgram) {
+                  return ProgramSelector(
+                    programList: activeProgram != null ? [activeProgram] : [],
+                    selectedProgram: activeProgram,
+                    onSelected: (program) {
+                      // 프로그램 선택 처리 (필요 시 구현)
+                    },
+                  );
+                },
               ),
 
               // 운동 세션 내용

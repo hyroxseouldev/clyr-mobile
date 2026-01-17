@@ -1,6 +1,5 @@
 import 'package:clyr_mobile/src/core/pagination/paginated_list_view.dart';
 import 'package:clyr_mobile/src/feature/workout/infra/entity/workout_entity.dart';
-import 'package:clyr_mobile/src/feature/workout/infra/usecase/get_program_info_usecase.dart';
 import 'package:clyr_mobile/src/feature/workout/infra/usecase/workout_usecase_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

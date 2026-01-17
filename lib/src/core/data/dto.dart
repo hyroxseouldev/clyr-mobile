@@ -214,7 +214,7 @@ class ProgramsDto {
   final bool? isPublic;
   @JsonKey(name: 'is_for_sale')
   final bool? isForSale;
-  final String? price;
+  final num? price;
   @JsonKey(name: 'access_period_days')
   final int? accessPeriodDays;
   final String? difficulty;

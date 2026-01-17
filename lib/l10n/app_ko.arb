@@ -142,6 +142,9 @@
   "emptyMembership": "멤버쉽 내역이 없습니다",
   "comingSoon": "준비 중",
 
+  "noProgramsRegistered": "등록된 프로그램이 없습니다",
+  "addNewProgram": "새로운 운동 프로그램을 추가해주세요",
+
   "cancel": "취소",
 
   "required": "필수 항목입니다",

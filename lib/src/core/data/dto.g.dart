@@ -122,7 +122,7 @@ ProgramsDto _$ProgramsDtoFromJson(Map<String, dynamic> json) => ProgramsDto(
   description: json['description'] as String?,
   isPublic: json['is_public'] as bool?,
   isForSale: json['is_for_sale'] as bool?,
-  price: json['price'] as String?,
+  price: json['price'] as num?,
   accessPeriodDays: (json['access_period_days'] as num?)?.toInt(),
   difficulty: json['difficulty'] as String?,
   durationWeeks: (json['duration_weeks'] as num?)?.toInt(),

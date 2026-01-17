@@ -23,6 +23,10 @@ class WorkoutException extends AppException {
   WorkoutException({required super.code, super.message});
 }
 
+class HomeException extends AppException {
+  HomeException({required super.code, super.message});
+}
+
 extension AppExceptionX on AppException {
   // 사용자에게 보여줄 메시지를 정의
   String get displayMessage {

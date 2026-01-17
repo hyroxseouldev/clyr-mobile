@@ -398,6 +398,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get comingSoon => 'Coming soon';
 
   @override
+  String get noProgramsRegistered => 'No registered programs';
+
+  @override
+  String get addNewProgram => 'Please add a new workout program';
+
+  @override
   String get cancel => 'Cancel';
 
   @override

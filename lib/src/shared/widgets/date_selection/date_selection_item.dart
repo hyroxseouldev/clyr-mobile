@@ -38,6 +38,7 @@ class DateSelectionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final locale = Localizations.localeOf(context);
 
     // Determine text color based on weekday and selection state
     Color getTextColor() {
@@ -85,7 +86,7 @@ class DateSelectionItem extends StatelessWidget {
           children: [
             // Weekday label (top)
             Text(
-              DateFormat('E', 'ko').format(date),
+              DateFormat('E', locale.languageCode).format(date),
               style: theme.textTheme.labelSmall?.copyWith(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,

@@ -142,6 +142,9 @@
   "emptyMembership": "No membership history",
   "comingSoon": "Coming soon",
 
+  "noProgramsRegistered": "No registered programs",
+  "addNewProgram": "Please add a new workout program",
+
   "cancel": "Cancel",
 
   "required": "Required field",

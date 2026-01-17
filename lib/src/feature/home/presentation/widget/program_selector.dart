@@ -1,4 +1,5 @@
-import 'package:clyr_mobile/src/feature/workout/infra/entity/workout_entity.dart';
+import 'package:clyr_mobile/l10n/app_localizations.dart';
+import 'package:clyr_mobile/src/feature/home/infra/entity/home_entity.dart';
 import 'package:flutter/material.dart';
 
 /// 프로그램 선택 위젯
@@ -6,13 +7,13 @@ import 'package:flutter/material.dart';
 /// 프로그램 리스트를 표시하고 사용자가 프로그램을 선택할 수 있는 셀렉터 위젯
 class ProgramSelector extends StatelessWidget {
   /// 표시할 프로그램 리스트
-  final List<ProgramEntity> programList;
+  final List<ActiveProgramEntity> programList;
 
   /// 현재 선택된 프로그램
-  final ProgramEntity? selectedProgram;
+  final ActiveProgramEntity? selectedProgram;
 
   /// 프로그램 선택 콜백
-  final Function(ProgramEntity) onSelected;
+  final Function(ActiveProgramEntity) onSelected;
 
   const ProgramSelector({
     super.key,
@@ -43,6 +44,7 @@ class ProgramSelector extends StatelessWidget {
   /// 빈 상태 위젯
   Widget _buildEmptyState(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Center(
       child: Padding(
@@ -58,7 +60,7 @@ class ProgramSelector extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              '등록된 프로그램이 없습니다',
+              l10n.noProgramsRegistered,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.grey.shade700,
@@ -66,7 +68,7 @@ class ProgramSelector extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              '새로운 운동 프로그램을 추가해주세요',
+              l10n.addNewProgram,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: Colors.grey.shade600,
               ),
@@ -81,7 +83,7 @@ class ProgramSelector extends StatelessWidget {
 
 /// 프로그램 선택 아이템 카드
 class _ProgramSelectorItem extends StatelessWidget {
-  final ProgramEntity program;
+  final ActiveProgramEntity program;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -122,7 +124,7 @@ class _ProgramSelectorItem extends StatelessWidget {
                 children: [
                   // 프로그램 제목
                   Text(
-                    program.name,
+                    program.title,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: isSelected

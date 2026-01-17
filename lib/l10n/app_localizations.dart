@@ -860,6 +860,18 @@ abstract class AppLocalizations {
   /// **'준비 중'**
   String get comingSoon;
 
+  /// No description provided for @noProgramsRegistered.
+  ///
+  /// In ko, this message translates to:
+  /// **'등록된 프로그램이 없습니다'**
+  String get noProgramsRegistered;
+
+  /// No description provided for @addNewProgram.
+  ///
+  /// In ko, this message translates to:
+  /// **'새로운 운동 프로그램을 추가해주세요'**
+  String get addNewProgram;
+
   /// No description provided for @cancel.
   ///
   /// In ko, this message translates to:

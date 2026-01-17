@@ -392,6 +392,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get comingSoon => '준비 중';
 
   @override
+  String get noProgramsRegistered => '등록된 프로그램이 없습니다';
+
+  @override
+  String get addNewProgram => '새로운 운동 프로그램을 추가해주세요';
+
+  @override
   String get cancel => '취소';
 
   @override

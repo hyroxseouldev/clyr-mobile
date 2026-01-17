@@ -53,6 +53,8 @@ class SupabaseDataSource implements CoreDataSource {
           .eq('status', 'ACTIVE')
           .maybeSingle();
 
+      print('getCurrentActiveProgram: response = $response');
+
       if (response == null) {
         throw Exception('No active enrollment found');
       }
@@ -63,6 +65,7 @@ class SupabaseDataSource implements CoreDataSource {
 
       return ProgramsDto.fromJson(response['programs']);
     } catch (e) {
+      print('getCurrentActiveProgram: error = $e');
       throw Exception('Failed to get active program: $e');
     }
   }
