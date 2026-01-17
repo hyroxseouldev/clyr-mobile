@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class TermsOfServiceView extends StatelessWidget {
@@ -5,12 +6,13 @@ class TermsOfServiceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('약관'),
+        title: Text(l10n.settingsTerms),
       ),
-      body: const Center(
-        child: Text('약관 - 준비 중'),
+      body: Center(
+        child: Text('${l10n.settingsTerms} - ${l10n.comingSoon}'),
       ),
     );
   }

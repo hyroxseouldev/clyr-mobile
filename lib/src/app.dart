@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/router/router_provider.dart';
 import 'package:clyr_mobile/src/core/theme/theme.dart';
 import 'package:clyr_mobile/src/shared/default_layout.dart';
@@ -29,12 +30,13 @@ class App extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
       localizationsDelegates: const [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [Locale('ko', 'KR'), Locale('en', 'US')],
-      locale: const Locale('ko', 'KR'),
+      supportedLocales: const [Locale('ko'), Locale('en')],
+      locale: const Locale('ko'),
       builder: (context, child) => FlavorBanner(child: child ?? SizedBox()),
       routerConfig: router,
     );

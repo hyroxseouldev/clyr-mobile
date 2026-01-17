@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -213,6 +214,7 @@ class PaginatedListView<T> extends HookWidget {
   }
 
   Widget _defaultErrorBuilder(BuildContext context, Object error) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -221,7 +223,7 @@ class PaginatedListView<T> extends HookWidget {
           children: [
             const Icon(Icons.error_outline, size: 48, color: Colors.red),
             const SizedBox(height: 16),
-            Text('오류가 발생했습니다', style: Theme.of(context).textTheme.titleMedium),
+            Text(l10n.error, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             Text(
               error.toString(),
@@ -235,6 +237,7 @@ class PaginatedListView<T> extends HookWidget {
   }
 
   Widget _defaultEmptyWidget(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -242,7 +245,7 @@ class PaginatedListView<T> extends HookWidget {
           Icon(Icons.inbox_outlined, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
-            '데이터가 없습니다',
+            l10n.noData,
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(color: Colors.grey[600]),

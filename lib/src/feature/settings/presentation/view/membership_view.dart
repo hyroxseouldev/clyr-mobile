@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/pagination/paginated_list_view.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/entity/enrollment_entity.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/provider/enrollments_controller.dart';
@@ -11,10 +12,11 @@ class MembershipView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final enrollmentsState = ref.watch(enrollmentsControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('멤버쉽 조회')),
+      appBar: AppBar(title: Text(l10n.settingsMembership)),
       body: AsyncWidget<PaginatedData<EnrollmentEntity>>(
         data: enrollmentsState,
         builder: (data) {
@@ -37,6 +39,7 @@ class MembershipView extends ConsumerWidget {
   }
 
   Widget _buildEmptyWidget(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -48,7 +51,7 @@ class MembershipView extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            '멤버쉽 내역이 없습니다',
+            l10n.emptyMembership,
             style: Theme.of(context)
                 .textTheme
                 .titleMedium

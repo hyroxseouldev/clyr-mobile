@@ -1,0 +1,408 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Korean (`ko`).
+class AppLocalizationsKo extends AppLocalizations {
+  AppLocalizationsKo([String locale = 'ko']) : super(locale);
+
+  @override
+  String get appTitle => 'CLYR';
+
+  @override
+  String get navStats => 'Stats';
+
+  @override
+  String get navLog => 'Log';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navRanking => 'Ranking';
+
+  @override
+  String get navMy => 'MY';
+
+  @override
+  String get loginTitle => '환영합니다';
+
+  @override
+  String get loginSubtitle => '로그인하여 시작하세요';
+
+  @override
+  String get splashWelcome => '환영합니다';
+
+  @override
+  String get splashTagline => '건강한 라이프스타일을 시작하세요';
+
+  @override
+  String get email => '이메일';
+
+  @override
+  String get password => '비밀번호';
+
+  @override
+  String get loginButton => '로그인';
+
+  @override
+  String get noAccount => '계정이 없으신가요? 회원가입';
+
+  @override
+  String get emailRequired => '이메일을 입력해주세요.';
+
+  @override
+  String get emailInvalid => '올바른 이메일 형식이 아닙니다.';
+
+  @override
+  String get passwordRequired => '비밀번호를 입력해주세요.';
+
+  @override
+  String get signupTitle => '회원가입';
+
+  @override
+  String get createAccount => '계정 만들기';
+
+  @override
+  String get enterInfo => '정보를 입력해주세요';
+
+  @override
+  String get name => '이름';
+
+  @override
+  String get confirmPassword => '비밀번호 확인';
+
+  @override
+  String get confirmPasswordRequired => '비밀번호 확인을 입력해주세요.';
+
+  @override
+  String get passwordMismatch => '비밀번호가 일치하지 않습니다.';
+
+  @override
+  String get passwordMinLength => '비밀번호는 최소 6자 이상이어야 합니다.';
+
+  @override
+  String get signupButton => '가입하기';
+
+  @override
+  String get hasAccount => '이미 계정이 있으신가요? 로그인';
+
+  @override
+  String get signupSuccess => '회원가입이 완료되었습니다. 이메일을 확인해주세요.';
+
+  @override
+  String get settingsTitle => '설정';
+
+  @override
+  String get settingsProfile => '프로필';
+
+  @override
+  String get settingsPurchaseHistory => '구매내역';
+
+  @override
+  String get settingsMembership => '멤버쉽 조회';
+
+  @override
+  String get settingsTerms => '약관';
+
+  @override
+  String get settingsAppInfo => '앱정보';
+
+  @override
+  String get logout => '로그아웃';
+
+  @override
+  String get save => '저장';
+
+  @override
+  String get saving => '저장중...';
+
+  @override
+  String get profileTitle => '프로필 설정';
+
+  @override
+  String get nickname => '닉네임';
+
+  @override
+  String get nicknameHint => '닉네임을 입력하세요';
+
+  @override
+  String get bio => '자기소개';
+
+  @override
+  String get bioHint => '자기소개를 입력하세요';
+
+  @override
+  String get phone => '연락처';
+
+  @override
+  String get phoneHint => '연락처를 입력하세요';
+
+  @override
+  String get fitnessLevel => '운동 수준';
+
+  @override
+  String get fitnessGoals => '운동 목표';
+
+  @override
+  String get profileImage => '프로필\n이미지';
+
+  @override
+  String get profileSaved => '프로필이 저장되었습니다';
+
+  @override
+  String get fitnessLevelBeginner => '초급자';
+
+  @override
+  String get fitnessLevelIntermediate => '중급자';
+
+  @override
+  String get fitnessLevelAdvanced => '고급자';
+
+  @override
+  String get goalWeightLoss => '체중감량';
+
+  @override
+  String get goalStrength => '근력증가';
+
+  @override
+  String get goalMuscle => '근육량 증가';
+
+  @override
+  String get goalStamina => '체력증진';
+
+  @override
+  String get goalFlexibility => '유연성';
+
+  @override
+  String get goalStress => '스트레스 해소';
+
+  @override
+  String get workoutTitle => 'Workout';
+
+  @override
+  String get noEnrollment => '구매한 프로그램이 없습니다';
+
+  @override
+  String get noEnrollmentDesc => '먼저 프로그램을 구매해주세요\n프로그램을 구매하면 맞춤 워크아웃을 제공합니다';
+
+  @override
+  String get workoutLogTitle => '운동 일지 작성';
+
+  @override
+  String get workoutLogSaved => '운동 일지가 저장되었습니다';
+
+  @override
+  String get title => '제목';
+
+  @override
+  String get titleHint => '예: 상체 운동';
+
+  @override
+  String get titleRequired => '제목을 입력해주세요';
+
+  @override
+  String get workoutDate => '운동 날짜';
+
+  @override
+  String get workoutIntensity => '운동 강도';
+
+  @override
+  String get intensityLow => '낮음';
+
+  @override
+  String get intensityMedium => '보통';
+
+  @override
+  String get intensityHigh => '높음';
+
+  @override
+  String get workoutContent => '운동 내용';
+
+  @override
+  String get workoutContentHint =>
+      '운동 내용을 자유롭게 기록해주세요\n\n예:\n벤치프레스 60kg 10회 3세트\n덤벨프레스 40kg 12회 3세트';
+
+  @override
+  String get contentRequired => '운동 내용을 입력해주세요';
+
+  @override
+  String get workoutLogDetail => '운동 일지 상세';
+
+  @override
+  String get workoutLogEdit => '운동 일지 수정';
+
+  @override
+  String get workoutLogDeleted => '운동 일지가 삭제되었습니다';
+
+  @override
+  String get workoutLogModified => '운동 일지가 수정되었습니다';
+
+  @override
+  String get modifying => '수정중...';
+
+  @override
+  String get modify => '수정';
+
+  @override
+  String get delete => '삭제';
+
+  @override
+  String get deleteConfirm => '삭제 확인';
+
+  @override
+  String get deleteConfirmMessage => '정말 이 운동 일지를 삭제하시겠습니까?';
+
+  @override
+  String get noContent => '내용 없음';
+
+  @override
+  String get recordInfo => '기록 정보';
+
+  @override
+  String get createdDate => '생성일';
+
+  @override
+  String get modifiedDate => '수정일';
+
+  @override
+  String get programDetail => '프로그램 상세';
+
+  @override
+  String get notYetStarted => '시작 전입니다';
+
+  @override
+  String get notYetStartedDesc => '프로그램 시작일 이전입니다\n시작일부터 확인할 수 있습니다';
+
+  @override
+  String get setStartDate => '시작일 설정';
+
+  @override
+  String get selectStartDate => '시작일을 설정해주세요';
+
+  @override
+  String get selectStartDateDesc => '프로그램 시작일을 설정하면\n맞춤 워크아웃을 제공합니다';
+
+  @override
+  String get selectStartDateTitle => '프로그램을 시작할 날짜를\n선택해주세요';
+
+  @override
+  String get selectStartDateDesc2 => '선택한 날짜를 Day 1로 시작하여\n맞춤 워크아웃을 제공합니다';
+
+  @override
+  String get tapToSelectDate => '날짜를 선택하려면 탭하세요';
+
+  @override
+  String get setting => '설정 중...';
+
+  @override
+  String get start => '시작하기';
+
+  @override
+  String get notAvailableYet => '아직 볼 수 없습니다';
+
+  @override
+  String get notAvailableYetDesc =>
+      '최대 4일 뒤까지의 워크아웃만 확인할 수 있습니다\n날짜를 조금 더 가까운 날로 선택해주세요';
+
+  @override
+  String get noWorkoutThisDate => '해당 날짜에 워크아웃이 없습니다';
+
+  @override
+  String get restDay => '오늘은 휴식일입니다\n충분한 휴식을 취하세요';
+
+  @override
+  String get noSessions => '등록된 세션이 없습니다.';
+
+  @override
+  String get confirm => '확인';
+
+  @override
+  String get workoutRecords => '운동 기록';
+
+  @override
+  String get today => '오늘';
+
+  @override
+  String get yesterday => '어제';
+
+  @override
+  String get tomorrow => '내일';
+
+  @override
+  String get tapToCreate => '오른쪽 하단의 + 버튼을 눌러\n운동 일지를 작성해보세요';
+
+  @override
+  String get todaysWorkout => '오늘의 운동';
+
+  @override
+  String get currentProgram => '현재 프로그램';
+
+  @override
+  String get error => '오류가 발생했습니다';
+
+  @override
+  String get retry => '다시 시도해주세요.';
+
+  @override
+  String get noData => '데이터가 없습니다';
+
+  @override
+  String get loading => '로딩 중...';
+
+  @override
+  String get errorNetwork => '네트워크 연결이 원활하지 않습니다.';
+
+  @override
+  String get errorUserNotFound => '존재하지 않는 계정입니다.';
+
+  @override
+  String get errorWrongPassword => '비밀번호가 일치하지 않습니다.';
+
+  @override
+  String get errorInvalidEmail => '올바른 이메일 형식이 아닙니다.';
+
+  @override
+  String get errorUnknown => '알 수 없는 오류가 발생했습니다.';
+
+  @override
+  String get emptyWorkoutLogs => '운동 일지가 없습니다';
+
+  @override
+  String get emptyPrograms => '프로그램이 없습니다';
+
+  @override
+  String get emptyStats => '통계 데이터가 없습니다';
+
+  @override
+  String get emptyRanking => '랭킹 데이터가 없습니다';
+
+  @override
+  String get emptyCommunity => '커뮤니티 게시글이 없습니다';
+
+  @override
+  String get emptyPurchaseHistory => '구매내역이 없습니다';
+
+  @override
+  String get emptyMembership => '멤버쉽 내역이 없습니다';
+
+  @override
+  String get comingSoon => '준비 중';
+
+  @override
+  String get cancel => '취소';
+
+  @override
+  String get required => '필수 항목입니다';
+
+  @override
+  String get tooShort => '너무 짧습니다';
+
+  @override
+  String get tooLong => '너무 깁니다';
+
+  @override
+  String get invalidFormat => '올바른 형식이 아닙니다';
+}

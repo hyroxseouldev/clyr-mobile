@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +8,7 @@ class SplashView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -43,18 +45,18 @@ class SplashView extends StatelessWidget {
                   const SizedBox(height: 32),
 
                   // 환영 문구
-                  const Text(
-                    '환영합니다',
-                    style: TextStyle(
+                  Text(
+                    l10n.splashWelcome,
+                    style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    '건강한 라이프스타일을 시작하세요',
-                    style: TextStyle(
+                  Text(
+                    l10n.splashTagline,
+                    style: const TextStyle(
                       fontSize: 16,
                       color: Colors.grey,
                     ),
@@ -75,9 +77,9 @@ class SplashView extends StatelessWidget {
                         ),
                         elevation: 2,
                       ),
-                      child: const Text(
-                        '로그인',
-                        style: TextStyle(
+                      child: Text(
+                        l10n.loginButton,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -99,9 +101,9 @@ class SplashView extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
-                        '회원가입',
-                        style: TextStyle(
+                      child: Text(
+                        l10n.signupButton,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),

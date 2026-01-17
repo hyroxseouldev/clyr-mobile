@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/feature/workout/infra/entity/workout_log_entity.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/provider/get_workout_log_by_id_controller.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/provider/workout_log_mutation_controller.dart';
@@ -14,18 +15,19 @@ class WorkoutLogEditView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final logState = ref.watch(getWorkoutLogByIdControllerProvider(logId));
 
     ref.listen(updateWorkoutLogControllerProvider, (previous, next) {
       if (next.hasError) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text("에러가 발생했습니다. 다시 시도해주세요.")));
+        ).showSnackBar(SnackBar(content: Text('${l10n.error} ${l10n.retry}')));
       }
       if (next is AsyncData) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('운동 일지가 수정되었습니다')));
+        ).showSnackBar(SnackBar(content: Text(l10n.workoutLogModified)));
       }
     });
 
@@ -47,6 +49,7 @@ class WorkoutLogEditForm extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final titleController = useTextEditingController(text: log.title);
     final contentController = useTextEditingController(
       text: log.content['content']?.toString() ?? '',
@@ -77,14 +80,12 @@ class WorkoutLogEditForm extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('운동 일지 수정'),
+        title: Text(l10n.workoutLogEdit),
         actions: [
           TextButton.icon(
             onPressed: controller.isLoading ? null : saveLog,
             icon: const Icon(Icons.save),
-            label: controller.isLoading
-                ? const Text('수정중...')
-                : const Text('수정'),
+            label: Text(controller.isLoading ? l10n.modifying : l10n.modify),
           ),
         ],
       ),
@@ -96,14 +97,14 @@ class WorkoutLogEditForm extends HookConsumerWidget {
             // 제목 입력
             TextFormField(
               controller: titleController,
-              decoration: const InputDecoration(
-                labelText: '제목',
-                hintText: '예: 상체 운동',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.title,
+                hintText: l10n.titleHint,
+                border: const OutlineInputBorder(),
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return '제목을 입력해주세요';
+                  return l10n.titleRequired;
                 }
                 return null;
               },
@@ -124,9 +125,9 @@ class WorkoutLogEditForm extends HookConsumerWidget {
                 }
               },
               child: InputDecorator(
-                decoration: const InputDecoration(
-                  labelText: '운동 날짜',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.workoutDate,
+                  border: const OutlineInputBorder(),
                 ),
                 child: Row(
                   children: [
@@ -143,9 +144,9 @@ class WorkoutLogEditForm extends HookConsumerWidget {
 
             // 운동 강도 선택
             InputDecorator(
-              decoration: const InputDecoration(
-                labelText: '운동 강도',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.workoutIntensity,
+                border: const OutlineInputBorder(),
               ),
               child: SegmentedButton<WorkoutIntensity>(
                 segments: const [
@@ -179,16 +180,15 @@ class WorkoutLogEditForm extends HookConsumerWidget {
               maxLines: null,
               minLines: 10,
               keyboardType: TextInputType.multiline,
-              decoration: const InputDecoration(
-                labelText: '운동 내용',
-                hintText:
-                    '운동 내용을 자유롭게 기록해주세요\n\n예:\n벤치프레스 60kg 10회 3세트\n덤벨프레스 40kg 12회 3세트',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.workoutContent,
+                hintText: l10n.workoutContentHint,
+                border: const OutlineInputBorder(),
                 alignLabelWithHint: true,
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return '운동 내용을 입력해주세요';
+                  return l10n.contentRequired;
                 }
                 return null;
               },

@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/pagination/paginated_list_view.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/entity/order_entity.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/provider/orders_controller.dart';
@@ -11,10 +12,11 @@ class PurchaseHistoryView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final ordersState = ref.watch(ordersControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('구매내역')),
+      appBar: AppBar(title: Text(l10n.settingsPurchaseHistory)),
       body: AsyncWidget<PaginatedData<OrderEntity>>(
         data: ordersState,
         builder: (data) {
@@ -36,6 +38,7 @@ class PurchaseHistoryView extends ConsumerWidget {
   }
 
   Widget _buildEmptyWidget(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +50,7 @@ class PurchaseHistoryView extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            '구매내역이 없습니다',
+            l10n.emptyPurchaseHistory,
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(color: Colors.grey.shade600),

@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/provider/set_start_date_controller.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class WorkoutStartDateSetupView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final selectedDate = useState<DateTime>(DateTime.now());
     final controller = ref.watch(setStartDateControllerProvider);
     Future<void> selectDate() async {
@@ -20,10 +22,9 @@ class WorkoutStartDateSetupView extends HookConsumerWidget {
         initialDate: selectedDate.value,
         firstDate: DateTime(2020),
         lastDate: DateTime.now().add(const Duration(days: 365)),
-        locale: const Locale('ko', 'KR'),
-        helpText: '프로그램 시작일',
-        confirmText: '확인',
-        cancelText: '취소',
+        helpText: l10n.selectStartDateTitle,
+        confirmText: l10n.confirm,
+        cancelText: l10n.cancel,
       );
 
       if (picked != null) {
@@ -53,7 +54,7 @@ class WorkoutStartDateSetupView extends HookConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('프로그램 시작일 설정')),
+      appBar: AppBar(title: Text(l10n.setStartDate)),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -73,7 +74,7 @@ class WorkoutStartDateSetupView extends HookConsumerWidget {
 
               // 제목
               Text(
-                '프로그램을 시작할 날짜를\n선택해주세요',
+                l10n.selectStartDateTitle,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
@@ -84,7 +85,7 @@ class WorkoutStartDateSetupView extends HookConsumerWidget {
 
               // 설명
               Text(
-                '선택한 날짜를 Day 1로 시작하여\n맞춤 워크아웃을 제공합니다',
+                l10n.selectStartDateDesc2,
                 textAlign: TextAlign.center,
                 style: Theme.of(
                   context,
@@ -120,7 +121,7 @@ class WorkoutStartDateSetupView extends HookConsumerWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '날짜를 선택하려면 탭하세요',
+                        l10n.tapToSelectDate,
                         style: TextStyle(
                           color: Colors.grey.shade600,
                           fontSize: 14,
@@ -185,7 +186,7 @@ class WorkoutStartDateSetupView extends HookConsumerWidget {
                       )
                     : const Icon(Icons.rocket_launch),
                 label: Text(
-                  controller.isLoading ? '설정 중...' : '시작하기',
+                  controller.isLoading ? l10n.setting : l10n.start,
                   style: const TextStyle(fontSize: 16),
                 ),
               ),

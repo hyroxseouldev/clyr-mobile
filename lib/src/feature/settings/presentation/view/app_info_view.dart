@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class AppInfoView extends StatelessWidget {
@@ -5,12 +6,13 @@ class AppInfoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('앱정보'),
+        title: Text(l10n.settingsAppInfo),
       ),
-      body: const Center(
-        child: Text('앱정보 - 준비 중'),
+      body: Center(
+        child: Text('${l10n.settingsAppInfo} - ${l10n.comingSoon}'),
       ),
     );
   }

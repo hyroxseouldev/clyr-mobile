@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/pagination/paginated_list_view.dart';
 import 'package:clyr_mobile/src/feature/workout/infra/entity/workout_entity.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/provider/get_program_info_controller.dart';
@@ -47,6 +48,7 @@ class WorkoutView extends ConsumerWidget {
 
   /// 구매한 프로그램 없음 프롬프트
   Widget _buildNoEnrollmentPrompt(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -60,7 +62,7 @@ class WorkoutView extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              '구매한 프로그램이 없습니다',
+              l10n.noEnrollment,
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
@@ -68,7 +70,7 @@ class WorkoutView extends ConsumerWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              '먼저 프로그램을 구매해주세요\n프로그램을 구매하면 맞춤 워크아웃을 제공합니다',
+              l10n.noEnrollmentDesc,
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),

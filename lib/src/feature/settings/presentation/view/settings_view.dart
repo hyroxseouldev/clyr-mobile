@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/core/theme/theme.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/widget/singout_button.dart';
@@ -18,32 +19,33 @@ class SettingView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     // 프로필 메뉴 와 아이콘 정리
     final List<SettingMenu> settingMenus = [
       SettingMenu(
         icon: Icons.person,
-        title: '프로필',
+        title: l10n.settingsProfile,
         route: RoutePaths.userProfile,
       ),
       SettingMenu(
         icon: Icons.notifications,
-        title: '구매내역',
+        title: l10n.settingsPurchaseHistory,
         route: RoutePaths.purchaseHistory,
       ),
       SettingMenu(
         icon: Icons.help,
-        title: '멤버쉽 조회',
+        title: l10n.settingsMembership,
         route: RoutePaths.membership,
       ),
       SettingMenu(
         icon: Icons.privacy_tip,
-        title: '약관',
+        title: l10n.settingsTerms,
         route: RoutePaths.termsOfService,
       ),
-      SettingMenu(icon: Icons.info, title: '앱정보', route: RoutePaths.appInfo),
+      SettingMenu(icon: Icons.info, title: l10n.settingsAppInfo, route: RoutePaths.appInfo),
     ];
     return Scaffold(
-      appBar: AppBar(title: const Text('설정')),
+      appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
         children: [
           // 테마 설정

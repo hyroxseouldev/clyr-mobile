@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/feature/workout/infra/entity/workout_daily_entity.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/provider/get_workout_daily_controller.dart';
@@ -17,6 +18,7 @@ class ProgramDetailView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     // 선택한 날짜 상태 관리
     final selectedDate = useState<DateTime>(DateTime.now());
 
@@ -26,7 +28,7 @@ class ProgramDetailView extends HookConsumerWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('프로그램 상세')),
+      appBar: AppBar(title: Text(l10n.programDetail)),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           context.go(
@@ -88,6 +90,7 @@ class ProgramDetailView extends HookConsumerWidget {
 
   /// 구매한 프로그램 없음 프롬프트
   Widget _buildNoEnrollmentPrompt(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -101,7 +104,7 @@ class ProgramDetailView extends HookConsumerWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              '구매한 프로그램이 없습니다',
+              l10n.noEnrollment,
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
@@ -109,7 +112,7 @@ class ProgramDetailView extends HookConsumerWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              '먼저 프로그램을 구매해주세요\n프로그램을 구매하면 맞춤 워크아웃을 제공합니다',
+              l10n.noEnrollmentDesc,
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
@@ -123,6 +126,7 @@ class ProgramDetailView extends HookConsumerWidget {
 
   /// 시작 날짜 이전 프롬프트
   Widget _buildBeforeStartDatePrompt(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -136,7 +140,7 @@ class ProgramDetailView extends HookConsumerWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              '시작 전입니다',
+              l10n.notYetStarted,
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
@@ -144,7 +148,7 @@ class ProgramDetailView extends HookConsumerWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              '프로그램 시작일 이전입니다\n시작일부터 확인할 수 있습니다',
+              l10n.notYetStartedDesc,
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
@@ -158,6 +162,7 @@ class ProgramDetailView extends HookConsumerWidget {
 
   /// 시작 날짜 미설정 프롬프트
   Widget _buildNoStartDatePrompt(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -167,7 +172,7 @@ class ProgramDetailView extends HookConsumerWidget {
             Icon(Icons.event_available, size: 80, color: Colors.amber.shade300),
             const SizedBox(height: 24),
             Text(
-              '시작일을 설정해주세요',
+              l10n.selectStartDate,
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
@@ -175,7 +180,7 @@ class ProgramDetailView extends HookConsumerWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              '프로그램 시작일을 설정하면\n맞춤 워크아웃을 제공합니다',
+              l10n.selectStartDateDesc,
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
@@ -188,7 +193,7 @@ class ProgramDetailView extends HookConsumerWidget {
                   '${RoutePaths.workout}/program/$programId/start-date-setup',
                 );
               },
-              child: const Text('시작일 설정'),
+              child: Text(l10n.setStartDate),
             ),
           ],
         ),
@@ -198,6 +203,7 @@ class ProgramDetailView extends HookConsumerWidget {
 
   /// 미래 날짜 접근 제한 프롬프트
   Widget _buildFutureRestrictedPrompt(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -207,7 +213,7 @@ class ProgramDetailView extends HookConsumerWidget {
             Icon(Icons.lock_clock, size: 80, color: Colors.red.shade300),
             const SizedBox(height: 24),
             Text(
-              '아직 볼 수 없습니다',
+              l10n.notAvailableYet,
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
@@ -215,7 +221,7 @@ class ProgramDetailView extends HookConsumerWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              '최대 4일 뒤까지의 워크아웃만 확인할 수 있습니다\n날짜를 조금 더 가까운 날로 선택해주세요',
+              l10n.notAvailableYetDesc,
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
@@ -229,6 +235,7 @@ class ProgramDetailView extends HookConsumerWidget {
 
   /// 워크아웃 없음 프롬프트
   Widget _buildNoWorkoutPrompt(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -242,7 +249,7 @@ class ProgramDetailView extends HookConsumerWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              '해당 날짜에 워크아웃이 없습니다',
+              l10n.noWorkoutThisDate,
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
@@ -250,7 +257,7 @@ class ProgramDetailView extends HookConsumerWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              '오늘은 휴식일입니다\n충분한 휴식을 취하세요',
+              l10n.restDay,
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
@@ -267,6 +274,7 @@ class ProgramDetailView extends HookConsumerWidget {
     BuildContext context,
     WorkoutWithSession workoutWithSession,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final workout = workoutWithSession.workout;
     final sessions = [...workoutWithSession.sessions]
       ..sort((a, b) => a.orderIndex.compareTo(b.orderIndex));
@@ -328,12 +336,12 @@ class ProgramDetailView extends HookConsumerWidget {
             const SizedBox(height: 16),
 
             // 세션 목록
-            Text('오늘의 운동', style: Theme.of(context).textTheme.titleSmall),
+            Text(l10n.todaysWorkout, style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
 
             if (sessions.isEmpty)
-              const Center(
-                child: Text('등록된 세션이 없습니다.', style: TextStyle(fontSize: 14)),
+              Center(
+                child: Text(l10n.noSessions, style: const TextStyle(fontSize: 14)),
               )
             else
               // indexing ordering

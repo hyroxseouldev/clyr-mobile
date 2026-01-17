@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/exception/exception.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/provider/auth_controller.dart';
 import 'package:clyr_mobile/src/shared/loader.dart';
@@ -13,6 +14,7 @@ class LoginView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final formKey = useMemoized(() => GlobalKey<FormBuilderState>());
     final isFormValid = useState(false);
 
@@ -53,28 +55,28 @@ class LoginView extends HookConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    '환영합니다',
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  Text(
+                    l10n.loginTitle,
+                    style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    '로그인하여 시작하세요',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  Text(
+                    l10n.loginSubtitle,
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                   const SizedBox(height: 48),
                   FormBuilderTextField(
                     name: 'email',
-                    decoration: const InputDecoration(
-                      labelText: '이메일',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.email),
+                    decoration: InputDecoration(
+                      labelText: l10n.email,
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.email),
                     ),
                     keyboardType: TextInputType.emailAddress,
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(errorText: '이메일을 입력해주세요.'),
+                      FormBuilderValidators.required(errorText: l10n.emailRequired),
                       FormBuilderValidators.email(
-                        errorText: '올바른 이메일 형식이 아닙니다.',
+                        errorText: l10n.emailInvalid,
                       ),
                     ]),
                   ),
@@ -82,14 +84,14 @@ class LoginView extends HookConsumerWidget {
                   FormBuilderTextField(
                     name: 'password',
                     obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: '비밀번호',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.lock),
+                    decoration: InputDecoration(
+                      labelText: l10n.password,
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.lock),
                     ),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(
-                        errorText: '비밀번호를 입력해주세요.',
+                        errorText: l10n.passwordRequired,
                       ),
                     ]),
                   ),
@@ -119,13 +121,13 @@ class LoginView extends HookConsumerWidget {
                       ),
                       child: isLoading
                           ? const Loader()
-                          : const Text('로그인', style: TextStyle(fontSize: 16)),
+                          : Text(l10n.loginButton, style: const TextStyle(fontSize: 16)),
                     ),
                   ),
                   const SizedBox(height: 16),
                   TextButton(
                     onPressed: () => context.push('/signup'),
-                    child: const Text('계정이 없으신가요? 회원가입'),
+                    child: Text(l10n.noAccount),
                   ),
                 ],
               ),

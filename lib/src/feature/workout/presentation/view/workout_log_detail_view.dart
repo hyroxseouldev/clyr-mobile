@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/feature/workout/infra/entity/workout_log_entity.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/provider/get_workout_log_by_id_controller.dart';
@@ -15,6 +16,7 @@ class WorkoutLogDetailView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final logState = ref.watch(getWorkoutLogByIdControllerProvider(logId));
 
     ref.listen(deleteWorkoutLogControllerProvider, (previous, next) {
@@ -26,14 +28,14 @@ class WorkoutLogDetailView extends ConsumerWidget {
       if (next is AsyncData) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('운동 일지가 삭제되었습니다')));
+        ).showSnackBar(SnackBar(content: Text(l10n.workoutLogDeleted)));
         context.go(RoutePaths.workoutLog);
       }
     });
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('운동 일지 상세'),
+        title: Text(l10n.workoutLogDetail),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -46,20 +48,23 @@ class WorkoutLogDetailView extends ConsumerWidget {
             onPressed: () async {
               final confirmed = await showDialog<bool>(
                 context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('삭제 확인'),
-                  content: const Text('정말 이 운동 일지를 삭제하시겠습니까?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => context.pop(false),
-                      child: const Text('취소'),
-                    ),
-                    TextButton(
-                      onPressed: () => context.pop(true),
-                      child: const Text('삭제'),
-                    ),
-                  ],
-                ),
+                builder: (context) {
+                  final l10n = AppLocalizations.of(context)!;
+                  return AlertDialog(
+                    title: Text(l10n.deleteConfirm),
+                    content: Text(l10n.deleteConfirmMessage),
+                    actions: [
+                      TextButton(
+                        onPressed: () => context.pop(false),
+                        child: Text(l10n.confirm),
+                      ),
+                      TextButton(
+                        onPressed: () => context.pop(true),
+                        child: Text(l10n.delete),
+                      ),
+                    ],
+                  );
+                }
               );
 
               if (confirmed == true && context.mounted) {
@@ -120,7 +125,7 @@ class WorkoutLogDetailView extends ConsumerWidget {
 
               // 운동 내용
               Text(
-                '운동 내용',
+                l10n.workoutContent,
                 style: Theme.of(
                   context,
                 ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -130,7 +135,7 @@ class WorkoutLogDetailView extends ConsumerWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    log.content['content']?.toString() ?? '내용 없음',
+                    log.content['content']?.toString() ?? l10n.noContent,
                     style: const TextStyle(fontSize: 16, height: 1.5),
                   ),
                 ),
@@ -140,7 +145,7 @@ class WorkoutLogDetailView extends ConsumerWidget {
 
               // 생성/수정 정보
               Text(
-                '기록 정보',
+                l10n.recordInfo,
                 style: Theme.of(
                   context,
                 ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -151,13 +156,13 @@ class WorkoutLogDetailView extends ConsumerWidget {
                   children: [
                     ListTile(
                       leading: const Icon(Icons.create),
-                      title: const Text('생성일'),
+                      title: Text(l10n.createdDate),
                       subtitle: Text(_formatDateTime(log.createdAt)),
                     ),
                     const Divider(height: 1),
                     ListTile(
                       leading: const Icon(Icons.update),
-                      title: const Text('수정일'),
+                      title: Text(l10n.modifiedDate),
                       subtitle: Text(_formatDateTime(log.updatedAt)),
                     ),
                   ],

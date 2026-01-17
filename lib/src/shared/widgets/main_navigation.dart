@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,6 +12,7 @@ class MainNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final location = GoRouterState.of(context).uri.path;
     final currentIndex = switch (location) {
       final p when p.startsWith('/stats') => 0,
@@ -38,12 +40,12 @@ class MainNavigation extends StatelessWidget {
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentIndex,
         onDestinationSelected: onDestinationSelected,
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.analytics), label: 'Stats'),
-          NavigationDestination(icon: Icon(Icons.description), label: 'Log'),
-          NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-          NavigationDestination(icon: Icon(Icons.bar_chart), label: 'Ranking'),
-          NavigationDestination(icon: Icon(Icons.person), label: 'My'),
+        destinations: [
+          NavigationDestination(icon: const Icon(Icons.analytics), label: l10n.navStats),
+          NavigationDestination(icon: const Icon(Icons.description), label: l10n.navLog),
+          NavigationDestination(icon: const Icon(Icons.home), label: l10n.navHome),
+          NavigationDestination(icon: const Icon(Icons.bar_chart), label: l10n.navRanking),
+          NavigationDestination(icon: const Icon(Icons.person), label: l10n.navMy),
         ],
       ),
     );

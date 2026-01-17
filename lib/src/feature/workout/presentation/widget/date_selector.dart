@@ -83,8 +83,8 @@ class DateSelector extends HookWidget {
                 color: isSelected
                     ? Theme.of(context).colorScheme.primary
                     : isToday
-                        ? Theme.of(context).colorScheme.primaryContainer
-                        : Colors.transparent,
+                    ? Theme.of(context).colorScheme.primaryContainer
+                    : Colors.transparent,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: isSelected || isToday

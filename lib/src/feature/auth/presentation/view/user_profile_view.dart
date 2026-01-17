@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/storage/storage.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/entity/user_profile_entity.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/provider/user_profile_controller.dart';
@@ -11,6 +12,7 @@ class UserProfileView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final profileState = ref.watch(userProfileControllerProvider);
 
     ref.listen(userProfileControllerProvider, (previous, next) {
@@ -48,7 +50,7 @@ class UserProfileView extends HookConsumerWidget {
             onSuccess: () {
               ScaffoldMessenger.of(
                 context,
-              ).showSnackBar(const SnackBar(content: Text('프로필이 저장되었습니다')));
+              ).showSnackBar(SnackBar(content: Text(l10n.profileSaved)));
             },
             nickname: nicknameController.text.trim().isEmpty
                 ? null
@@ -67,7 +69,7 @@ class UserProfileView extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('프로필 설정'),
+        title: Text(l10n.profileTitle),
         actions: [
           TextButton(
             onPressed: profileState.isLoading ? null : saveProfile,
@@ -77,7 +79,7 @@ class UserProfileView extends HookConsumerWidget {
                     height: 20,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Text('저장'),
+                : Text(l10n.save),
           ),
         ],
       ),
@@ -105,58 +107,63 @@ class UserProfileView extends HookConsumerWidget {
                     width: 120,
                     height: 120,
                     isCircle: true,
-                    placeholderText: '프로필\n이미지',
+                    placeholderText: l10n.profileImage,
                   ),
                 ),
 
                 const SizedBox(height: 32),
 
-                // 닉네임
                 TextField(
                   controller: nicknameController,
-                  decoration: const InputDecoration(
-                    labelText: '닉네임',
-                    hintText: '닉네임을 입력하세요',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l10n.nickname,
+                    hintText: l10n.nicknameHint,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
 
                 const SizedBox(height: 16),
 
-                // 자기소개
                 TextField(
                   controller: bioController,
                   maxLines: 3,
-                  decoration: const InputDecoration(
-                    labelText: '자기소개',
-                    hintText: '자기소개를 입력하세요',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l10n.bio,
+                    hintText: l10n.bioHint,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
 
                 const SizedBox(height: 16),
 
-                // 연락처
                 TextField(
                   controller: phoneController,
                   keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(
-                    labelText: '연락처',
-                    hintText: '연락처를 입력하세요',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l10n.phone,
+                    hintText: l10n.phoneHint,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
 
                 const SizedBox(height: 24),
 
-                // 운동 수준
-                Text('운동 수준', style: Theme.of(context).textTheme.titleMedium),
+                Text(l10n.fitnessLevel, style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
                 SegmentedButton<FitnessLevel>(
                   segments: FitnessLevel.values.map((level) {
                     return ButtonSegment(
                       value: level,
-                      label: Text(level.displayName),
+                      label: Text(() {
+                        switch (level) {
+                          case FitnessLevel.beginner:
+                            return l10n.fitnessLevelBeginner;
+                          case FitnessLevel.intermediate:
+                            return l10n.fitnessLevelIntermediate;
+                          case FitnessLevel.advanced:
+                            return l10n.fitnessLevelAdvanced;
+                        }
+                      }()),
                     );
                   }).toList(),
                   selected: selectedFitnessLevel.value != null
@@ -172,33 +179,37 @@ class UserProfileView extends HookConsumerWidget {
 
                 const SizedBox(height: 24),
 
-                // 운동 목표
-                Text('운동 목표', style: Theme.of(context).textTheme.titleMedium),
+                Text(l10n.fitnessGoals, style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: ['체중감량', '근력증가', '근육량 증가', '체력증진', '유연성', '스트레스 해소']
-                      .map((goal) {
-                        final isSelected = selectedGoals.value.contains(goal);
-                        return FilterChip(
-                          label: Text(goal),
-                          selected: isSelected,
-                          onSelected: (selected) {
-                            if (selected) {
-                              selectedGoals.value = {
-                                ...selectedGoals.value,
-                                goal,
-                              };
-                            } else {
-                              selectedGoals.value = selectedGoals.value
-                                  .where((g) => g != goal)
-                                  .toSet();
-                            }
-                          },
-                        );
-                      })
-                      .toList(),
+                  children: [
+                    (l10n.goalWeightLoss, '체중감량'),
+                    (l10n.goalStrength, '근력증가'),
+                    (l10n.goalMuscle, '근육량 증가'),
+                    (l10n.goalStamina, '체력증진'),
+                    (l10n.goalFlexibility, '유연성'),
+                    (l10n.goalStress, '스트레스 해소'),
+                  ].map((goal) {
+                    final isSelected = selectedGoals.value.contains(goal.$2);
+                    return FilterChip(
+                      label: Text(goal.$1),
+                      selected: isSelected,
+                      onSelected: (selected) {
+                        if (selected) {
+                          selectedGoals.value = {
+                            ...selectedGoals.value,
+                            goal.$2,
+                          };
+                        } else {
+                          selectedGoals.value = selectedGoals.value
+                              .where((g) => g != goal.$2)
+                              .toSet();
+                        }
+                      },
+                    );
+                  }).toList(),
                 ),
 
                 // 에러 메시지

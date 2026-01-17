@@ -1,3 +1,6 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+
 sealed class AppException implements Exception {
   final String code;
   final String? message;
@@ -29,6 +32,18 @@ extension AppExceptionX on AppException {
       'wrong-password' => '비밀번호가 일치하지 않습니다.',
       'invalid-email' => '올바른 이메일 형식이 아닙니다.',
       _ => message ?? '알 수 없는 오류가 발생했습니다.',
+    };
+  }
+
+  // Get localized error message
+  String getLocalizedMessage(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return switch (code) {
+      'NETWORK_ERROR' => l10n.errorNetwork,
+      'user-not-found' => l10n.errorUserNotFound,
+      'wrong-password' => l10n.errorWrongPassword,
+      'invalid-email' => l10n.errorInvalidEmail,
+      _ => message ?? l10n.errorUnknown,
     };
   }
 }

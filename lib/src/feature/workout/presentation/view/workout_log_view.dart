@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/pagination/paginated_list_view.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/feature/workout/infra/entity/workout_log_entity.dart';
@@ -12,6 +13,7 @@ class WorkoutLogView extends ConsumerWidget {
   static const String routeName = 'workoutLog';
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final logsState = ref.watch(getWorkoutLogsControllerProvider);
 
     return Scaffold(
@@ -20,7 +22,7 @@ class WorkoutLogView extends ConsumerWidget {
           children: [
             Icon(Icons.description_outlined),
             const SizedBox(width: 8),
-            const Text('운동 기록', style: TextStyle(fontWeight: FontWeight.w600)),
+            Text(l10n.workoutRecords, style: const TextStyle(fontWeight: FontWeight.w600)),
           ],
         ),
       ),
@@ -55,7 +57,7 @@ class WorkoutLogView extends ConsumerWidget {
                   children: [
                     const SizedBox(height: 4),
                     Text(
-                      _formatDate(log.logDate),
+                      _formatDate(log.logDate, context),
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey.shade600,
@@ -63,7 +65,7 @@ class WorkoutLogView extends ConsumerWidget {
                     ),
                     if (log.content.isNotEmpty)
                       Text(
-                        _getContentPreview(log.content),
+                        _getContentPreview(log.content, context),
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey.shade500,
@@ -85,8 +87,7 @@ class WorkoutLogView extends ConsumerWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
-    // 1. SafeArea와 Expanded를 모두 제거합니다.
-    // 2. 부모(PaginatedListView)가 제공하는 공간 내에서 중앙 정렬을 수행합니다.
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -102,14 +103,14 @@ class WorkoutLogView extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              '운동 일지가 없습니다',
+              l10n.emptyWorkoutLogs,
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             Text(
-              '오른쪽 하단의 + 버튼을 눌러\n운동 일지를 작성해보세요',
+              l10n.tapToCreate,
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
@@ -151,22 +152,24 @@ class WorkoutLogView extends ConsumerWidget {
     );
   }
 
-  String _formatDate(DateTime date) {
+  String _formatDate(DateTime date, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final logDate = DateTime(date.year, date.month, date.day);
 
     final difference = today.difference(logDate).inDays;
 
-    if (difference == 0) return '오늘';
-    if (difference == 1) return '어제';
-    if (difference == -1) return '내일';
+    if (difference == 0) return l10n.today;
+    if (difference == 1) return l10n.yesterday;
+    if (difference == -1) return l10n.tomorrow;
 
     return '${date.year}.${date.month}.${date.day}';
   }
 
-  String _getContentPreview(Map<String, dynamic> content) {
-    if (content.isEmpty) return '내용 없음';
+  String _getContentPreview(Map<String, dynamic> content, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    if (content.isEmpty) return l10n.noContent;
 
     final firstValue = content.values.first;
     if (firstValue is String) {

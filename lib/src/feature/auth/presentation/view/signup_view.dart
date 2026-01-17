@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/exception/exception.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/provider/auth_controller.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class SignupView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final formKey = useMemoized(() => GlobalKey<FormBuilderState>());
     final isFormValid = useState(false);
 
@@ -33,8 +35,8 @@ class SignupView extends HookConsumerWidget {
         }
       } else if (next is AsyncData && previous is AsyncLoading) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('회원가입이 완료되었습니다. 이메일을 확인해주세요.'),
+          SnackBar(
+            content: Text(l10n.signupSuccess),
             backgroundColor: Colors.green,
           ),
         );
@@ -43,7 +45,7 @@ class SignupView extends HookConsumerWidget {
     });
 
     return Scaffold(
-      appBar: AppBar(title: const Text('회원가입')),
+      appBar: AppBar(title: Text(l10n.signupTitle)),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -60,40 +62,40 @@ class SignupView extends HookConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    '계정 만들기',
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  Text(
+                    l10n.createAccount,
+                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    '정보를 입력해주세요',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  Text(
+                    l10n.enterInfo,
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 32),
                   FormBuilderTextField(
                     name: 'fullName',
-                    decoration: const InputDecoration(
-                      labelText: '이름',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.person),
+                    decoration: InputDecoration(
+                      labelText: l10n.name,
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.person),
                     ),
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(errorText: '이름을 입력해주세요.'),
+                      FormBuilderValidators.required(errorText: l10n.required),
                     ]),
                   ),
                   const SizedBox(height: 16),
                   FormBuilderTextField(
                     name: 'email',
-                    decoration: const InputDecoration(
-                      labelText: '이메일',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.email),
+                    decoration: InputDecoration(
+                      labelText: l10n.email,
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.email),
                     ),
                     keyboardType: TextInputType.emailAddress,
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(errorText: '이메일을 입력해주세요.'),
+                      FormBuilderValidators.required(errorText: l10n.emailRequired),
                       FormBuilderValidators.email(
-                        errorText: '올바른 이메일 형식이 아닙니다.',
+                        errorText: l10n.emailInvalid,
                       ),
                     ]),
                   ),
@@ -101,18 +103,18 @@ class SignupView extends HookConsumerWidget {
                   FormBuilderTextField(
                     name: 'password',
                     obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: '비밀번호',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.lock),
+                    decoration: InputDecoration(
+                      labelText: l10n.password,
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.lock),
                     ),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(
-                        errorText: '비밀번호를 입력해주세요.',
+                        errorText: l10n.passwordRequired,
                       ),
                       FormBuilderValidators.minLength(
                         6,
-                        errorText: '비밀번호는 최소 6자 이상이어야 합니다.',
+                        errorText: l10n.passwordMinLength,
                       ),
                     ]),
                   ),
@@ -120,19 +122,19 @@ class SignupView extends HookConsumerWidget {
                   FormBuilderTextField(
                     name: 'confirmPassword',
                     obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: '비밀번호 확인',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.lock_outline),
+                    decoration: InputDecoration(
+                      labelText: l10n.confirmPassword,
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.lock_outline),
                     ),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(
-                        errorText: '비밀번호 확인을 입력해주세요.',
+                        errorText: l10n.confirmPasswordRequired,
                       ),
                       (val) {
                         if (val !=
                             formKey.currentState?.fields['password']?.value) {
-                          return '비밀번호가 일치하지 않습니다.';
+                          return l10n.passwordMismatch;
                         }
                         return null;
                       },
@@ -172,13 +174,13 @@ class SignupView extends HookConsumerWidget {
                                 color: Colors.white,
                               ),
                             )
-                          : const Text('가입하기', style: TextStyle(fontSize: 16)),
+                          : Text(l10n.signupButton, style: const TextStyle(fontSize: 16)),
                     ),
                   ),
                   const SizedBox(height: 16),
                   TextButton(
                     onPressed: () => context.pop(),
-                    child: const Text('이미 계정이 있으신가요? 로그인'),
+                    child: Text(l10n.hasAccount),
                   ),
                 ],
               ),

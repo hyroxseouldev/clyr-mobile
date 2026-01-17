@@ -6,7 +6,6 @@ part of 'user_profile_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-// ignore: unused_element
 UserProfileDto _$UserProfileDtoFromJson(Map<String, dynamic> json) =>
     UserProfileDto(
       id: json['id'] as String?,
