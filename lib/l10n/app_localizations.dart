@@ -758,6 +758,18 @@ abstract class AppLocalizations {
   /// **'현재 프로그램'**
   String get currentProgram;
 
+  /// No description provided for @todaysSections.
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘의 세션'**
+  String get todaysSections;
+
+  /// No description provided for @noSectionsForDate.
+  ///
+  /// In ko, this message translates to:
+  /// **'이 날짜에 세션이 없습니다'**
+  String get noSectionsForDate;
+
   /// No description provided for @error.
   ///
   /// In ko, this message translates to:
@@ -877,6 +889,66 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'취소'**
   String get cancel;
+
+  /// No description provided for @category.
+  ///
+  /// In ko, this message translates to:
+  /// **'카테고리'**
+  String get category;
+
+  /// No description provided for @notes.
+  ///
+  /// In ko, this message translates to:
+  /// **'메모'**
+  String get notes;
+
+  /// No description provided for @notesRequired.
+  ///
+  /// In ko, this message translates to:
+  /// **'메모를 입력해주세요'**
+  String get notesRequired;
+
+  /// No description provided for @workoutNotesHint.
+  ///
+  /// In ko, this message translates to:
+  /// **'운동 내용을 자유롭게 기록해주세요'**
+  String get workoutNotesHint;
+
+  /// No description provided for @recordCategoryFortime.
+  ///
+  /// In ko, this message translates to:
+  /// **'포르타임'**
+  String get recordCategoryFortime;
+
+  /// No description provided for @recordCategoryAmraps.
+  ///
+  /// In ko, this message translates to:
+  /// **'AMRAP'**
+  String get recordCategoryAmraps;
+
+  /// No description provided for @recordCategoryMaxrep.
+  ///
+  /// In ko, this message translates to:
+  /// **'맥스렙'**
+  String get recordCategoryMaxrep;
+
+  /// No description provided for @recordCategoryMaxWeight.
+  ///
+  /// In ko, this message translates to:
+  /// **'맥스웨이트'**
+  String get recordCategoryMaxWeight;
+
+  /// No description provided for @completeWorkout.
+  ///
+  /// In ko, this message translates to:
+  /// **'운동 완료'**
+  String get completeWorkout;
+
+  /// No description provided for @completed.
+  ///
+  /// In ko, this message translates to:
+  /// **'완료됨'**
+  String get completed;
 
   /// No description provided for @required.
   ///

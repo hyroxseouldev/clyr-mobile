@@ -25,3 +25,25 @@ abstract class ActiveProgramEntity with _$ActiveProgramEntity {
     );
   }
 }
+
+/// Blueprint 섹션 엔티티
+@freezed
+abstract class BlueprintSectionEntity with _$BlueprintSectionEntity {
+  const factory BlueprintSectionEntity({
+    required String id,
+    required String title,
+    required String content,
+    required int orderIndex,
+  }) = _BlueprintSectionEntity;
+
+  /// DTO로부터 엔티티 생성
+  factory BlueprintSectionEntity.fromDto(BlueprintSectionItemsDto dto) {
+    final section = dto.blueprintSection;
+    return BlueprintSectionEntity(
+      id: dto.id,
+      title: section?.title ?? '',
+      content: section?.content ?? '',
+      orderIndex: dto.orderIndex,
+    );
+  }
+}

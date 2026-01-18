@@ -12,6 +12,17 @@ CoreDataSource coreDataSource(Ref ref) {
 
 abstract interface class CoreDataSource {
   Future<ProgramsDto> getCurrentActiveProgram();
+  Future<List<BlueprintSectionItemsDto>> getBlueprintSectionItemsByDate({
+    required DateTime date,
+    bool isTest = false,
+  });
+
+  /// Create a new section record
+  Future<SectionRecordDto> createSectionRecord({
+    required String sectionId,
+    required String sectionItemId,
+    Map<String, dynamic>? content,
+  });
 }
 
 class SupabaseDataSource implements CoreDataSource {
@@ -67,6 +78,119 @@ class SupabaseDataSource implements CoreDataSource {
     } catch (e) {
       print('getCurrentActiveProgram: error = $e');
       throw Exception('Failed to get active program: $e');
+    }
+  }
+
+  @override
+  Future<List<BlueprintSectionItemsDto>> getBlueprintSectionItemsByDate({
+    required DateTime date,
+    bool isTest = false,
+  }) async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) {
+      throw Exception('User not authenticated');
+    }
+
+    try {
+      // 1. Get active enrollment
+      final enrollmentResponse = await supabase
+          .from('enrollments')
+          .select('start_date, program_id')
+          .eq('user_id', userId)
+          .eq('status', 'ACTIVE')
+          .maybeSingle();
+
+      if (enrollmentResponse == null) {
+        throw Exception('No active enrollment found');
+      }
+
+      final startDate = DateTime.parse(enrollmentResponse['start_date']);
+      final programId = enrollmentResponse['program_id'];
+
+      // 2. Calculate day number (1-indexed)
+      final dayNumber = isTest ? 1 : date.difference(startDate).inDays + 1;
+
+      if (dayNumber < 1) {
+        throw Exception('Date is before enrollment start date');
+      }
+
+      // 3. Calculate phase number (1-indexed, 7 days per phase)
+      final phaseNumber = isTest ? 1 : (dayNumber - 1) ~/ 7 + 1;
+
+      // 4. Query blueprint by program_id, phase_number, day_number
+      final programBlueprint = await supabase
+          .from('program_blueprints')
+          .select('id')
+          .eq('program_id', programId)
+          .eq('phase_number', phaseNumber)
+          .eq('day_number', dayNumber)
+          .maybeSingle();
+
+      if (programBlueprint == null) {
+        return [];
+      }
+
+      final blueprintId = programBlueprint['id'] as String;
+
+      // 5. Get blueprint_section_items with nested sections, ordered
+      final sectionItems = await supabase
+          .from('blueprint_section_items')
+          .select('''
+            id,
+            blueprint_id,
+            section_id,
+            order_index,
+            created_at,
+            blueprint_sections (
+              id,
+              title,
+              content,
+              created_at,
+              updated_at
+            )
+          ''')
+          .eq('blueprint_id', blueprintId)
+          .order('order_index', ascending: true);
+
+      // 6. Parse and return BlueprintSectionItemsDto list
+      return sectionItems
+          .map((item) => BlueprintSectionItemsDto.fromJson(item))
+          .toList();
+    } catch (e) {
+      print('getBlueprintSectionItemsByDate: error = $e');
+      throw Exception('Failed to get blueprint sections: $e');
+    }
+  }
+
+  @override
+  Future<SectionRecordDto> createSectionRecord({
+    required String sectionId,
+    required String sectionItemId,
+    Map<String, dynamic>? content,
+  }) async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) {
+      throw Exception('User not authenticated');
+    }
+
+    try {
+      final insertData = {
+        'user_id': userId,
+        'section_id': sectionId,
+        'section_item_id': sectionItemId,
+        'content': content ?? {},
+      };
+
+      final response = await supabase
+          .from('section_records')
+          .insert(insertData)
+          .select()
+          .single();
+
+      return SectionRecordDto.fromJson(response);
+    } catch (e) {
+      print('createSectionRecord: error = $e');
+      throw Exception('Failed to create section record: $e');
     }
   }
 }

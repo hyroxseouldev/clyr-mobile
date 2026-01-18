@@ -347,6 +347,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get currentProgram => 'Current program';
 
   @override
+  String get todaysSections => 'Today\'s Sessions';
+
+  @override
+  String get noSectionsForDate => 'No sessions for this date';
+
+  @override
   String get error => 'An error occurred';
 
   @override
@@ -405,6 +411,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get notes => 'Notes';
+
+  @override
+  String get notesRequired => 'Please enter notes';
+
+  @override
+  String get workoutNotesHint => 'Record your workout freely';
+
+  @override
+  String get recordCategoryFortime => 'For Time';
+
+  @override
+  String get recordCategoryAmraps => 'AMRAP';
+
+  @override
+  String get recordCategoryMaxrep => 'Max Rep';
+
+  @override
+  String get recordCategoryMaxWeight => 'Max Weight';
+
+  @override
+  String get completeWorkout => 'Complete Workout';
+
+  @override
+  String get completed => 'Completed';
 
   @override
   String get required => 'Required field';

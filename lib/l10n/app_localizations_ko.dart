@@ -341,6 +341,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get currentProgram => '현재 프로그램';
 
   @override
+  String get todaysSections => '오늘의 세션';
+
+  @override
+  String get noSectionsForDate => '이 날짜에 세션이 없습니다';
+
+  @override
   String get error => '오류가 발생했습니다';
 
   @override
@@ -399,6 +405,36 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get cancel => '취소';
+
+  @override
+  String get category => '카테고리';
+
+  @override
+  String get notes => '메모';
+
+  @override
+  String get notesRequired => '메모를 입력해주세요';
+
+  @override
+  String get workoutNotesHint => '운동 내용을 자유롭게 기록해주세요';
+
+  @override
+  String get recordCategoryFortime => '포르타임';
+
+  @override
+  String get recordCategoryAmraps => 'AMRAP';
+
+  @override
+  String get recordCategoryMaxrep => '맥스렙';
+
+  @override
+  String get recordCategoryMaxWeight => '맥스웨이트';
+
+  @override
+  String get completeWorkout => '운동 완료';
+
+  @override
+  String get completed => '완료됨';
 
   @override
   String get required => '필수 항목입니다';

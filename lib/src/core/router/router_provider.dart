@@ -6,6 +6,8 @@ import 'package:clyr_mobile/src/feature/auth/presentation/view/splash_view.dart'
 import 'package:clyr_mobile/src/feature/auth/presentation/view/user_profile_view.dart';
 import 'package:clyr_mobile/src/feature/community/presentation/view/commnunity_view.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/home_view.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/view/session_record_create_view.dart';
+import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_create_view.dart';
 import 'package:clyr_mobile/src/feature/log/presentation/view/log_view.dart';
 import 'package:clyr_mobile/src/feature/ranking/presentation/view/ranking_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/app_info_view.dart';
@@ -15,7 +17,6 @@ import 'package:clyr_mobile/src/feature/settings/presentation/view/terms_of_serv
 import 'package:clyr_mobile/src/feature/settings/presentation/view/settings_view.dart';
 import 'package:clyr_mobile/src/feature/stats/presentation/view/stats_view.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/program_detail_view.dart';
-import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_create_view.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_detail_view.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_edit_view.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_view.dart';
@@ -72,6 +73,16 @@ GoRouter router(Ref ref) {
           GoRoute(
             path: RoutePaths.home,
             builder: (context, state) => const HomeView(),
+            routes: [
+              GoRoute(
+                path: 'session-record-create/:sId',
+                name: RoutePaths.homeSessionRecordCreate,
+                builder: (context, state) {
+                  final sId = state.pathParameters['sId']!;
+                  return SessionRecordCreateView(sessionId: sId);
+                },
+              ),
+            ],
           ),
           GoRoute(
             path: RoutePaths.ranking,

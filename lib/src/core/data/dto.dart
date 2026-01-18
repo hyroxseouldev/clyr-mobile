@@ -321,6 +321,9 @@ class BlueprintSectionItemsDto {
   final int orderIndex;
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
+  // Nested section data from Supabase query (ignored in serialization)
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final BlueprintSectionsDto? blueprintSection;
 
   BlueprintSectionItemsDto({
     required this.id,
@@ -328,10 +331,26 @@ class BlueprintSectionItemsDto {
     required this.sectionId,
     required this.orderIndex,
     required this.createdAt,
+    this.blueprintSection,
   });
 
-  factory BlueprintSectionItemsDto.fromJson(Map<String, dynamic> json) =>
-      _$BlueprintSectionItemsDtoFromJson(json);
+  factory BlueprintSectionItemsDto.fromJson(Map<String, dynamic> json) {
+    // Extract nested blueprint_sections
+    BlueprintSectionsDto? section;
+    if (json['blueprint_sections'] != null) {
+      section = BlueprintSectionsDto.fromJson(json['blueprint_sections']);
+    }
+
+    return BlueprintSectionItemsDto(
+      id: json['id'] as String,
+      blueprintId: json['blueprint_id'] as String,
+      sectionId: json['section_id'] as String,
+      orderIndex: json['order_index'] as int,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      blueprintSection: section,
+    );
+  }
+
   Map<String, dynamic> toJson() => _$BlueprintSectionItemsDtoToJson(this);
 }
 
@@ -461,4 +480,41 @@ class EnrollmentsDto {
   factory EnrollmentsDto.fromJson(Map<String, dynamic> json) =>
       _$EnrollmentsDtoFromJson(json);
   Map<String, dynamic> toJson() => _$EnrollmentsDtoToJson(this);
+}
+
+/// [SectionRecord] 섹션 완료 기록
+@JsonSerializable()
+class SectionRecordDto {
+  final String id;
+  @JsonKey(name: 'user_id')
+  final String userId;
+  @JsonKey(name: 'section_id')
+  final String sectionId;
+  @JsonKey(name: 'section_item_id')
+  final String sectionItemId;
+  final Map<String, dynamic>? content;
+  @JsonKey(name: 'completed_at')
+  final DateTime completedAt;
+  @JsonKey(name: 'coach_comment')
+  final String? coachComment;
+  @JsonKey(name: 'created_at')
+  final DateTime createdAt;
+  @JsonKey(name: 'updated_at')
+  final DateTime updatedAt;
+
+  SectionRecordDto({
+    required this.id,
+    required this.userId,
+    required this.sectionId,
+    required this.sectionItemId,
+    this.content,
+    required this.completedAt,
+    this.coachComment,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory SectionRecordDto.fromJson(Map<String, dynamic> json) =>
+      _$SectionRecordDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$SectionRecordDtoToJson(this);
 }

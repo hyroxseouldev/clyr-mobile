@@ -307,3 +307,29 @@ Map<String, dynamic> _$EnrollmentsDtoToJson(EnrollmentsDto instance) =>
       'created_at': instance.createdAt.toIso8601String(),
       'updated_at': instance.updatedAt.toIso8601String(),
     };
+
+SectionRecordDto _$SectionRecordDtoFromJson(Map<String, dynamic> json) =>
+    SectionRecordDto(
+      id: json['id'] as String,
+      userId: json['user_id'] as String,
+      sectionId: json['section_id'] as String,
+      sectionItemId: json['section_item_id'] as String,
+      content: json['content'] as Map<String, dynamic>?,
+      completedAt: DateTime.parse(json['completed_at'] as String),
+      coachComment: json['coach_comment'] as String?,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+    );
+
+Map<String, dynamic> _$SectionRecordDtoToJson(SectionRecordDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'user_id': instance.userId,
+      'section_id': instance.sectionId,
+      'section_item_id': instance.sectionItemId,
+      'content': instance.content,
+      'completed_at': instance.completedAt.toIso8601String(),
+      'coach_comment': instance.coachComment,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+    };

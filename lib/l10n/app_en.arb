@@ -121,6 +121,8 @@
 
   "todaysWorkout": "Today's Workout",
   "currentProgram": "Current program",
+  "todaysSections": "Today's Sessions",
+  "noSectionsForDate": "No sessions for this date",
 
   "error": "An error occurred",
   "retry": "Please try again.",
@@ -146,6 +148,17 @@
   "addNewProgram": "Please add a new workout program",
 
   "cancel": "Cancel",
+
+  "category": "Category",
+  "notes": "Notes",
+  "notesRequired": "Please enter notes",
+  "workoutNotesHint": "Record your workout freely",
+  "recordCategoryFortime": "For Time",
+  "recordCategoryAmraps": "AMRAP",
+  "recordCategoryMaxrep": "Max Rep",
+  "recordCategoryMaxWeight": "Max Weight",
+  "completeWorkout": "Complete Workout",
+  "completed": "Completed",
 
   "required": "Required field",
   "tooShort": "Too short",

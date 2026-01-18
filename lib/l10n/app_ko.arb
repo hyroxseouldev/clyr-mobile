@@ -121,6 +121,8 @@
 
   "todaysWorkout": "오늘의 운동",
   "currentProgram": "현재 프로그램",
+  "todaysSections": "오늘의 세션",
+  "noSectionsForDate": "이 날짜에 세션이 없습니다",
 
   "error": "오류가 발생했습니다",
   "retry": "다시 시도해주세요.",
@@ -146,6 +148,17 @@
   "addNewProgram": "새로운 운동 프로그램을 추가해주세요",
 
   "cancel": "취소",
+
+  "category": "카테고리",
+  "notes": "메모",
+  "notesRequired": "메모를 입력해주세요",
+  "workoutNotesHint": "운동 내용을 자유롭게 기록해주세요",
+  "recordCategoryFortime": "포르타임",
+  "recordCategoryAmraps": "AMRAP",
+  "recordCategoryMaxrep": "맥스렙",
+  "recordCategoryMaxWeight": "맥스웨이트",
+  "completeWorkout": "운동 완료",
+  "completed": "완료됨",
 
   "required": "필수 항목입니다",
   "tooShort": "너무 짧습니다",

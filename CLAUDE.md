@@ -154,3 +154,371 @@ Environment variables are managed using `envied` package:
 - Access via: `Env.{variableName}`
 
 See `document/flutter_rule.md` for comprehensive development guidelines in Korean.
+
+---
+
+## Clean Architecture Implementation: Home Feature
+
+This section documents the Clean Architecture pattern implementation for the Home feature, serving as a reference for all feature development.
+
+### Architecture Pattern
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           PRESENTATION LAYER                            │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    │
+│  │      View       │◄───┤    Provider     │◄───┤    Widget      │    │
+│  │   (home_view)   │    │  (*_provider)   │    │  (*_widget)     │    │
+│  └─────────────────┘    └─────────────────┘    └─────────────────┘    │
+│           │                      │                      │              │
+│           │                      ▼                      │              │
+│           │            ┌─────────────────┐              │              │
+│           │            │     UseCase     │              │              │
+│           │            │  (*_usecase)    │              │              │
+│           │            └─────────────────┘              │              │
+└───────────│──────────────────┼──────────────────────────│──────────────┘
+            │                  │                          │
+            ▼                  ▼                          ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           DOMAIN LAYER (infra)                          │
+│  ┌─────────────────┐    ┌─────────────────┐                              │
+│  │     Entity      │◄───┤    UseCase      │                              │
+│  │  (*_entity)     │    │  (*_usecase)    │                              │
+│  └─────────────────┘    └─────────────────┘                              │
+│           │                      │                                        │
+└───────────│──────────────────────│──────────────────────────────────────┘
+            │                      │
+            ▼                      ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                            DATA LAYER                                   │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    │
+│  │     DTO         │    │   Repository    │◄───┤  Data Source    │    │
+│  │  (dto.dart)     │    │ (*_repository)  │    │ (data_source)   │    │
+│  └─────────────────┘    └─────────────────┘    └─────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Data Flow Examples
+
+#### Flow 1: Active Program Display
+
+```dart
+// 1. DATA LAYER: SupabaseDataSource (data_source.dart)
+Future<ActiveProgramDto> getCurrentActiveProgram() async {
+  final response = await supabase.from('enrollments').select('*').eq('is_active', true).single();
+  return ActiveProgramDto.fromJson(response);
+}
+
+// 2. DATA LAYER: HomeRepository (home_repository.dart)
+FutureEither<AppException, ActiveProgramEntity> getActiveProgram() async {
+  try {
+    final dto = await dataSource.getCurrentActiveProgram();
+    return right(ActiveProgramEntity.fromDto(dto));
+  } catch (e) {
+    return left(HomeException(code: 'ACTIVE_PROGRAM_FETCH_FAILED', message: e.toString()));
+  }
+}
+
+// 3. DOMAIN LAYER: GetActiveProgramUseCase (get_active_program_usecase.dart)
+class GetActiveProgramUseCase implements Usecase<void, ActiveProgramEntity?> {
+  final HomeRepository _repository;
+  GetActiveProgramUseCase(this._repository);
+
+  @override
+  FutureEither<AppException, ActiveProgramEntity?> call(void input) {
+    return _repository.getActiveProgram();
+  }
+}
+
+// 4. PRESENTATION LAYER: Provider (home_controller.dart)
+@riverpod
+class HomeController extends _$HomeController {
+  @override
+  FutureOr<ActiveProgramEntity?> build() async {
+    final usecase = ref.watch(getActiveProgramUseCaseProvider);
+    final result = await usecase(null);
+    return result.fold(
+      (l) => throw l,
+      (r) => r,
+    );
+  }
+}
+
+// 5. PRESENTATION LAYER: View (home_view.dart)
+final activeProgramState = ref.watch(homeControllerProvider);
+AsyncWidget<ActiveProgramEntity?>(
+  data: activeProgramState,
+  builder: (activeProgram) => ProgramSelector(programList: [activeProgram!]),
+)
+```
+
+#### Flow 2: Blueprint Sections by Date
+
+```dart
+// 1. DATA LAYER: SupabaseDataSource (data_source.dart)
+Future<List<BlueprintSectionItemsDto>> getBlueprintSectionItemsByDate({
+  required DateTime date,
+}) async {
+  try {
+    // Get enrollment and calculate dayNumber, phaseNumber
+    final enrollmentData = await supabase.from('enrollments').select().single();
+
+    final startDate = DateTime.parse(enrollmentData['start_date']);
+    final dayNumber = date.difference(startDate).inDays + 1;
+    final phaseNumber = (dayNumber - 1) ~/ 7 + 1;
+
+    // Query blueprint with nested sections
+    final response = await supabase
+        .from('program_blueprints')
+        .select('''
+          id,
+          blueprint_section_items (
+            id,
+            section_id,
+            order_index,
+            blueprint_sections (
+              id,
+              title,
+              content
+            )
+          )
+        ''')
+        .eq('program_id', enrollmentData['program_id'])
+        .eq('phase_number', phaseNumber)
+        .eq('day_number', dayNumber)
+        .single();
+
+    return (response['blueprint_section_items'] as List)
+        .map((e) => BlueprintSectionItemsDto.fromJson(e))
+        .toList();
+  } catch (e) {
+    print('getBlueprintSectionItemsByDate: error = $e');
+    throw Exception('Failed to get blueprint sections: $e');
+  }
+}
+
+// 2. DATA LAYER: HomeRepository (home_repository.dart)
+FutureEither<AppException, List<BlueprintSectionEntity>> getBlueprintSections({
+  required DateTime date,
+}) async {
+  try {
+    final dtos = await dataSource.getBlueprintSectionItemsByDate(date: date);
+    final entities = dtos.map((dto) => BlueprintSectionEntity.fromDto(dto)).toList();
+    return right(entities);
+  } catch (e) {
+    return left(
+      HomeException(
+        code: 'BLUEPRINT_SECTIONS_FETCH_FAILED',
+        message: e.toString(),
+      ),
+    );
+  }
+}
+
+// 3. DOMAIN LAYER: BlueprintSectionEntity (home_entity.dart)
+@freezed
+class BlueprintSectionEntity with _$BlueprintSectionEntity {
+  const factory BlueprintSectionEntity({
+    required String id,
+    required String title,
+    required String content,
+    required int orderIndex,
+  }) = _BlueprintSectionEntity;
+
+  factory BlueprintSectionEntity.fromDto(BlueprintSectionItemsDto dto) {
+    final section = dto.blueprintSection;
+    return BlueprintSectionEntity(
+      id: dto.id,
+      title: section?.title ?? '',
+      content: section?.content ?? '',
+      orderIndex: dto.orderIndex,
+    );
+  }
+}
+
+// 4. DOMAIN LAYER: GetBlueprintSectionsUseCase (get_blueprint_sections_usecase.dart)
+class GetBlueprintSectionsUseCase
+    implements Usecase<GetBlueprintSectionsParams, List<BlueprintSectionEntity>> {
+  final HomeRepository _repository;
+
+  GetBlueprintSectionsUseCase(this._repository);
+
+  @override
+  FutureEither<AppException, List<BlueprintSectionEntity>> call(
+    GetBlueprintSectionsParams input,
+  ) {
+    return _repository.getBlueprintSections(date: input.date);
+  }
+}
+
+class GetBlueprintSectionsParams {
+  final DateTime date;
+  const GetBlueprintSectionsParams({required this.date});
+}
+
+// 5. PRESENTATION LAYER: Provider (blueprint_section_provider.dart)
+@riverpod
+Future<List<BlueprintSectionEntity>> blueprintSections(
+  Ref ref,
+  DateTime date,
+) async {
+  final usecase = ref.watch(getBlueprintSectionsUseCaseProvider);
+  final params = GetBlueprintSectionsParams(date: date);
+
+  final result = await usecase(params);
+  return result.fold(
+    (l) => throw l,
+    (r) => r,
+  );
+}
+
+// 6. PRESENTATION LAYER: Widget (blueprint_section_card.dart)
+import 'package:clyr_mobile/src/core/router/router_path.dart';
+
+class BlueprintSectionCard extends StatelessWidget {
+  final BlueprintSectionEntity item;
+  final int index;
+  final bool isCompleted;
+  final bool showingCompleteButton;
+
+  const BlueprintSectionCard({
+    super.key,
+    required this.item,
+    required this.index,
+    this.isCompleted = false,
+    this.showingCompleteButton = false,
+  });
+
+  void _onCompletePressed(BuildContext context) {
+    context.goNamed(
+      RoutePaths.homeSessionRecordCreate,
+      pathParameters: {'sId': item.id},
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: ExpansionTile(
+        leading: CircleAvatar(child: Text('$index')),
+        title: Text(item.title),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Html(data: item.content),
+          ),
+          if (showingCompleteButton)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: isCompleted ? null : () => _onCompletePressed(context),
+                  child: Text(isCompleted ? l10n.completed : l10n.completeWorkout),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+// 7. PRESENTATION LAYER: View (home_view.dart)
+AsyncWidget<List<BlueprintSectionEntity>>(
+  data: ref.watch(blueprintSectionsProvider(selectedDate.value)),
+  builder: (sections) {
+    if (sections.isEmpty) {
+      return _buildEmptySections(context);
+    }
+    return Column(
+      children: sections.asMap().entries.map((entry) {
+        return BlueprintSectionCard(
+          item: entry.value,
+          index: entry.key + 1,
+        );
+      }).toList(),
+    );
+  },
+)
+```
+
+### Layer Responsibilities
+
+| Layer | Responsibility | Input | Output | Error Handling |
+|-------|---------------|-------|--------|----------------|
+| **Data Source** | API/DB communication, raw queries | Primitives | DTO | throws Exception |
+| **Repository** | DTO → Entity mapping | Primitives | `FutureEither<AppException, Entity>` | Maps to AppException |
+| **UseCase** | Business logic orchestration | Params Record | `FutureEither<AppException, Entity>` | Forwards from Repository |
+| **Provider** | State management, caching | Primitives | `AsyncValue<Entity>` | Throws on left |
+| **View** | UI rendering | `AsyncValue<Entity>` | Widget | AsyncWidget handles |
+| **Widget** | Reusable UI components | Entity | Widget | N/A |
+
+### Implementation Rules
+
+1. **Data Flow Direction**: Always unidirectional: DataSource → Repository → UseCase → Provider → View
+2. **DTO to Entity**: Use `factory Entity.fromDto(DTO dto)` in Entity classes
+3. **Error Handling**: Use `fpdart` Either pattern - `FutureEither<AppException, T>`
+4. **State Management**: Use Riverpod v3+ with code generation (`@riverpod`)
+5. **Async UI**: Use `AsyncWidget<T>` wrapper for `AsyncValue<T>` handling
+6. **Localization**: Always use `l10n` strings, never hardcode UI text
+7. **Nested DTOs**: Use custom `fromJson` with `@JsonKey(includeFromJson: false, includeToJson: false)`
+8. **Freezed Entities**: Use `@freezed` for immutable Entity classes
+9. **Routing Navigation**: Always use `context.goNamed()` with `RoutePaths` constants, never hardcode routes
+
+### Routing Best Practices
+
+**DO** - Use named navigation with RoutePaths constants:
+```dart
+// ✅ Correct: Type-safe navigation with constants
+import 'package:clyr_mobile/src/core/router/router_path.dart';
+
+context.goNamed(
+  RoutePaths.homeSessionRecordCreate,
+  pathParameters: {'sId': item.id},
+);
+```
+
+**DON'T** - Never hardcode route paths:
+```dart
+// ❌ Wrong: Hardcoded route string
+context.go('/home/workout-log-create/${item.id}');
+
+// ❌ Wrong: Hardcoded path string
+context.goNamed('/home/session-record-create/${item.id}');
+```
+
+**Why?**
+- **Type Safety**: Compiler catches typos and missing parameters
+- **Refactoring**: Route changes update automatically
+- **Consistency**: Single source of truth for route paths
+- **IDE Support**: Auto-completion and jump-to-definition
+
+### File Organization
+
+```
+lib/src/feature/home/
+├── data/
+│   ├── repository/
+│   │   ├── home_repository.dart          # Repository interface + impl
+│   │   └── home_repository_provider.dart
+│   └── (DTOs are in lib/src/core/data/dto.dart)
+├── infra/
+│   ├── entity/
+│   │   └── home_entity.dart              # ActiveProgramEntity, BlueprintSectionEntity
+│   └── usecase/
+│       ├── get_active_program_usecase.dart
+│       ├── get_blueprint_sections_usecase.dart
+│       └── home_usecase_provider.dart
+└── presentation/
+    ├── provider/
+    │   ├── home_controller.dart          # ActiveProgram provider
+    │   └── blueprint_section_provider.dart
+    ├── view/
+    │   └── home_view.dart
+    └── widget/
+        ├── program_selector.dart
+        └── blueprint_section_card.dart
+```
