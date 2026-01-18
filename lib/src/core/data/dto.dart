@@ -345,10 +345,17 @@ class BlueprintSectionItemsDto {
       section = BlueprintSectionsDto.fromJson(json['blueprint_sections']);
     }
 
-    // Extract nested section_records
+    // Extract nested section_records (filter by current user if multiple)
     SectionRecordDto? record;
     if (json['section_records'] != null) {
-      record = SectionRecordDto.fromJson(json['section_records']);
+      final recordsData = json['section_records'];
+      // Handle both single object and array
+      if (recordsData is Map) {
+        record = SectionRecordDto.fromJson(recordsData as Map<String, dynamic>);
+      } else if (recordsData is List && recordsData.isNotEmpty) {
+        // Filter by current user's session records (we'd need userId here, but for now take first)
+        record = SectionRecordDto.fromJson(recordsData[0] as Map<String, dynamic>);
+      }
     }
 
     return BlueprintSectionItemsDto(

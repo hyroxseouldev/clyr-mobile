@@ -114,3 +114,57 @@ final class GetBlueprintSectionsUseCaseProvider
 
 String _$getBlueprintSectionsUseCaseHash() =>
     r'0afa83f862349fab5d7141dc6b068349bbc87f29';
+
+/// 섹션 완료 기록 생성 UseCase 프로바이더
+
+@ProviderFor(createSectionRecordUseCase)
+final createSectionRecordUseCaseProvider =
+    CreateSectionRecordUseCaseProvider._();
+
+/// 섹션 완료 기록 생성 UseCase 프로바이더
+
+final class CreateSectionRecordUseCaseProvider
+    extends
+        $FunctionalProvider<
+          CreateSectionRecordUseCase,
+          CreateSectionRecordUseCase,
+          CreateSectionRecordUseCase
+        >
+    with $Provider<CreateSectionRecordUseCase> {
+  /// 섹션 완료 기록 생성 UseCase 프로바이더
+  CreateSectionRecordUseCaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'createSectionRecordUseCaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$createSectionRecordUseCaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<CreateSectionRecordUseCase> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  CreateSectionRecordUseCase create(Ref ref) {
+    return createSectionRecordUseCase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(CreateSectionRecordUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<CreateSectionRecordUseCase>(value),
+    );
+  }
+}
+
+String _$createSectionRecordUseCaseHash() =>
+    r'56019c783ff8ebf73cd63f625ed67a6f22400198';

@@ -1,7 +1,7 @@
 class RoutePaths {
   static const String splash = '/';
   static const String home = '/home';
-  static const String homeSessionRecordCreate = '/home/workout-log-create/:sectionId';
+  static const String homeSectionRecordCreate = '/home/section-record-create/:sectionId/:sectionItemId';
   static const String ranking = '/ranking';
   static const String log = '/log';
   static const String community = '/community';

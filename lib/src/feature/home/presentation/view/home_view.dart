@@ -103,6 +103,7 @@ class HomeView extends HookConsumerWidget {
                           index: index + 1,
                           isCompleted: entry.value.isCompleted,
                           showingCompleteButton: entry.value.title == "본운동",
+                          selectedDate: selectedDate.value,
                         );
                       }).toList(),
                     );

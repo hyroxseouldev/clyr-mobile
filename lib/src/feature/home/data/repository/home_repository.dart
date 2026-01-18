@@ -12,6 +12,13 @@ abstract class HomeRepository {
   /// 지정된 날짜의 블루프린트 섹션들을 가져옵니다
   FutureEither<AppException, List<BlueprintSectionEntity>>
   getBlueprintSections({required DateTime date});
+
+  /// 섹션 완료 기록을 생성합니다
+  FutureEither<AppException, void> createSectionRecord({
+    required String sectionId,
+    required String sectionItemId,
+    Map<String, dynamic>? content,
+  });
 }
 
 /// 홈 데이터 소스 구현체
@@ -51,6 +58,29 @@ class HomeRepositoryImpl implements HomeRepository {
       return left(
         HomeException(
           code: 'BLUEPRINT_SECTIONS_FETCH_FAILED',
+          message: e.toString(),
+        ),
+      );
+    }
+  }
+
+  @override
+  FutureEither<AppException, void> createSectionRecord({
+    required String sectionId,
+    required String sectionItemId,
+    Map<String, dynamic>? content,
+  }) async {
+    try {
+      await dataSource.createSectionRecord(
+        sectionId: sectionId,
+        sectionItemId: sectionItemId,
+        content: content,
+      );
+      return right(null);
+    } catch (e) {
+      return left(
+        HomeException(
+          code: 'SECTION_RECORD_CREATE_FAILED',
           message: e.toString(),
         ),
       );

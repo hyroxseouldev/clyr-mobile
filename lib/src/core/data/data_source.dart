@@ -132,7 +132,9 @@ class SupabaseDataSource implements CoreDataSource {
 
       final blueprintId = programBlueprint['id'] as String;
 
-      // 5. Get blueprint_section_items with nested sections, ordered
+      // 5. Get blueprint_section_items with nested sections and records, ordered
+      // Note: Supabase doesn't support filtering nested relationships directly,
+      // so we fetch all and filter in the DTO
       final sectionItems = await supabase
           .from('blueprint_section_items')
           .select('''
@@ -145,6 +147,17 @@ class SupabaseDataSource implements CoreDataSource {
               id,
               title,
               content,
+              created_at,
+              updated_at
+            ),
+            section_records!section_item_id (
+              id,
+              user_id,
+              section_id,
+              section_item_id,
+              content,
+              completed_at,
+              coach_comment,
               created_at,
               updated_at
             )

@@ -6,7 +6,7 @@ import 'package:clyr_mobile/src/feature/auth/presentation/view/splash_view.dart'
 import 'package:clyr_mobile/src/feature/auth/presentation/view/user_profile_view.dart';
 import 'package:clyr_mobile/src/feature/community/presentation/view/commnunity_view.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/home_view.dart';
-import 'package:clyr_mobile/src/feature/home/presentation/view/session_record_create_view.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/view/section_record_create_view.dart';
 import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_create_view.dart';
 import 'package:clyr_mobile/src/feature/log/presentation/view/log_view.dart';
 import 'package:clyr_mobile/src/feature/ranking/presentation/view/ranking_view.dart';
@@ -75,11 +75,20 @@ GoRouter router(Ref ref) {
             builder: (context, state) => const HomeView(),
             routes: [
               GoRoute(
-                path: 'session-record-create/:sId',
-                name: RoutePaths.homeSessionRecordCreate,
+                path: 'section-record-create/:sectionId/:sectionItemId',
+                name: RoutePaths.homeSectionRecordCreate,
                 builder: (context, state) {
-                  final sId = state.pathParameters['sId']!;
-                  return SessionRecordCreateView(sessionId: sId);
+                  final sectionId = state.pathParameters['sectionId']!;
+                  final sectionItemId = state.pathParameters['sectionItemId']!;
+                  final dateParam = state.uri.queryParameters['date'];
+                  final selectedDate = dateParam != null
+                      ? DateTime.parse(dateParam)
+                      : DateTime.now();
+                  return SectionRecordCreateView(
+                    sectionId: sectionId,
+                    sectionItemId: sectionItemId,
+                    selectedDate: selectedDate,
+                  );
                 },
               ),
             ],

@@ -30,7 +30,8 @@ abstract class ActiveProgramEntity with _$ActiveProgramEntity {
 @freezed
 abstract class BlueprintSectionEntity with _$BlueprintSectionEntity {
   const factory BlueprintSectionEntity({
-    required String id,
+    required String id,             // sectionItemId
+    required String sectionId,      // sectionId
     required String title,
     required String content,
     required int orderIndex,
@@ -41,7 +42,8 @@ abstract class BlueprintSectionEntity with _$BlueprintSectionEntity {
   factory BlueprintSectionEntity.fromDto(BlueprintSectionItemsDto dto) {
     final section = dto.blueprintSection;
     return BlueprintSectionEntity(
-      id: dto.id,
+      id: dto.id,                    // sectionItemId
+      sectionId: dto.sectionId,      // sectionId
       title: section?.title ?? '',
       content: section?.content ?? '',
       orderIndex: dto.orderIndex,
