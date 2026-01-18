@@ -324,6 +324,9 @@ class BlueprintSectionItemsDto {
   // Nested section data from Supabase query (ignored in serialization)
   @JsonKey(includeFromJson: false, includeToJson: false)
   final BlueprintSectionsDto? blueprintSection;
+  // Nested section record from Supabase query (if completed)
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final SectionRecordDto? sectionRecord;
 
   BlueprintSectionItemsDto({
     required this.id,
@@ -332,6 +335,7 @@ class BlueprintSectionItemsDto {
     required this.orderIndex,
     required this.createdAt,
     this.blueprintSection,
+    this.sectionRecord,
   });
 
   factory BlueprintSectionItemsDto.fromJson(Map<String, dynamic> json) {
@@ -341,6 +345,12 @@ class BlueprintSectionItemsDto {
       section = BlueprintSectionsDto.fromJson(json['blueprint_sections']);
     }
 
+    // Extract nested section_records
+    SectionRecordDto? record;
+    if (json['section_records'] != null) {
+      record = SectionRecordDto.fromJson(json['section_records']);
+    }
+
     return BlueprintSectionItemsDto(
       id: json['id'] as String,
       blueprintId: json['blueprint_id'] as String,
@@ -348,6 +358,7 @@ class BlueprintSectionItemsDto {
       orderIndex: json['order_index'] as int,
       createdAt: DateTime.parse(json['created_at'] as String),
       blueprintSection: section,
+      sectionRecord: record,
     );
   }
 

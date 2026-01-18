@@ -34,6 +34,7 @@ abstract class BlueprintSectionEntity with _$BlueprintSectionEntity {
     required String title,
     required String content,
     required int orderIndex,
+    required bool isCompleted,
   }) = _BlueprintSectionEntity;
 
   /// DTO로부터 엔티티 생성
@@ -44,6 +45,7 @@ abstract class BlueprintSectionEntity with _$BlueprintSectionEntity {
       title: section?.title ?? '',
       content: section?.content ?? '',
       orderIndex: dto.orderIndex,
+      isCompleted: dto.sectionRecord != null,
     );
   }
 }

@@ -101,7 +101,7 @@ class HomeView extends HookConsumerWidget {
                         return BlueprintSectionCard(
                           item: item,
                           index: index + 1,
-                          isCompleted: false,
+                          isCompleted: entry.value.isCompleted,
                           showingCompleteButton: entry.value.title == "본운동",
                         );
                       }).toList(),
