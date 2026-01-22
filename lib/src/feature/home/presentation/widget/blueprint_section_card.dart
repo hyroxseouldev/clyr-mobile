@@ -11,13 +11,11 @@ class BlueprintSectionCard extends StatelessWidget {
   final int index;
   final bool isCompleted;
   final bool showingCompleteButton;
-  final DateTime selectedDate;
 
   const BlueprintSectionCard({
     super.key,
     required this.item,
     required this.index,
-    required this.selectedDate,
     this.isCompleted = false,
     this.showingCompleteButton = false,
   });
@@ -28,9 +26,6 @@ class BlueprintSectionCard extends StatelessWidget {
       pathParameters: {
         'sectionId': item.sectionId,
         'sectionItemId': item.id,
-      },
-      queryParameters: {
-        'date': selectedDate.toIso8601String(),
       },
     );
   }

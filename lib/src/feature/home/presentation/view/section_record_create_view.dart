@@ -1,5 +1,6 @@
 import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/section_record_create_controller.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/provider/selected_date_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -28,13 +29,11 @@ enum SectionRecordCategory {
 class SectionRecordCreateView extends HookConsumerWidget {
   final String sectionId;
   final String sectionItemId;
-  final DateTime selectedDate;
 
   const SectionRecordCreateView({
     super.key,
     required this.sectionId,
     required this.sectionItemId,
-    required this.selectedDate,
   });
 
   static const String routeName = 'homeSectionRecordCreate';
@@ -42,6 +41,7 @@ class SectionRecordCreateView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    final selectedDate = ref.watch(selectedDateProvider);
     final selectedCategory = useState<SectionRecordCategory>(
       SectionRecordCategory.fortime,
     );

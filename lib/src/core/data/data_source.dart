@@ -23,6 +23,12 @@ abstract interface class CoreDataSource {
     required String sectionItemId,
     Map<String, dynamic>? content,
   });
+
+  /// Get section records for main workout (main_workout) sections by date
+  Future<List<SectionRecordDto>> getMainWorkoutSectionRecords({
+    required DateTime date,
+    bool isTest = false,
+  });
 }
 
 class SupabaseDataSource implements CoreDataSource {
@@ -204,6 +210,114 @@ class SupabaseDataSource implements CoreDataSource {
     } catch (e) {
       print('createSectionRecord: error = $e');
       throw Exception('Failed to create section record: $e');
+    }
+  }
+
+  @override
+  Future<List<SectionRecordDto>> getMainWorkoutSectionRecords({
+    required DateTime date,
+    bool isTest = false,
+  }) async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) {
+      throw Exception('User not authenticated');
+    }
+
+    try {
+      // 1. Get active enrollment
+      final enrollmentResponse = await supabase
+          .from('enrollments')
+          .select('start_date, program_id')
+          .eq('user_id', userId)
+          .eq('status', 'ACTIVE')
+          .maybeSingle();
+
+      if (enrollmentResponse == null) {
+        throw Exception('No active enrollment found');
+      }
+
+      final startDate = DateTime.parse(enrollmentResponse['start_date']);
+      final programId = enrollmentResponse['program_id'];
+
+      // 2. Calculate day number (1-indexed)
+      final dayNumber = isTest ? 1 : date.difference(startDate).inDays + 1;
+
+      if (dayNumber < 1) {
+        throw Exception('Date is before enrollment start date');
+      }
+
+      // 3. Calculate phase number (1-indexed, 7 days per phase)
+      final phaseNumber = isTest ? 1 : (dayNumber - 1) ~/ 7 + 1;
+
+      // 4. Query blueprint by program_id, phase_number, day_number
+      final programBlueprint = await supabase
+          .from('program_blueprints')
+          .select('id')
+          .eq('program_id', programId)
+          .eq('phase_number', phaseNumber)
+          .eq('day_number', dayNumber)
+          .maybeSingle();
+
+      if (programBlueprint == null) {
+        return [];
+      }
+
+      final blueprintId = programBlueprint['id'] as String;
+
+      // 5. Get blueprint_section_items with nested sections and records
+      final sectionItems = await supabase
+          .from('blueprint_section_items')
+          .select('''
+            id,
+            blueprint_id,
+            section_id,
+            order_index,
+            created_at,
+            blueprint_sections (
+              id,
+              title,
+              content,
+              created_at,
+              updated_at
+            ),
+            section_records!section_item_id (
+              id,
+              user_id,
+              section_id,
+              section_item_id,
+              content,
+              completed_at,
+              coach_comment,
+              created_at,
+              updated_at
+            )
+          ''')
+          .eq('blueprint_id', blueprintId)
+          .order('order_index', ascending: true);
+
+      // 6. Filter for "main_workout" (main workout) sections and collect records
+      final List<SectionRecordDto> mainWorkoutRecords = [];
+
+      for (final item in sectionItems) {
+        final section = item['blueprint_sections'];
+        if (section != null && section['title'] != null) {
+          final title = section['title'] as String;
+          // Check if title contains "main_workout" (main workout)
+          if (title.contains('main_workout')) {
+            final records = item['section_records'] as List?;
+            if (records != null) {
+              for (final record in records) {
+                mainWorkoutRecords.add(SectionRecordDto.fromJson(record));
+              }
+            }
+          }
+        }
+      }
+
+      return mainWorkoutRecords;
+    } catch (e) {
+      print('getMainWorkoutSectionRecords: error = $e');
+      throw Exception('Failed to get main workout section records: $e');
     }
   }
 }

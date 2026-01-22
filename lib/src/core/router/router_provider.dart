@@ -80,14 +80,9 @@ GoRouter router(Ref ref) {
                 builder: (context, state) {
                   final sectionId = state.pathParameters['sectionId']!;
                   final sectionItemId = state.pathParameters['sectionItemId']!;
-                  final dateParam = state.uri.queryParameters['date'];
-                  final selectedDate = dateParam != null
-                      ? DateTime.parse(dateParam)
-                      : DateTime.now();
                   return SectionRecordCreateView(
                     sectionId: sectionId,
                     sectionItemId: sectionItemId,
-                    selectedDate: selectedDate,
                   );
                 },
               ),

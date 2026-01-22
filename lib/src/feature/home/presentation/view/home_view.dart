@@ -2,24 +2,25 @@ import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/feature/home/infra/entity/home_entity.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/blueprint_section_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/home_controller.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/provider/selected_date_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/widget/blueprint_section_card.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/widget/program_selector.dart';
 import 'package:clyr_mobile/src/shared/async_widget.dart';
 import 'package:clyr_mobile/src/shared/widgets/date_selection/date_selection_type.dart';
 import 'package:clyr_mobile/src/shared/widgets/date_selection/date_selection_widget.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class HomeView extends HookConsumerWidget {
+class HomeView extends ConsumerWidget {
   const HomeView({super.key});
   static const String routeName = 'home';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final selectedDate = useState<DateTime>(DateTime.now());
+    final locale = Localizations.localeOf(context);
+    final selectedDate = ref.watch(selectedDateProvider);
 
     // 현재 활성화된 프로그램 상태 감지
     final activeProgramState = ref.watch(homeControllerProvider);
@@ -31,12 +32,14 @@ class HomeView extends HookConsumerWidget {
           children: [
             Text(l10n.todaysWorkout),
             Text(
-              DateFormat('yyyy-MM-dd (E)', 'ko').format(selectedDate.value),
+              DateFormat(
+                'yyyy-MM-dd (E)',
+                locale.languageCode,
+              ).format(selectedDate),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),
-
         centerTitle: false,
         actions: [
           IconButton(
@@ -45,7 +48,6 @@ class HomeView extends HookConsumerWidget {
           ),
         ],
       ),
-
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -56,8 +58,12 @@ class HomeView extends HookConsumerWidget {
                 // 가로로 스크롤 되는 날짜 선택 위젯
                 DateSelectionWidget(
                   showType: DateSelectionType.weekly,
-                  selectedDate: selectedDate.value,
-                  onDateSelected: (date) => selectedDate.value = date,
+                  selectedDate: selectedDate,
+                  onDateSelected: (date) {
+                    ref
+                        .read(selectedDateProvider.notifier)
+                        .setSelectedDate(date);
+                  },
                   startDate: DateTime.now().subtract(const Duration(days: 7)),
                   endDate: DateTime.now().add(const Duration(days: 7)),
                 ),
@@ -76,20 +82,15 @@ class HomeView extends HookConsumerWidget {
                     );
                   },
                 ),
-
                 const SizedBox(height: 24),
-
                 // Blueprint sections list
                 Text(
                   l10n.todaysSections,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 12),
-
                 AsyncWidget<List<BlueprintSectionEntity>>(
-                  data: ref.watch(
-                    blueprintSectionsProvider(selectedDate.value),
-                  ),
+                  data: ref.watch(blueprintSectionsProvider(selectedDate)),
                   builder: (sections) {
                     if (sections.isEmpty) {
                       return _buildEmptySections(context);
@@ -102,8 +103,8 @@ class HomeView extends HookConsumerWidget {
                           item: item,
                           index: index + 1,
                           isCompleted: entry.value.isCompleted,
-                          showingCompleteButton: entry.value.title == "본운동",
-                          selectedDate: selectedDate.value,
+                          showingCompleteButton:
+                              entry.value.title == "main_workout",
                         );
                       }).toList(),
                     );

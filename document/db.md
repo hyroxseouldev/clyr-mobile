@@ -149,7 +149,7 @@ export const workoutSessions = pgTable("workout_sessions", {
     .references(() => workouts.id, { onDelete: "cascade" })
     .notNull(),
 
-  title: text("title").notNull(), // 예: "본운동: 백 스쿼트"
+  title: text("title").notNull(), // 예: "main_workout: 백 스쿼트"
   content: text("content"), // 위지윅 에디터에서 온 상세 운동 가이드
   orderIndex: integer("order_index").default(0).notNull(), // 표시 순서
 });
