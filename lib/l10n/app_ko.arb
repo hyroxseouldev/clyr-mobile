@@ -163,5 +163,8 @@
   "required": "필수 항목입니다",
   "tooShort": "너무 짧습니다",
   "tooLong": "너무 깁니다",
-  "invalidFormat": "올바른 형식이 아닙니다"
+  "invalidFormat": "올바른 형식이 아닙니다",
+
+  "leaderboard": "리더보드",
+  "noLeaderboardEntries": "리더보드 기록이 없습니다"
 }

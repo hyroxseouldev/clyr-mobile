@@ -447,4 +447,10 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get invalidFormat => '올바른 형식이 아닙니다';
+
+  @override
+  String get leaderboard => '리더보드';
+
+  @override
+  String get noLeaderboardEntries => '리더보드 기록이 없습니다';
 }

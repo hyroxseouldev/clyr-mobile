@@ -37,9 +37,9 @@ class ProgramCard extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(12),
               ),
-              child: program.thumbnailUrl != null
+              child: program.programImage != null
                   ? Image.network(
-                      program.thumbnailUrl!,
+                      program.programImage!,
                       height: 120,
                       width: double.infinity,
                       fit: BoxFit.cover,

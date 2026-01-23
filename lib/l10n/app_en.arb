@@ -163,5 +163,8 @@
   "required": "Required field",
   "tooShort": "Too short",
   "tooLong": "Too long",
-  "invalidFormat": "Invalid format"
+  "invalidFormat": "Invalid format",
+
+  "leaderboard": "Leaderboard",
+  "noLeaderboardEntries": "No leaderboard entries"
 }

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProgramEntity {
 
- String get id; String get name; String? get thumbnailUrl; String? get description; String? get shortDescription;
+ String get id; String get name; String? get programImage; List<String>? get mainImageList; String? get description;
 /// Create a copy of ProgramEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ProgramEntityCopyWith<ProgramEntity> get copyWith => _$ProgramEntityCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProgramEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.description, description) || other.description == description)&&(identical(other.shortDescription, shortDescription) || other.shortDescription == shortDescription));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProgramEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.programImage, programImage) || other.programImage == programImage)&&const DeepCollectionEquality().equals(other.mainImageList, mainImageList)&&(identical(other.description, description) || other.description == description));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,thumbnailUrl,description,shortDescription);
+int get hashCode => Object.hash(runtimeType,id,name,programImage,const DeepCollectionEquality().hash(mainImageList),description);
 
 @override
 String toString() {
-  return 'ProgramEntity(id: $id, name: $name, thumbnailUrl: $thumbnailUrl, description: $description, shortDescription: $shortDescription)';
+  return 'ProgramEntity(id: $id, name: $name, programImage: $programImage, mainImageList: $mainImageList, description: $description)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ProgramEntityCopyWith<$Res>  {
   factory $ProgramEntityCopyWith(ProgramEntity value, $Res Function(ProgramEntity) _then) = _$ProgramEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String? thumbnailUrl, String? description, String? shortDescription
+ String id, String name, String? programImage, List<String>? mainImageList, String? description
 });
 
 
@@ -62,13 +62,13 @@ class _$ProgramEntityCopyWithImpl<$Res>
 
 /// Create a copy of ProgramEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? thumbnailUrl = freezed,Object? description = freezed,Object? shortDescription = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? programImage = freezed,Object? mainImageList = freezed,Object? description = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,thumbnailUrl: freezed == thumbnailUrl ? _self.thumbnailUrl : thumbnailUrl // ignore: cast_nullable_to_non_nullable
-as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,shortDescription: freezed == shortDescription ? _self.shortDescription : shortDescription // ignore: cast_nullable_to_non_nullable
+as String,programImage: freezed == programImage ? _self.programImage : programImage // ignore: cast_nullable_to_non_nullable
+as String?,mainImageList: freezed == mainImageList ? _self.mainImageList : mainImageList // ignore: cast_nullable_to_non_nullable
+as List<String>?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -154,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String? thumbnailUrl,  String? description,  String? shortDescription)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String? programImage,  List<String>? mainImageList,  String? description)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProgramEntity() when $default != null:
-return $default(_that.id,_that.name,_that.thumbnailUrl,_that.description,_that.shortDescription);case _:
+return $default(_that.id,_that.name,_that.programImage,_that.mainImageList,_that.description);case _:
   return orElse();
 
 }
@@ -175,10 +175,10 @@ return $default(_that.id,_that.name,_that.thumbnailUrl,_that.description,_that.s
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String? thumbnailUrl,  String? description,  String? shortDescription)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String? programImage,  List<String>? mainImageList,  String? description)  $default,) {final _that = this;
 switch (_that) {
 case _ProgramEntity():
-return $default(_that.id,_that.name,_that.thumbnailUrl,_that.description,_that.shortDescription);case _:
+return $default(_that.id,_that.name,_that.programImage,_that.mainImageList,_that.description);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +195,10 @@ return $default(_that.id,_that.name,_that.thumbnailUrl,_that.description,_that.s
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String? thumbnailUrl,  String? description,  String? shortDescription)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String? programImage,  List<String>? mainImageList,  String? description)?  $default,) {final _that = this;
 switch (_that) {
 case _ProgramEntity() when $default != null:
-return $default(_that.id,_that.name,_that.thumbnailUrl,_that.description,_that.shortDescription);case _:
+return $default(_that.id,_that.name,_that.programImage,_that.mainImageList,_that.description);case _:
   return null;
 
 }
@@ -210,14 +210,22 @@ return $default(_that.id,_that.name,_that.thumbnailUrl,_that.description,_that.s
 
 
 class _ProgramEntity implements ProgramEntity {
-  const _ProgramEntity({required this.id, required this.name, this.thumbnailUrl, this.description, this.shortDescription});
+  const _ProgramEntity({required this.id, required this.name, this.programImage, final  List<String>? mainImageList, this.description}): _mainImageList = mainImageList;
   
 
 @override final  String id;
 @override final  String name;
-@override final  String? thumbnailUrl;
+@override final  String? programImage;
+ final  List<String>? _mainImageList;
+@override List<String>? get mainImageList {
+  final value = _mainImageList;
+  if (value == null) return null;
+  if (_mainImageList is EqualUnmodifiableListView) return _mainImageList;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
 @override final  String? description;
-@override final  String? shortDescription;
 
 /// Create a copy of ProgramEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +237,16 @@ _$ProgramEntityCopyWith<_ProgramEntity> get copyWith => __$ProgramEntityCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProgramEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.description, description) || other.description == description)&&(identical(other.shortDescription, shortDescription) || other.shortDescription == shortDescription));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProgramEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.programImage, programImage) || other.programImage == programImage)&&const DeepCollectionEquality().equals(other._mainImageList, _mainImageList)&&(identical(other.description, description) || other.description == description));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,thumbnailUrl,description,shortDescription);
+int get hashCode => Object.hash(runtimeType,id,name,programImage,const DeepCollectionEquality().hash(_mainImageList),description);
 
 @override
 String toString() {
-  return 'ProgramEntity(id: $id, name: $name, thumbnailUrl: $thumbnailUrl, description: $description, shortDescription: $shortDescription)';
+  return 'ProgramEntity(id: $id, name: $name, programImage: $programImage, mainImageList: $mainImageList, description: $description)';
 }
 
 
@@ -249,7 +257,7 @@ abstract mixin class _$ProgramEntityCopyWith<$Res> implements $ProgramEntityCopy
   factory _$ProgramEntityCopyWith(_ProgramEntity value, $Res Function(_ProgramEntity) _then) = __$ProgramEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String? thumbnailUrl, String? description, String? shortDescription
+ String id, String name, String? programImage, List<String>? mainImageList, String? description
 });
 
 
@@ -266,13 +274,13 @@ class __$ProgramEntityCopyWithImpl<$Res>
 
 /// Create a copy of ProgramEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? thumbnailUrl = freezed,Object? description = freezed,Object? shortDescription = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? programImage = freezed,Object? mainImageList = freezed,Object? description = freezed,}) {
   return _then(_ProgramEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,thumbnailUrl: freezed == thumbnailUrl ? _self.thumbnailUrl : thumbnailUrl // ignore: cast_nullable_to_non_nullable
-as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,shortDescription: freezed == shortDescription ? _self.shortDescription : shortDescription // ignore: cast_nullable_to_non_nullable
+as String,programImage: freezed == programImage ? _self.programImage : programImage // ignore: cast_nullable_to_non_nullable
+as String?,mainImageList: freezed == mainImageList ? _self._mainImageList : mainImageList // ignore: cast_nullable_to_non_nullable
+as List<String>?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

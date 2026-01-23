@@ -9,18 +9,18 @@ abstract class ProgramEntity with _$ProgramEntity {
   const factory ProgramEntity({
     required String id,
     required String name,
-    String? thumbnailUrl,
+    String? programImage,
+    List<String>? mainImageList,
     String? description,
-    String? shortDescription,
   }) = _ProgramEntity;
 
   factory ProgramEntity.fromDto(ProgramDto dto) {
     return ProgramEntity(
       id: dto.id,
       name: dto.name,
-      thumbnailUrl: dto.thumbnailUrl,
+      programImage: dto.programImage,
+      mainImageList: dto.mainImageList,
       description: dto.description,
-      shortDescription: dto.shortDescription,
     );
   }
 }

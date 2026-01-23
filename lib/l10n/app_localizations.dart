@@ -973,6 +973,18 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'올바른 형식이 아닙니다'**
   String get invalidFormat;
+
+  /// No description provided for @leaderboard.
+  ///
+  /// In ko, this message translates to:
+  /// **'리더보드'**
+  String get leaderboard;
+
+  /// No description provided for @noLeaderboardEntries.
+  ///
+  /// In ko, this message translates to:
+  /// **'리더보드 기록이 없습니다'**
+  String get noLeaderboardEntries;
 }
 
 class _AppLocalizationsDelegate

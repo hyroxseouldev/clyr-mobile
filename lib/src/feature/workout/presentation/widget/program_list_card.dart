@@ -26,9 +26,9 @@ class ProgramListCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 썸네일
-            program.thumbnailUrl != null
+            program.programImage != null
                 ? Image.network(
-                    program.thumbnailUrl!,
+                    program.programImage!,
                     width: double.infinity,
                     height: 200,
                     fit: BoxFit.cover,
@@ -65,7 +65,7 @@ class ProgramListCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  if (program.shortDescription != null) ...[
+                  if (program.description != null) ...[
                     const SizedBox(height: 8),
                     Text(
                       program.description!,

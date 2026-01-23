@@ -52,8 +52,6 @@ class SupabaseDataSource implements CoreDataSource {
               title,
               slug,
               type,
-              thumbnail_url,
-              short_description,
               description,
               is_public,
               is_for_sale,
@@ -62,6 +60,8 @@ class SupabaseDataSource implements CoreDataSource {
               difficulty,
               duration_weeks,
               days_per_week,
+              main_image_list,
+              program_image,
               created_at,
               updated_at
             )
@@ -69,8 +69,6 @@ class SupabaseDataSource implements CoreDataSource {
           .eq('user_id', userId)
           .eq('status', 'ACTIVE')
           .maybeSingle();
-
-      print('getCurrentActiveProgram: response = $response');
 
       if (response == null) {
         throw Exception('No active enrollment found');
@@ -158,7 +156,6 @@ class SupabaseDataSource implements CoreDataSource {
             ),
             section_records!section_item_id (
               id,
-              user_id,
               section_id,
               section_item_id,
               content,
@@ -171,7 +168,12 @@ class SupabaseDataSource implements CoreDataSource {
           .eq('blueprint_id', blueprintId)
           .order('order_index', ascending: true);
 
-      // 6. Parse and return BlueprintSectionItemsDto list
+      print('DEBUG: sectionItems count = ${sectionItems.length}');
+      if (sectionItems.isNotEmpty) {
+        print('DEBUG: first sectionItem = ${sectionItems[0]}');
+        print('DEBUG: order_index type = ${sectionItems[0]['order_index'].runtimeType}');
+      }
+
       return sectionItems
           .map((item) => BlueprintSectionItemsDto.fromJson(item))
           .toList();
@@ -273,7 +275,7 @@ class SupabaseDataSource implements CoreDataSource {
             section_id,
             order_index,
             created_at,
-            blueprint_sections (
+            blueprint_sections!section_id (
               id,
               title,
               content,
@@ -289,7 +291,15 @@ class SupabaseDataSource implements CoreDataSource {
               completed_at,
               coach_comment,
               created_at,
-              updated_at
+              updated_at,
+              user_id (
+                id,
+                user_profiles!account_id (
+                  id,
+                  nickname,
+                  profile_image_url
+                )
+              )
             )
           ''')
           .eq('blueprint_id', blueprintId)

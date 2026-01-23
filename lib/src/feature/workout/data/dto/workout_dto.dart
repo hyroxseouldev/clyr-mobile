@@ -8,18 +8,18 @@ part 'workout_dto.g.dart';
 class ProgramDto {
   final String id;
   final String name;
-  @JsonKey(name: 'thumbnail_url')
-  final String? thumbnailUrl;
+  @JsonKey(name: 'program_image')
+  final String? programImage;
+  @JsonKey(name: 'main_image_list')
+  final List<String>? mainImageList;
   final String? description;
-  @JsonKey(name: 'short_description')
-  final String? shortDescription;
 
   ProgramDto({
     required this.id,
     required this.name,
-    this.thumbnailUrl,
+    this.programImage,
+    this.mainImageList,
     this.description,
-    this.shortDescription,
   });
 
   factory ProgramDto.fromJson(Map<String, dynamic> json) =>

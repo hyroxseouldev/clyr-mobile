@@ -133,14 +133,12 @@ class _ProgramSelectorItem extends StatelessWidget {
                     ),
                   ),
                   // 프로그램 설명 (있는 경우)
-                  if (program.shortDescription != null ||
-                      program.description != null) ...[
+                  if (program.description != null) ...[
                     const SizedBox(height: 4),
                     Text(
-                      program.shortDescription ??
-                          ((program.description?.length ?? 0) > 50
-                              ? '${program.description!.substring(0, 50)}...'
-                              : program.description ?? ''),
+                      (program.description!.length > 50
+                          ? '${program.description!.substring(0, 50)}...'
+                          : program.description!),
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: isSelected
                             ? theme.colorScheme.onPrimaryContainer

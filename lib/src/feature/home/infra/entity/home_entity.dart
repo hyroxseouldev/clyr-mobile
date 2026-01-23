@@ -9,8 +9,8 @@ abstract class ActiveProgramEntity with _$ActiveProgramEntity {
   const factory ActiveProgramEntity({
     required String id,
     required String title,
-    String? thumbnailUrl,
-    String? shortDescription,
+    String? programImage,
+    List<String>? mainImageList,
     String? description,
   }) = _ActiveProgramEntity;
 
@@ -19,8 +19,8 @@ abstract class ActiveProgramEntity with _$ActiveProgramEntity {
     return ActiveProgramEntity(
       id: dto.id,
       title: dto.title,
-      thumbnailUrl: dto.thumbnailUrl,
-      shortDescription: dto.shortDescription,
+      programImage: dto.programImage,
+      mainImageList: dto.mainImageList,
       description: dto.description,
     );
   }

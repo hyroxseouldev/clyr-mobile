@@ -136,7 +136,8 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
             programs (
               id,
               title,
-              thumbnail_url,
+              program_image,
+              main_image_list,
               description
             ),
             program_weeks (
@@ -187,7 +188,10 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
             ? ProgramEntity(
                 id: programData['id'],
                 name: programData['title'],
-                thumbnailUrl: programData['thumbnail_url'],
+                programImage: programData['program_image'],
+                mainImageList: programData['main_image_list'] != null
+                    ? List<String>.from(programData['main_image_list'])
+                    : null,
                 description: programData['description'],
               )
             : null,
@@ -321,8 +325,8 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
             programs(
               id,
               title,
-              thumbnail_url,
-              short_description,
+              program_image,
+              main_image_list,
               description
             )
           ''')
@@ -335,9 +339,11 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
         return ProgramEntity(
           id: programData['id'],
           name: programData['title'], // title → name 매핑
-          thumbnailUrl: programData['thumbnail_url'],
-          description:
-              programData['short_description'] ?? programData['description'],
+          programImage: programData['program_image'],
+          mainImageList: programData['main_image_list'] != null
+              ? List<String>.from(programData['main_image_list'])
+              : null,
+          description: programData['description'],
         );
       }).toList();
 

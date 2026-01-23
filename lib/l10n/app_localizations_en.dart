@@ -453,4 +453,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invalidFormat => 'Invalid format';
+
+  @override
+  String get leaderboard => 'Leaderboard';
+
+  @override
+  String get noLeaderboardEntries => 'No leaderboard entries';
 }

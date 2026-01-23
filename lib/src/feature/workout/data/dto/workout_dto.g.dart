@@ -9,18 +9,20 @@ part of 'workout_dto.dart';
 ProgramDto _$ProgramDtoFromJson(Map<String, dynamic> json) => ProgramDto(
   id: json['id'] as String,
   name: json['name'] as String,
-  thumbnailUrl: json['thumbnail_url'] as String?,
+  programImage: json['program_image'] as String?,
+  mainImageList: (json['main_image_list'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
   description: json['description'] as String?,
-  shortDescription: json['short_description'] as String?,
 );
 
 Map<String, dynamic> _$ProgramDtoToJson(ProgramDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'thumbnail_url': instance.thumbnailUrl,
+      'program_image': instance.programImage,
+      'main_image_list': instance.mainImageList,
       'description': instance.description,
-      'short_description': instance.shortDescription,
     };
 
 WorkoutDto _$WorkoutDtoFromJson(Map<String, dynamic> json) => WorkoutDto(
