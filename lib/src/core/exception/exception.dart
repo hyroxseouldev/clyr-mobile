@@ -31,6 +31,10 @@ class LogException extends AppException {
   LogException({required super.code, super.message});
 }
 
+class OnboardingException extends AppException {
+  OnboardingException({required super.code, super.message});
+}
+
 extension AppExceptionX on AppException {
   // 사용자에게 보여줄 메시지를 정의
   String get displayMessage {

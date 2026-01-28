@@ -29,6 +29,12 @@ abstract interface class CoreDataSource {
     required DateTime date,
     bool isTest = false,
   });
+
+  /// Check if user has completed onboarding
+  Future<bool> checkOnboardingStatus();
+
+  /// Complete onboarding with user data
+  Future<void> completeOnboarding(Map<String, dynamic> data);
 }
 
 class SupabaseDataSource implements CoreDataSource {
@@ -334,6 +340,51 @@ class SupabaseDataSource implements CoreDataSource {
     } catch (e) {
       print('getMainWorkoutSectionRecords: error = $e');
       throw Exception('Failed to get main workout section records: $e');
+    }
+  }
+
+  @override
+  Future<bool> checkOnboardingStatus() async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) {
+      throw Exception('User not authenticated');
+    }
+
+    try {
+      final response = await supabase
+          .from('user_profile')
+          .select('onboarding_completed')
+          .eq('account_id', userId)
+          .maybeSingle();
+
+      if (response == null) {
+        return false;
+      }
+
+      return response['onboarding_completed'] as bool? ?? false;
+    } catch (e) {
+      print('checkOnboardingStatus: error = $e');
+      throw Exception('Failed to check onboarding status: $e');
+    }
+  }
+
+  @override
+  Future<void> completeOnboarding(Map<String, dynamic> data) async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) {
+      throw Exception('User not authenticated');
+    }
+
+    try {
+      await supabase.from('user_profile').update({
+        'onboarding_completed': true,
+        'onboarding_data': data,
+        'onboarding_completed_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String(),
+      }).eq('account_id', userId);
+    } catch (e) {
+      print('completeOnboarding: error = $e');
+      throw Exception('Failed to complete onboarding: $e');
     }
   }
 }

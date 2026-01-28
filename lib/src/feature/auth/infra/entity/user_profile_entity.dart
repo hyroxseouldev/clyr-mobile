@@ -1,4 +1,4 @@
-import 'package:clyr_mobile/src/feature/auth/data/user_profile_dto.dart';
+import 'package:clyr_mobile/src/core/data/dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_profile_entity.freezed.dart';

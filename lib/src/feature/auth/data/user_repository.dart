@@ -1,7 +1,7 @@
+import 'package:clyr_mobile/src/core/data/dto.dart';
 import 'package:clyr_mobile/src/core/exception/exception.dart';
 import 'package:clyr_mobile/src/core/supabase/supabase_provider.dart';
 import 'package:clyr_mobile/src/core/typedef/typedef.dart';
-import 'package:clyr_mobile/src/feature/auth/data/user_profile_dto.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/entity/user_profile_entity.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -39,6 +39,12 @@ abstract interface class UserRepository {
     })
     params,
   );
+
+  /// 온보딩 완료 여부 확인
+  FutureEither<AppException, bool> checkOnboardingStatus();
+
+  /// 온보딩 데이터 업데이트
+  FutureEither<AppException, void> completeOnboarding(Map<String, dynamic> data);
 }
 
 class UserRepositoryImpl implements UserRepository {
@@ -189,6 +195,69 @@ class UserRepositoryImpl implements UserRepository {
       }
     } catch (e) {
       return left(AuthException(code: 'unknown', message: e.toString()));
+    }
+  }
+
+  @override
+  FutureEither<AppException, bool> checkOnboardingStatus() async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) {
+      return left(
+        OnboardingException(
+          code: 'not_authenticated',
+          message: 'User not authenticated',
+        ),
+      );
+    }
+
+    try {
+      final response = await supabase
+          .from('user_profile')
+          .select('onboarding_completed')
+          .eq('account_id', userId)
+          .maybeSingle();
+
+      if (response == null) {
+        return right(false);
+      }
+
+      final isOnboarded = response['onboarding_completed'] as bool? ?? false;
+      return right(isOnboarded);
+    } catch (e) {
+      print('checkOnboardingStatus: error = $e');
+      return left(
+        OnboardingException(code: 'ONBOARDING_CHECK_FAILED', message: e.toString()),
+      );
+    }
+  }
+
+  @override
+  FutureEither<AppException, void> completeOnboarding(
+      Map<String, dynamic> data) async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) {
+      return left(
+        OnboardingException(
+          code: 'not_authenticated',
+          message: 'User not authenticated',
+        ),
+      );
+    }
+
+    try {
+      await supabase.from('user_profile').update({
+        'onboarding_completed': true,
+        'onboarding_data': data,
+        'onboarding_completed_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String(),
+      }).eq('account_id', userId);
+
+      return right(null);
+    } catch (e) {
+      print('completeOnboarding: error = $e');
+      return left(
+        OnboardingException(code: 'ONBOARDING_COMPLETE_FAILED', message: e.toString()),
+      );
     }
   }
 }

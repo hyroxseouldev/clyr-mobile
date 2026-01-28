@@ -266,6 +266,120 @@ abstract class AppLocalizations {
   /// **'회원가입이 완료되었습니다. 이메일을 확인해주세요.'**
   String get signupSuccess;
 
+  /// No description provided for @onboardingWelcome.
+  ///
+  /// In ko, this message translates to:
+  /// **'반가워요!'**
+  String get onboardingWelcome;
+
+  /// No description provided for @onboardingSubtitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'간단한 정보를 입력하고 맞춤 서비스를 시작하세요'**
+  String get onboardingSubtitle;
+
+  /// No description provided for @onboardingGender.
+  ///
+  /// In ko, this message translates to:
+  /// **'성별'**
+  String get onboardingGender;
+
+  /// No description provided for @onboardingExerciseType.
+  ///
+  /// In ko, this message translates to:
+  /// **'선호하는 운동'**
+  String get onboardingExerciseType;
+
+  /// No description provided for @onboardingExperience.
+  ///
+  /// In ko, this message translates to:
+  /// **'운동 경력'**
+  String get onboardingExperience;
+
+  /// No description provided for @onboardingStart.
+  ///
+  /// In ko, this message translates to:
+  /// **'시작하기'**
+  String get onboardingStart;
+
+  /// No description provided for @genderMale.
+  ///
+  /// In ko, this message translates to:
+  /// **'남성'**
+  String get genderMale;
+
+  /// No description provided for @genderFemale.
+  ///
+  /// In ko, this message translates to:
+  /// **'여성'**
+  String get genderFemale;
+
+  /// No description provided for @exerciseHyrox.
+  ///
+  /// In ko, this message translates to:
+  /// **'하이록스'**
+  String get exerciseHyrox;
+
+  /// No description provided for @exerciseCrossfit.
+  ///
+  /// In ko, this message translates to:
+  /// **'크로스핏'**
+  String get exerciseCrossfit;
+
+  /// No description provided for @exerciseRunning.
+  ///
+  /// In ko, this message translates to:
+  /// **'러닝'**
+  String get exerciseRunning;
+
+  /// No description provided for @exerciseGym.
+  ///
+  /// In ko, this message translates to:
+  /// **'헬스'**
+  String get exerciseGym;
+
+  /// No description provided for @exerciseOther.
+  ///
+  /// In ko, this message translates to:
+  /// **'기타'**
+  String get exerciseOther;
+
+  /// No description provided for @experienceLess3m.
+  ///
+  /// In ko, this message translates to:
+  /// **'3개월 미만'**
+  String get experienceLess3m;
+
+  /// No description provided for @experienceLess6m.
+  ///
+  /// In ko, this message translates to:
+  /// **'6개월 미만'**
+  String get experienceLess6m;
+
+  /// No description provided for @experienceLess1y.
+  ///
+  /// In ko, this message translates to:
+  /// **'1년 미만'**
+  String get experienceLess1y;
+
+  /// No description provided for @experienceMore1y.
+  ///
+  /// In ko, this message translates to:
+  /// **'1년 이상'**
+  String get experienceMore1y;
+
+  /// No description provided for @experienceMore3y.
+  ///
+  /// In ko, this message translates to:
+  /// **'3년 이상'**
+  String get experienceMore3y;
+
+  /// No description provided for @pleaseFillAllFields.
+  ///
+  /// In ko, this message translates to:
+  /// **'모든 항목을 선택해주세요'**
+  String get pleaseFillAllFields;
+
   /// No description provided for @settingsTitle.
   ///
   /// In ko, this message translates to:

@@ -93,6 +93,63 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signupSuccess => 'Signup complete. Please check your email.';
 
   @override
+  String get onboardingWelcome => 'Welcome!';
+
+  @override
+  String get onboardingSubtitle => 'Enter your information to get started';
+
+  @override
+  String get onboardingGender => 'Gender';
+
+  @override
+  String get onboardingExerciseType => 'Preferred Exercise';
+
+  @override
+  String get onboardingExperience => 'Exercise Experience';
+
+  @override
+  String get onboardingStart => 'Get Started';
+
+  @override
+  String get genderMale => 'Male';
+
+  @override
+  String get genderFemale => 'Female';
+
+  @override
+  String get exerciseHyrox => 'Hyrox';
+
+  @override
+  String get exerciseCrossfit => 'Crossfit';
+
+  @override
+  String get exerciseRunning => 'Running';
+
+  @override
+  String get exerciseGym => 'Gym';
+
+  @override
+  String get exerciseOther => 'Other';
+
+  @override
+  String get experienceLess3m => 'Less than 3 months';
+
+  @override
+  String get experienceLess6m => 'Less than 6 months';
+
+  @override
+  String get experienceLess1y => 'Less than 1 year';
+
+  @override
+  String get experienceMore1y => '1 year or more';
+
+  @override
+  String get experienceMore3y => '3 years or more';
+
+  @override
+  String get pleaseFillAllFields => 'Please fill in all fields';
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override

@@ -67,23 +67,32 @@ UserProfileDto _$UserProfileDtoFromJson(Map<String, dynamic> json) =>
           ?.map((e) => e as String)
           .toList(),
       fitnessLevel: json['fitness_level'] as String?,
+      onboardingCompleted: json['onboarding_completed'] as bool?,
+      onboardingData: json['onboarding_data'] as Map<String, dynamic>?,
+      onboardingCompletedAt: json['onboarding_completed_at'] == null
+          ? null
+          : DateTime.parse(json['onboarding_completed_at'] as String),
       updatedAt: json['updated_at'] == null
           ? null
           : DateTime.parse(json['updated_at'] as String),
     );
 
-Map<String, dynamic> _$UserProfileDtoToJson(UserProfileDto instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'account_id': instance.accountId,
-      'nickname': instance.nickname,
-      'bio': instance.bio,
-      'profile_image_url': instance.profileImageUrl,
-      'phone_number': instance.phoneNumber,
-      'fitness_goals': instance.fitnessGoals,
-      'fitness_level': instance.fitnessLevel,
-      'updated_at': instance.updatedAt?.toIso8601String(),
-    };
+Map<String, dynamic> _$UserProfileDtoToJson(
+  UserProfileDto instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'account_id': instance.accountId,
+  'nickname': instance.nickname,
+  'bio': instance.bio,
+  'profile_image_url': instance.profileImageUrl,
+  'phone_number': instance.phoneNumber,
+  'fitness_goals': instance.fitnessGoals,
+  'fitness_level': instance.fitnessLevel,
+  'onboarding_completed': instance.onboardingCompleted,
+  'onboarding_data': instance.onboardingData,
+  'onboarding_completed_at': instance.onboardingCompletedAt?.toIso8601String(),
+  'updated_at': instance.updatedAt?.toIso8601String(),
+};
 
 WorkoutLibraryDto _$WorkoutLibraryDtoFromJson(Map<String, dynamic> json) =>
     WorkoutLibraryDto(

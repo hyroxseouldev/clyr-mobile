@@ -93,6 +93,63 @@ class AppLocalizationsKo extends AppLocalizations {
   String get signupSuccess => '회원가입이 완료되었습니다. 이메일을 확인해주세요.';
 
   @override
+  String get onboardingWelcome => '반가워요!';
+
+  @override
+  String get onboardingSubtitle => '간단한 정보를 입력하고 맞춤 서비스를 시작하세요';
+
+  @override
+  String get onboardingGender => '성별';
+
+  @override
+  String get onboardingExerciseType => '선호하는 운동';
+
+  @override
+  String get onboardingExperience => '운동 경력';
+
+  @override
+  String get onboardingStart => '시작하기';
+
+  @override
+  String get genderMale => '남성';
+
+  @override
+  String get genderFemale => '여성';
+
+  @override
+  String get exerciseHyrox => '하이록스';
+
+  @override
+  String get exerciseCrossfit => '크로스핏';
+
+  @override
+  String get exerciseRunning => '러닝';
+
+  @override
+  String get exerciseGym => '헬스';
+
+  @override
+  String get exerciseOther => '기타';
+
+  @override
+  String get experienceLess3m => '3개월 미만';
+
+  @override
+  String get experienceLess6m => '6개월 미만';
+
+  @override
+  String get experienceLess1y => '1년 미만';
+
+  @override
+  String get experienceMore1y => '1년 이상';
+
+  @override
+  String get experienceMore3y => '3년 이상';
+
+  @override
+  String get pleaseFillAllFields => '모든 항목을 선택해주세요';
+
+  @override
   String get settingsTitle => '설정';
 
   @override

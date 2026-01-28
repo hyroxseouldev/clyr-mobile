@@ -1,4 +1,6 @@
 import 'package:clyr_mobile/l10n/app_localizations.dart';
+import 'package:clyr_mobile/src/core/router/router_path.dart';
+import 'package:clyr_mobile/src/feature/auth/presentation/provider/onboarding_controller.dart';
 import 'package:clyr_mobile/src/feature/home/infra/entity/home_entity.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/blueprint_section_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/home_controller.dart';
@@ -8,6 +10,7 @@ import 'package:clyr_mobile/src/feature/home/presentation/widget/program_selecto
 import 'package:clyr_mobile/src/shared/async_widget.dart';
 import 'package:clyr_mobile/src/shared/widgets/date_selection/date_selection_type.dart';
 import 'package:clyr_mobile/src/shared/widgets/date_selection/date_selection_widget.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -24,6 +27,27 @@ class HomeView extends ConsumerWidget {
 
     // 현재 활성화된 프로그램 상태 감지
     final activeProgramState = ref.watch(homeControllerProvider);
+
+    // Watch onboarding status and redirect if not completed
+    ref.listen<AsyncValue<bool>>(
+      checkOnboardingStatusProvider,
+      (previous, next) {
+        next.when(
+          data: (isOnboarded) {
+            if (!isOnboarded) {
+              // Redirect to onboarding
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                context.go(RoutePaths.onboarding);
+              });
+            }
+          },
+          loading: () {},
+          error: (error, _) {
+            // On error, allow to proceed to home
+          },
+        );
+      },
+    );
 
     return Scaffold(
       appBar: AppBar(

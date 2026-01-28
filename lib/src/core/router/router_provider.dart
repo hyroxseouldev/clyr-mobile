@@ -1,6 +1,7 @@
 import 'package:clyr_mobile/src/core/router/session_provider.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/login_view.dart';
+import 'package:clyr_mobile/src/feature/auth/presentation/view/onboarding_view.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/signup_view.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/splash_view.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/user_profile_view.dart';
@@ -64,6 +65,10 @@ GoRouter router(Ref ref) {
       GoRoute(
         path: RoutePaths.signup,
         builder: (context, state) => const SignupView(),
+      ),
+      GoRoute(
+        path: RoutePaths.onboarding,
+        builder: (context, state) => const OnboardingView(),
       ),
 
       // ✅ ShellRoute: 바텀 네비게이션

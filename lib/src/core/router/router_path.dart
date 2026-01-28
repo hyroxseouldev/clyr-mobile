@@ -7,6 +7,7 @@ class RoutePaths {
   static const String community = '/community';
   static const String login = '/login';
   static const String signup = '/signup';
+  static const String onboarding = '/onboarding';
   static const String workout = '/workout';
   static const String stats = '/stats';
   static const String workoutStartDateSetup = '/workout/start-date-setup';

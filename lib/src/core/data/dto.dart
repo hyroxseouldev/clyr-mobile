@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:clyr_mobile/src/feature/auth/infra/entity/user_profile_entity.dart';
 
 part 'dto.g.dart';
 
@@ -109,6 +110,12 @@ class UserProfileDto {
   final List<String>? fitnessGoals;
   @JsonKey(name: 'fitness_level')
   final String? fitnessLevel;
+  @JsonKey(name: 'onboarding_completed')
+  final bool? onboardingCompleted;
+  @JsonKey(name: 'onboarding_data')
+  final Map<String, dynamic>? onboardingData;
+  @JsonKey(name: 'onboarding_completed_at')
+  final DateTime? onboardingCompletedAt;
   @JsonKey(name: 'updated_at')
   final DateTime? updatedAt;
 
@@ -121,6 +128,9 @@ class UserProfileDto {
     this.phoneNumber,
     this.fitnessGoals,
     this.fitnessLevel,
+    this.onboardingCompleted,
+    this.onboardingData,
+    this.onboardingCompletedAt,
     required this.updatedAt,
   });
 
@@ -143,6 +153,11 @@ class UserProfileDto {
       phoneNumber: json['phone_number'] as String?,
       fitnessGoals: goals,
       fitnessLevel: json['fitness_level'] as String?,
+      onboardingCompleted: json['onboarding_completed'] as bool?,
+      onboardingData: json['onboarding_data'] as Map<String, dynamic>?,
+      onboardingCompletedAt: json['onboarding_completed_at'] != null
+          ? DateTime.parse(json['onboarding_completed_at'] as String)
+          : null,
       updatedAt: json['updated_at'] != null
           ? DateTime.parse(json['updated_at'] as String)
           : DateTime.now(),
@@ -150,6 +165,8 @@ class UserProfileDto {
   }
 
   Map<String, dynamic> toJson() => _$UserProfileDtoToJson(this);
+
+  UserProfileEntity toEntity() => UserProfileEntity.fromDto(this);
 }
 
 // =============================================================
