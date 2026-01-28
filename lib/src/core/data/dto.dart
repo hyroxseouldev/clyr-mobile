@@ -242,6 +242,10 @@ class ProgramsDto {
   final List<String>? mainImageList;
   @JsonKey(name: 'program_image')
   final String? programImage;
+  @JsonKey(name: 'start_date')
+  final DateTime startDate;
+  @JsonKey(name: 'end_date')
+  final DateTime endDate;
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
   @JsonKey(name: 'updated_at')
@@ -263,6 +267,8 @@ class ProgramsDto {
     required this.daysPerWeek,
     this.mainImageList,
     this.programImage,
+    required this.startDate,
+    required this.endDate,
     required this.createdAt,
     required this.updatedAt,
   });

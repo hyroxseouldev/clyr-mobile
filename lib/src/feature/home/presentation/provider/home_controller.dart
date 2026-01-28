@@ -10,16 +10,16 @@ part 'home_controller.g.dart';
 @riverpod
 class HomeController extends _$HomeController {
   @override
-  FutureOr<ActiveProgramEntity?> build() async {
+  FutureOr<ActiveProgramEntity> build() async {
     try {
       final usecase = ref.read(getActiveProgramUseCaseProvider);
       final result = await usecase(null);
       return result.fold(
-        (l) => null, // 에러 시 null 반환 (활성화된 프로그램 없음)
+        (l) => ActiveProgramEntity.empty(), // 에러 시 null 반환 (활성화된 프로그램 없음)
         (r) => r,
       );
     } catch (e) {
-      return null;
+      return ActiveProgramEntity.empty();
     }
   }
 

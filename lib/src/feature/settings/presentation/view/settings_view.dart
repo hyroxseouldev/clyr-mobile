@@ -65,7 +65,7 @@ class SettingView extends HookConsumerWidget {
           ),
 
           const SizedBox(height: 8),
-          const SingoutButton(),
+          SingoutButton(buttonText: l10n.logout),
         ],
       ),
     );

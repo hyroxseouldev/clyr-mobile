@@ -1046,6 +1046,18 @@ abstract class AppLocalizations {
   /// **'새로운 운동 프로그램을 추가해주세요'**
   String get addNewProgram;
 
+  /// No description provided for @trainingWithCoach.
+  ///
+  /// In ko, this message translates to:
+  /// **'{coachName} 코치와 함께하는'**
+  String trainingWithCoach(Object coachName);
+
+  /// No description provided for @currentProgress.
+  ///
+  /// In ko, this message translates to:
+  /// **'현재 진척률'**
+  String get currentProgress;
+
   /// No description provided for @cancel.
   ///
   /// In ko, this message translates to:

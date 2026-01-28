@@ -8,69 +8,75 @@ part of 'blueprint_section_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Blueprint Sections Provider
+/// 오늘의 세션 상태 Provider
 ///
-/// 지정된 날짜의 블루프린트 섹션 엔티티들을 가져옵니다.
-/// 날짜가 변경되면 자동으로 다시 가져옵니다.
+/// ActiveProgram 상태에 따라 오늘의 세션 상태를 반환합니다:
+/// - empty: 활성화된 프로그램 없음
+/// - trainingDay: 훈련일 (세션 리스트 있음)
+/// - restDay: 휴식일 (세션 없음)
 
-@ProviderFor(blueprintSections)
-final blueprintSectionsProvider = BlueprintSectionsFamily._();
+@ProviderFor(todaysSessionState)
+final todaysSessionStateProvider = TodaysSessionStateFamily._();
 
-/// Blueprint Sections Provider
+/// 오늘의 세션 상태 Provider
 ///
-/// 지정된 날짜의 블루프린트 섹션 엔티티들을 가져옵니다.
-/// 날짜가 변경되면 자동으로 다시 가져옵니다.
+/// ActiveProgram 상태에 따라 오늘의 세션 상태를 반환합니다:
+/// - empty: 활성화된 프로그램 없음
+/// - trainingDay: 훈련일 (세션 리스트 있음)
+/// - restDay: 휴식일 (세션 없음)
 
-final class BlueprintSectionsProvider
+final class TodaysSessionStateProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<BlueprintSectionEntity>>,
-          List<BlueprintSectionEntity>,
-          FutureOr<List<BlueprintSectionEntity>>
+          AsyncValue<TodaysSessionState>,
+          TodaysSessionState,
+          FutureOr<TodaysSessionState>
         >
     with
-        $FutureModifier<List<BlueprintSectionEntity>>,
-        $FutureProvider<List<BlueprintSectionEntity>> {
-  /// Blueprint Sections Provider
+        $FutureModifier<TodaysSessionState>,
+        $FutureProvider<TodaysSessionState> {
+  /// 오늘의 세션 상태 Provider
   ///
-  /// 지정된 날짜의 블루프린트 섹션 엔티티들을 가져옵니다.
-  /// 날짜가 변경되면 자동으로 다시 가져옵니다.
-  BlueprintSectionsProvider._({
-    required BlueprintSectionsFamily super.from,
+  /// ActiveProgram 상태에 따라 오늘의 세션 상태를 반환합니다:
+  /// - empty: 활성화된 프로그램 없음
+  /// - trainingDay: 훈련일 (세션 리스트 있음)
+  /// - restDay: 휴식일 (세션 없음)
+  TodaysSessionStateProvider._({
+    required TodaysSessionStateFamily super.from,
     required DateTime super.argument,
   }) : super(
          retry: null,
-         name: r'blueprintSectionsProvider',
+         name: r'todaysSessionStateProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
 
   @override
-  String debugGetCreateSourceHash() => _$blueprintSectionsHash();
+  String debugGetCreateSourceHash() => _$todaysSessionStateHash();
 
   @override
   String toString() {
-    return r'blueprintSectionsProvider'
+    return r'todaysSessionStateProvider'
         ''
         '($argument)';
   }
 
   @$internal
   @override
-  $FutureProviderElement<List<BlueprintSectionEntity>> $createElement(
+  $FutureProviderElement<TodaysSessionState> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<BlueprintSectionEntity>> create(Ref ref) {
+  FutureOr<TodaysSessionState> create(Ref ref) {
     final argument = this.argument as DateTime;
-    return blueprintSections(ref, argument);
+    return todaysSessionState(ref, argument);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is BlueprintSectionsProvider && other.argument == argument;
+    return other is TodaysSessionStateProvider && other.argument == argument;
   }
 
   @override
@@ -79,36 +85,37 @@ final class BlueprintSectionsProvider
   }
 }
 
-String _$blueprintSectionsHash() => r'3843a0433ae674eb4ce432c68119942bbf850ebe';
+String _$todaysSessionStateHash() =>
+    r'7ee923d05c1c5b969a5c023ec1e573d175a6eb22';
 
-/// Blueprint Sections Provider
+/// 오늘의 세션 상태 Provider
 ///
-/// 지정된 날짜의 블루프린트 섹션 엔티티들을 가져옵니다.
-/// 날짜가 변경되면 자동으로 다시 가져옵니다.
+/// ActiveProgram 상태에 따라 오늘의 세션 상태를 반환합니다:
+/// - empty: 활성화된 프로그램 없음
+/// - trainingDay: 훈련일 (세션 리스트 있음)
+/// - restDay: 휴식일 (세션 없음)
 
-final class BlueprintSectionsFamily extends $Family
-    with
-        $FunctionalFamilyOverride<
-          FutureOr<List<BlueprintSectionEntity>>,
-          DateTime
-        > {
-  BlueprintSectionsFamily._()
+final class TodaysSessionStateFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<TodaysSessionState>, DateTime> {
+  TodaysSessionStateFamily._()
     : super(
         retry: null,
-        name: r'blueprintSectionsProvider',
+        name: r'todaysSessionStateProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
       );
 
-  /// Blueprint Sections Provider
+  /// 오늘의 세션 상태 Provider
   ///
-  /// 지정된 날짜의 블루프린트 섹션 엔티티들을 가져옵니다.
-  /// 날짜가 변경되면 자동으로 다시 가져옵니다.
+  /// ActiveProgram 상태에 따라 오늘의 세션 상태를 반환합니다:
+  /// - empty: 활성화된 프로그램 없음
+  /// - trainingDay: 훈련일 (세션 리스트 있음)
+  /// - restDay: 휴식일 (세션 없음)
 
-  BlueprintSectionsProvider call(DateTime date) =>
-      BlueprintSectionsProvider._(argument: date, from: this);
+  TodaysSessionStateProvider call(DateTime date) =>
+      TodaysSessionStateProvider._(argument: date, from: this);
 
   @override
-  String toString() => r'blueprintSectionsProvider';
+  String toString() => r'todaysSessionStateProvider';
 }

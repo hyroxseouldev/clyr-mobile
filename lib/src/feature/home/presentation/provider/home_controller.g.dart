@@ -19,7 +19,7 @@ final homeControllerProvider = HomeControllerProvider._();
 ///
 /// 현재 사용자의 활성화된 프로그램을 가져옵니다
 final class HomeControllerProvider
-    extends $AsyncNotifierProvider<HomeController, ActiveProgramEntity?> {
+    extends $AsyncNotifierProvider<HomeController, ActiveProgramEntity> {
   /// 홈 컨트롤러
   ///
   /// 현재 사용자의 활성화된 프로그램을 가져옵니다
@@ -42,28 +42,24 @@ final class HomeControllerProvider
   HomeController create() => HomeController();
 }
 
-String _$homeControllerHash() => r'28c99462274617cd282b2b54354864e3e5817cbb';
+String _$homeControllerHash() => r'dfd32df3f54a5e8f5ddbe1a2a8a01420cb4664c5';
 
 /// 홈 컨트롤러
 ///
 /// 현재 사용자의 활성화된 프로그램을 가져옵니다
 
-abstract class _$HomeController extends $AsyncNotifier<ActiveProgramEntity?> {
-  FutureOr<ActiveProgramEntity?> build();
+abstract class _$HomeController extends $AsyncNotifier<ActiveProgramEntity> {
+  FutureOr<ActiveProgramEntity> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final ref =
-        this.ref
-            as $Ref<AsyncValue<ActiveProgramEntity?>, ActiveProgramEntity?>;
+        this.ref as $Ref<AsyncValue<ActiveProgramEntity>, ActiveProgramEntity>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<
-                AsyncValue<ActiveProgramEntity?>,
-                ActiveProgramEntity?
-              >,
-              AsyncValue<ActiveProgramEntity?>,
+              AnyNotifier<AsyncValue<ActiveProgramEntity>, ActiveProgramEntity>,
+              AsyncValue<ActiveProgramEntity>,
               Object?,
               Object?
             >;

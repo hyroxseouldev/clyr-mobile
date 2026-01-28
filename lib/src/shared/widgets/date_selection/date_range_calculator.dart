@@ -112,4 +112,40 @@ class DateRangeCalculator {
     }
     return true;
   }
+
+  /// Get the start of the week for a given date
+  /// [weekStartDay] = 1 for Monday, 7 for Sunday (DateTime weekday values)
+  static DateTime getWeekStart(DateTime date, int weekStartDay) {
+    final currentWeekday = date.weekday; // 1=Monday, 7=Sunday
+    final daysToSubtract = (currentWeekday - weekStartDay + 7) % 7;
+    return DateTime(date.year, date.month, date.day - daysToSubtract);
+  }
+
+  /// Calculate list of week start dates from a date range
+  static List<DateTime> calculateWeekStarts(
+    List<DateTime> dates,
+    int weekStartDay,
+  ) {
+    if (dates.isEmpty) return [];
+
+    final weekStarts = <DateTime>[];
+    DateTime currentWeekStart = getWeekStart(dates.first, weekStartDay);
+
+    final lastDate = dates.last;
+    while (currentWeekStart.isBefore(lastDate) ||
+        currentWeekStart.isAtSameMomentAs(lastDate)) {
+      weekStarts.add(currentWeekStart);
+      currentWeekStart = currentWeekStart.add(const Duration(days: 7));
+    }
+
+    return weekStarts;
+  }
+
+  /// Get 7 days for a week starting from the given date
+  static List<DateTime> getWeekDays(DateTime weekStart) {
+    return List.generate(
+      7,
+      (index) => weekStart.add(Duration(days: index)),
+    );
+  }
 }

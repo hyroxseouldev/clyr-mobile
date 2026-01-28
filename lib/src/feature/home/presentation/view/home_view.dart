@@ -6,15 +6,18 @@ import 'package:clyr_mobile/src/feature/home/presentation/provider/blueprint_sec
 import 'package:clyr_mobile/src/feature/home/presentation/provider/home_controller.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/selected_date_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/widget/blueprint_section_card.dart';
-import 'package:clyr_mobile/src/feature/home/presentation/widget/program_selector.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/widget/coach_profile_card_widget.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/widget/program_progress_bar_widget.dart';
 import 'package:clyr_mobile/src/shared/async_widget.dart';
 import 'package:clyr_mobile/src/shared/widgets/date_selection/date_selection_type.dart';
 import 'package:clyr_mobile/src/shared/widgets/date_selection/date_selection_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/widget/coach_quote_widget.dart';
 
+// View State ( 날짜 )
+// Needed Data ( 코치이름 ,코치 프로필 아바타, 프로그램 명, 프로그램 기간, 진척도, 블루프린트 코치의 한마디 )
 class HomeView extends ConsumerWidget {
   const HomeView({super.key});
   static const String routeName = 'home';
@@ -22,56 +25,33 @@ class HomeView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final locale = Localizations.localeOf(context);
     final selectedDate = ref.watch(selectedDateProvider);
 
     // 현재 활성화된 프로그램 상태 감지
     final activeProgramState = ref.watch(homeControllerProvider);
 
     // Watch onboarding status and redirect if not completed
-    ref.listen<AsyncValue<bool>>(
-      checkOnboardingStatusProvider,
-      (previous, next) {
-        next.when(
-          data: (isOnboarded) {
-            if (!isOnboarded) {
-              // Redirect to onboarding
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                context.go(RoutePaths.onboarding);
-              });
-            }
-          },
-          loading: () {},
-          error: (error, _) {
-            // On error, allow to proceed to home
-          },
-        );
-      },
-    );
+    ref.listen<AsyncValue<bool>>(checkOnboardingStatusProvider, (
+      previous,
+      next,
+    ) {
+      next.when(
+        data: (isOnboarded) {
+          if (!isOnboarded) {
+            // Redirect to onboarding
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              context.go(RoutePaths.onboarding);
+            });
+          }
+        },
+        loading: () {},
+        error: (error, _) {
+          // On error, allow to proceed to home
+        },
+      );
+    });
 
     return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(l10n.todaysWorkout),
-            Text(
-              DateFormat(
-                'yyyy-MM-dd (E)',
-                locale.languageCode,
-              ).format(selectedDate),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.calendar_month_outlined),
-          ),
-        ],
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -79,58 +59,108 @@ class HomeView extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // 가로로 스크롤 되는 날짜 선택 위젯
-                DateSelectionWidget(
-                  showType: DateSelectionType.weekly,
-                  selectedDate: selectedDate,
-                  onDateSelected: (date) {
-                    ref
-                        .read(selectedDateProvider.notifier)
-                        .setSelectedDate(date);
-                  },
-                  startDate: DateTime.now().subtract(const Duration(days: 7)),
-                  endDate: DateTime.now().add(const Duration(days: 7)),
-                ),
-                Text(l10n.currentProgram),
-                const SizedBox(height: 12),
                 // 현재 등록된 프로그램 표시
-                AsyncWidget<ActiveProgramEntity?>(
+                AsyncWidget<ActiveProgramEntity>(
                   data: activeProgramState,
                   builder: (activeProgram) {
-                    return ProgramSelector(
-                      programList: activeProgram != null ? [activeProgram] : [],
-                      selectedProgram: activeProgram,
-                      onSelected: (program) {
-                        // 프로그램 선택 처리 (필요 시 구현)
+                    return activeProgram.maybeWhen(
+                      (
+                        id,
+                        title,
+                        programImage,
+                        mainImageList,
+                        description,
+                        startDate,
+                        endDate,
+                        coachProfileUrl,
+                        coachName,
+                      ) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // 가로로 스크롤 되는 날짜 선택 위젯
+                            DateSelectionWidget(
+                              showType: DateSelectionType.weekly,
+                              selectedDate: selectedDate,
+                              onDateSelected: (date) {
+                                ref
+                                    .read(selectedDateProvider.notifier)
+                                    .setSelectedDate(date);
+                              },
+                              startDate: startDate,
+                              endDate: endDate,
+                            ),
+
+                            CoachProfileCard(
+                              profileUrl: coachProfileUrl,
+                              coachName: coachName,
+                              programName: title,
+                              subtitleText: l10n.trainingWithCoach(coachName),
+                            ),
+                            const SizedBox(height: 20),
+                            ProgramProgressBar(
+                              startDate: startDate,
+                              endDate: endDate,
+                              today: DateTime.now(),
+                              completedText: l10n.completed,
+                            ),
+                          ],
+                        );
                       },
+                      empty: () => _buildEmptyProgramState(context),
+                      orElse: () => _buildEmptyProgramState(context),
                     );
                   },
                 ),
                 const SizedBox(height: 24),
                 // Blueprint sections list
-                Text(
-                  l10n.todaysSections,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 12),
-                AsyncWidget<List<BlueprintSectionEntity>>(
-                  data: ref.watch(blueprintSectionsProvider(selectedDate)),
-                  builder: (sections) {
-                    if (sections.isEmpty) {
-                      return _buildEmptySections(context);
-                    }
-                    return Column(
-                      children: sections.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final item = entry.value;
-                        return BlueprintSectionCard(
-                          item: item,
-                          index: index + 1,
-                          isCompleted: entry.value.isCompleted,
-                          showingCompleteButton:
-                              entry.value.title == "main_workout",
+                AsyncWidget<TodaysSessionState>(
+                  data: ref.watch(todaysSessionStateProvider(selectedDate)),
+                  builder: (sessionState) {
+                    return sessionState.when(
+                      empty: () => const SizedBox.shrink(),
+                      restDay: () => Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            l10n.todaysSections,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 12),
+                          _buildRestDayState(context),
+                        ],
+                      ),
+                      trainingDay: (sections, coachQuote, coachName) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            CoachQuoteWidget(
+                              title: '$coachName 의 한마디',
+                              content: coachQuote,
+                            ),
+                            Text(
+                              l10n.todaysSections,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            const SizedBox(height: 12),
+                            Column(
+                              children: sections.asMap().entries.map((entry) {
+                                final index = entry.key;
+                                final item = entry.value;
+                                return BlueprintSectionCard(
+                                  item: item,
+                                  index: index + 1,
+                                  isCompleted: entry.value.isCompleted,
+                                  showingCompleteButton:
+                                      entry.value.title == "main_workout",
+                                  completedText: l10n.completed,
+                                  completeWorkoutText: l10n.completeWorkout,
+                                );
+                              }).toList(),
+                            ),
+                          ],
                         );
-                      }).toList(),
+                      },
                     );
                   },
                 ),
@@ -142,7 +172,29 @@ class HomeView extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptySections(BuildContext context) {
+  Widget _buildRestDayState(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.self_improvement, size: 64, color: Colors.grey.shade400),
+            const SizedBox(height: 16),
+            Text(
+              l10n.restDay,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyProgramState(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
@@ -152,15 +204,24 @@ class HomeView extends ConsumerWidget {
           children: [
             Icon(
               Icons.fitness_center_outlined,
-              size: 64,
+              size: 80,
               color: Colors.grey.shade400,
             ),
             const SizedBox(height: 16),
             Text(
-              l10n.noSectionsForDate,
+              l10n.noProgramsRegistered,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Colors.grey.shade600,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.addNewProgram,
               style: Theme.of(
                 context,
-              ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
+              ).textTheme.bodySmall?.copyWith(color: Colors.grey.shade500),
+              textAlign: TextAlign.center,
             ),
           ],
         ),

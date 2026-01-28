@@ -140,6 +140,8 @@ ProgramsDto _$ProgramsDtoFromJson(Map<String, dynamic> json) => ProgramsDto(
       ?.map((e) => e as String)
       .toList(),
   programImage: json['program_image'] as String?,
+  startDate: DateTime.parse(json['start_date'] as String),
+  endDate: DateTime.parse(json['end_date'] as String),
   createdAt: DateTime.parse(json['created_at'] as String),
   updatedAt: DateTime.parse(json['updated_at'] as String),
 );
@@ -161,6 +163,8 @@ Map<String, dynamic> _$ProgramsDtoToJson(ProgramsDto instance) =>
       'days_per_week': instance.daysPerWeek,
       'main_image_list': instance.mainImageList,
       'program_image': instance.programImage,
+      'start_date': instance.startDate.toIso8601String(),
+      'end_date': instance.endDate.toIso8601String(),
       'created_at': instance.createdAt.toIso8601String(),
       'updated_at': instance.updatedAt.toIso8601String(),
     };

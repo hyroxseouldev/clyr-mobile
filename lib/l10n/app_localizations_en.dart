@@ -494,6 +494,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addNewProgram => 'Please add a new workout program';
 
   @override
+  String trainingWithCoach(Object coachName) {
+    return 'Training with Coach $coachName';
+  }
+
+  @override
+  String get currentProgress => 'Current Progress';
+
+  @override
   String get cancel => 'Cancel';
 
   @override

@@ -1,4 +1,3 @@
-import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/feature/home/infra/entity/home_entity.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +10,8 @@ class BlueprintSectionCard extends StatelessWidget {
   final int index;
   final bool isCompleted;
   final bool showingCompleteButton;
+  final String completedText;
+  final String completeWorkoutText;
 
   const BlueprintSectionCard({
     super.key,
@@ -18,6 +19,8 @@ class BlueprintSectionCard extends StatelessWidget {
     required this.index,
     this.isCompleted = false,
     this.showingCompleteButton = false,
+    this.completedText = '완료됨',
+    this.completeWorkoutText = '운동 완료',
   });
 
   void _onCompletePressed(BuildContext context) {
@@ -32,7 +35,6 @@ class BlueprintSectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ExpansionTile(
@@ -104,7 +106,7 @@ class BlueprintSectionCard extends StatelessWidget {
                     ).colorScheme.surfaceContainerHighest,
                   ),
                   child: Text(
-                    isCompleted ? l10n.completed : l10n.completeWorkout,
+                    isCompleted ? completedText : completeWorkoutText,
                   ),
                 ),
               ),

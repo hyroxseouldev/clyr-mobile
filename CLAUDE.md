@@ -400,6 +400,8 @@ class BlueprintSectionCard extends StatelessWidget {
   final int index;
   final bool isCompleted;
   final bool showingCompleteButton;
+  final String completedText;
+  final String completeWorkoutText;
 
   const BlueprintSectionCard({
     super.key,
@@ -407,18 +409,19 @@ class BlueprintSectionCard extends StatelessWidget {
     required this.index,
     this.isCompleted = false,
     this.showingCompleteButton = false,
+    this.completedText = '완료됨',
+    this.completeWorkoutText = '운동 완료',
   });
 
   void _onCompletePressed(BuildContext context) {
     context.goNamed(
       RoutePaths.homeSessionRecordCreate,
-      pathParameters: {'sId': item.id},
+      pathParameters: {'sectionId': item.sectionId, 'sectionItemId': item.id},
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ExpansionTile(
@@ -436,7 +439,7 @@ class BlueprintSectionCard extends StatelessWidget {
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: isCompleted ? null : () => _onCompletePressed(context),
-                  child: Text(isCompleted ? l10n.completed : l10n.completeWorkout),
+                  child: Text(isCompleted ? completedText : completeWorkoutText),
                 ),
               ),
             ),
@@ -447,8 +450,10 @@ class BlueprintSectionCard extends StatelessWidget {
 }
 
 // 7. PRESENTATION LAYER: View (home_view.dart)
+final l10n = AppLocalizations.of(context)!;
+
 AsyncWidget<List<BlueprintSectionEntity>>(
-  data: ref.watch(blueprintSectionsProvider(selectedDate.value)),
+  data: ref.watch(blueprintSectionsProvider(selectedDate)),
   builder: (sections) {
     if (sections.isEmpty) {
       return _buildEmptySections(context);
@@ -458,6 +463,10 @@ AsyncWidget<List<BlueprintSectionEntity>>(
         return BlueprintSectionCard(
           item: entry.value,
           index: entry.key + 1,
+          isCompleted: entry.value.isCompleted,
+          showingCompleteButton: entry.value.title == "main_workout",
+          completedText: l10n.completed,
+          completeWorkoutText: l10n.completeWorkout,
         );
       }).toList(),
     );
@@ -484,9 +493,10 @@ AsyncWidget<List<BlueprintSectionEntity>>(
 4. **State Management**: Use Riverpod v3+ with code generation (`@riverpod`)
 5. **Async UI**: Use `AsyncWidget<T>` wrapper for `AsyncValue<T>` handling
 6. **Localization**: Always use `l10n` strings, never hardcode UI text
-7. **Nested DTOs**: Use custom `fromJson` with `@JsonKey(includeFromJson: false, includeToJson: false)`
-8. **Freezed Entities**: Use `@freezed` for immutable Entity classes
-9. **Routing Navigation**: Always use `context.goNamed()` with `RoutePaths` constants, never hardcode routes
+7. **Widget Localization**: Widgets MUST NOT import `AppLocalizations`. Pass localized strings as parameters from View layer
+8. **Nested DTOs**: Use custom `fromJson` with `@JsonKey(includeFromJson: false, includeToJson: false)`
+9. **Freezed Entities**: Use `@freezed` for immutable Entity classes
+10. **Routing Navigation**: Always use `context.goNamed()` with `RoutePaths` constants, never hardcode routes
 
 ### Routing Best Practices
 
@@ -515,6 +525,75 @@ context.goNamed('/home/session-record-create/${item.id}');
 - **Refactoring**: Route changes update automatically
 - **Consistency**: Single source of truth for route paths
 - **IDE Support**: Auto-completion and jump-to-definition
+
+### Widget Localization Best Practices
+
+**DO** - Pass localized strings as parameters from View layer:
+```dart
+// ✅ Correct: Widget receives strings as parameters
+// Widget (coach_profile_card_widget.dart)
+class CoachProfileCard extends StatelessWidget {
+  final String profileUrl;
+  final String coachName;
+  final String programName;
+  final String subtitleText;  // Localized string passed as parameter
+
+  const CoachProfileCard({
+    required this.profileUrl,
+    required this.coachName,
+    required this.programName,
+    this.subtitleText = '',  // Optional with default
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(subtitleText),  // Use parameter directly
+        // ...
+      ],
+    );
+  }
+}
+
+// View (home_view.dart)
+final l10n = AppLocalizations.of(context)!;
+
+CoachProfileCard(
+  profileUrl: coachProfileUrl,
+  coachName: coachName,
+  programName: title,
+  subtitleText: l10n.trainingWithCoach(coachName),  // View handles localization
+),
+```
+
+**DON'T** - Never import AppLocalizations in widgets:
+```dart
+// ❌ Wrong: Widget directly imports AppLocalizations
+import 'package:clyr_mobile/l10n/app_localizations.dart';
+
+class CoachProfileCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Text(l10n.trainingWithCoach(coachName));  // ❌ Widget handles localization
+  }
+}
+```
+
+**Why?**
+- **Separation of Concerns**: Widgets focus on UI rendering, Views handle localization
+- **Testability**: Widgets can be tested with mock strings without l10n context
+- **Reusability**: Widgets can be used in contexts without AppLocalizations
+- **Flexibility**: Easy to customize text for specific use cases
+- **Type Safety**: Compile-time checking of string parameters
+
+**Parameter Guidelines:**
+- Use descriptive names: `completedText`, `emptyStateText`, `buttonText`
+- Provide sensible Korean defaults for backward compatibility
+- Optional parameters with defaults reduce boilerplate
+- All localized strings should be passed from View layer
 
 ### File Organization
 

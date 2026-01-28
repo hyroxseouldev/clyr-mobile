@@ -41,7 +41,10 @@ class LogView extends ConsumerWidget {
               child: AsyncWidget<List<LeaderboardEntryEntity>>(
                 data: ref.watch(leaderboardProvider(selectedDate)),
                 builder: (entries) {
-                  return LogLeaderBoardWidget(entries: entries);
+                  return LogLeaderBoardWidget(
+                    entries: entries,
+                    emptyStateText: l10n.noLeaderboardEntries,
+                  );
                 },
               ),
             ),

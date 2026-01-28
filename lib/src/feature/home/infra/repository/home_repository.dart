@@ -31,6 +31,9 @@ class HomeRepositoryImpl implements HomeRepository {
   FutureEither<AppException, ActiveProgramEntity> getActiveProgram() async {
     try {
       final dto = await dataSource.getCurrentActiveProgram();
+      if (dto == null) {
+        return right(const ActiveProgramEntity.empty());
+      }
       return right(ActiveProgramEntity.fromDto(dto));
     } catch (e) {
       return left(

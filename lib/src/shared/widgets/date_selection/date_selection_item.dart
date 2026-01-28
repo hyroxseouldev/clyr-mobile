@@ -12,6 +12,9 @@ class DateSelectionItem extends StatelessWidget {
   /// Whether this date is today
   final bool isToday;
 
+  /// Whether this date is enabled (within valid date range)
+  final bool isEnabled;
+
   /// Callback when item is tapped
   final VoidCallback? onTap;
 
@@ -29,6 +32,7 @@ class DateSelectionItem extends StatelessWidget {
     required this.date,
     required this.isSelected,
     this.isToday = false,
+    this.isEnabled = true,
     this.onTap,
     this.width,
     this.height,
@@ -40,9 +44,15 @@ class DateSelectionItem extends StatelessWidget {
     final theme = Theme.of(context);
     final locale = Localizations.localeOf(context);
 
-    // Determine text color based on weekday and selection state
+    // Only show as selected if both selected AND enabled
+    final effectivelySelected = isSelected && isEnabled;
+
+    // Determine text color based on weekday, selection state, and enabled state
     Color getTextColor() {
-      if (isSelected) {
+      if (!isEnabled) {
+        return Colors.grey.withValues(alpha: 0.4);
+      }
+      if (effectivelySelected) {
         return theme.colorScheme.onPrimary;
       }
 
@@ -58,53 +68,56 @@ class DateSelectionItem extends StatelessWidget {
 
     final textColor = getTextColor();
 
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          color: isSelected
-              ? theme.colorScheme.primary
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(borderRadius),
-          // Shadow effect for selected state
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
-              : null,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Weekday label (top)
-            Text(
-              DateFormat('E', locale.languageCode).format(date),
-              style: theme.textTheme.labelSmall?.copyWith(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: textColor,
+    return Opacity(
+      opacity: isEnabled ? 1.0 : 0.4,
+      child: GestureDetector(
+        onTap: isEnabled ? onTap : null,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            color: effectivelySelected
+                ? theme.colorScheme.primary
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(borderRadius),
+            // Shadow effect for selected state
+            boxShadow: effectivelySelected
+                ? [
+                    BoxShadow(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : null,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Weekday label (top)
+              Text(
+                DateFormat('E', locale.languageCode).format(date),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: textColor,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
+              const SizedBox(height: 4),
 
-            // Date number (bottom)
-            Text(
-              '${date.day}',
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: textColor,
+              // Date number (bottom)
+              Text(
+                '${date.day}',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

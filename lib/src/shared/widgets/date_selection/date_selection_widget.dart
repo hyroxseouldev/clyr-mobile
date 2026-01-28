@@ -51,6 +51,10 @@ class DateSelectionWidget extends HookWidget {
   /// Border radius for items (default 18px)
   final double? itemBorderRadius;
 
+  /// Week start day (1=Monday, 2=Tuesday, ..., 7=Sunday)
+  /// Default is Monday (1)
+  final int weekStartDay;
+
   const DateSelectionWidget({
     super.key,
     required this.showType,
@@ -62,6 +66,7 @@ class DateSelectionWidget extends HookWidget {
     this.itemWidth,
     this.itemHeight,
     this.itemBorderRadius,
+    this.weekStartDay = 1, // Default: Monday
   });
 
   @override
@@ -75,7 +80,7 @@ class DateSelectionWidget extends HookWidget {
         startDate: startDate,
         endDate: endDate,
       ),
-      [showType, startDate, endDate],
+      [showType, startDate, endDate, weekStartDay],
     );
 
     // Calculate responsive item width for weekly mode
@@ -124,85 +129,100 @@ class DateSelectionWidget extends HookWidget {
     );
   }
 
-  /// Build weekly mode with horizontal scrollable list
+  /// Build weekly mode with PageView for snap-to-week behavior
   Widget _buildWeeklyMode(
     BuildContext context,
     List<DateTime> dates,
     double itemWidth,
     double itemHeight,
   ) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    // Calculate initial scroll offset to center the first 7 items
-    // Account for ListView padding (2px total: 1px left + 1px right)
-    final totalWidth = (7 * itemWidth); // 7 items + ListView padding
-    final initialOffset = (totalWidth - screenWidth) / 2;
-
-    final scrollController = useScrollController(
-      initialScrollOffset: initialOffset > 0 ? initialOffset : 0,
+    // Calculate week starts from date range
+    final weekStarts = useMemoized(
+      () => DateRangeCalculator.calculateWeekStarts(dates, weekStartDay),
+      [dates, weekStartDay],
     );
 
-    // Auto-scroll to selected date when it changes
+    if (weekStarts.isEmpty) {
+      return SizedBox(
+        height: itemHeight,
+        child: Center(
+          child: Text(
+            '표시할 날짜가 없습니다',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ),
+      );
+    }
+
+    // Calculate initial page (week containing selectedDate)
+    final initialPage = useMemoized(() {
+      if (selectedDate == null) return 0;
+      final selectedWeekStart =
+          DateRangeCalculator.getWeekStart(selectedDate!, weekStartDay);
+      final index = weekStarts.indexWhere(
+        (ws) => DateRangeCalculator.isSameDay(ws, selectedWeekStart),
+      );
+      return index != -1 ? index : 0;
+    }, [selectedDate, weekStarts, weekStartDay]);
+
+    final pageController = usePageController(initialPage: initialPage);
+
+    // Animate to the page containing selectedDate when it changes
     useEffect(() {
-      if (selectedDate != null && dates.isNotEmpty) {
-        final selectedIndex = dates.indexWhere(
-          (date) => DateRangeCalculator.isSameDay(date, selectedDate!),
+      if (selectedDate != null && weekStarts.isNotEmpty) {
+        final selectedWeekStart =
+            DateRangeCalculator.getWeekStart(selectedDate!, weekStartDay);
+        final index = weekStarts.indexWhere(
+          (ws) => DateRangeCalculator.isSameDay(ws, selectedWeekStart),
         );
-
-        if (selectedIndex != -1) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            // Check if controller is attached to a scrollable widget
-            if (!scrollController.hasClients) return;
-
-            // Add 1 for ListView left padding
-            final targetPosition =
-                (selectedIndex * itemWidth) +
-                (itemWidth / 2) -
-                (screenWidth / 2) +
-                1;
-
-            scrollController.animateTo(
-              targetPosition.clamp(
-                0.0,
-                scrollController.position.maxScrollExtent,
-              ),
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          });
+        if (index != -1 && pageController.hasClients) {
+          pageController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
         }
       }
       return null;
-    }, [selectedDate, dates, screenWidth]);
+    }, [selectedDate, weekStarts, weekStartDay]);
 
     return SizedBox(
       height: itemHeight,
-      child: ListView.builder(
-        controller: scrollController,
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.only(left: 1, right: 1),
-        itemCount: dates.length,
-        itemBuilder: (context, index) {
-          final date = dates[index];
-          final isSelected =
-              selectedDate != null &&
-              DateRangeCalculator.isSameDay(date, selectedDate!);
-          final isToday = DateRangeCalculator.isSameDay(date, DateTime.now());
+      child: PageView.builder(
+        controller: pageController,
+        itemCount: weekStarts.length,
+        itemBuilder: (context, page) {
+          final weekStart = weekStarts[page];
+          final weekDays = DateRangeCalculator.getWeekDays(weekStart);
 
-          return SizedBox(
-            width: itemWidth,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 1),
-              child: DateSelectionItem(
-                date: date,
-                isSelected: isSelected,
-                isToday: isToday,
-                width: itemWidth - 2,
-                height: itemHeight,
-                borderRadius: itemBorderRadius ?? 18.0,
-                onTap: () => onDateSelected?.call(date),
-              ),
-            ),
+          return Row(
+            children: weekDays.map((date) {
+              final isSelected =
+                  selectedDate != null &&
+                  DateRangeCalculator.isSameDay(date, selectedDate!);
+              final isToday = DateRangeCalculator.isSameDay(date, DateTime.now());
+              final isEnabled = DateRangeCalculator.isInRange(
+                date,
+                startDate,
+                endDate,
+              );
+
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 1),
+                  child: DateSelectionItem(
+                    date: date,
+                    isSelected: isSelected,
+                    isToday: isToday,
+                    isEnabled: isEnabled,
+                    width: itemWidth - 2,
+                    height: itemHeight,
+                    borderRadius: itemBorderRadius ?? 18.0,
+                    onTap: () => onDateSelected?.call(date),
+                  ),
+                ),
+              );
+            }).toList(),
           );
         },
       ),
@@ -245,6 +265,11 @@ class DateSelectionWidget extends HookWidget {
                 date,
                 DateTime.now(),
               );
+              final isEnabled = DateRangeCalculator.isInRange(
+                date,
+                startDate,
+                endDate,
+              );
 
               return Expanded(
                 child: Padding(
@@ -253,6 +278,7 @@ class DateSelectionWidget extends HookWidget {
                     date: date,
                     isSelected: isSelected,
                     isToday: isToday,
+                    isEnabled: isEnabled,
                     width: itemWidth,
                     height: itemHeight,
                     borderRadius: itemBorderRadius ?? 18.0,

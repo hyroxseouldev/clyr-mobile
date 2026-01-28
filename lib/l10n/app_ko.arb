@@ -174,6 +174,8 @@
 
   "noProgramsRegistered": "등록된 프로그램이 없습니다",
   "addNewProgram": "새로운 운동 프로그램을 추가해주세요",
+  "trainingWithCoach": "{coachName} 코치와 함께하는",
+  "currentProgress": "현재 진척률",
 
   "cancel": "취소",
 

@@ -1,4 +1,3 @@
-import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/feature/log/infra/entity/log_entity.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -6,10 +5,12 @@ import 'package:flutter/material.dart';
 /// Log LeaderBoard Widget
 class LogLeaderBoardWidget extends StatelessWidget {
   final List<LeaderboardEntryEntity> entries;
+  final String emptyStateText;
 
   const LogLeaderBoardWidget({
     super.key,
     required this.entries,
+    this.emptyStateText = '리더보드 기록이 없습니다',
   });
 
   Color _getRankColor(int rank) {
@@ -47,8 +48,6 @@ class LogLeaderBoardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     if (entries.isEmpty) {
       return Center(
         child: Padding(
@@ -63,7 +62,7 @@ class LogLeaderBoardWidget extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                l10n.noLeaderboardEntries,
+                emptyStateText,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),

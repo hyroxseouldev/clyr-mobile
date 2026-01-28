@@ -30,7 +30,7 @@ class SectionRecordCreateController extends _$SectionRecordCreateController {
       );
       return result.fold((l) => throw l, (r) {
         onSuccess();
-        ref.invalidate(blueprintSectionsProvider(selectedDate));
+        ref.invalidate(todaysSessionStateProvider(selectedDate));
         return r;
       });
     });

@@ -487,6 +487,14 @@ class AppLocalizationsKo extends AppLocalizations {
   String get addNewProgram => '새로운 운동 프로그램을 추가해주세요';
 
   @override
+  String trainingWithCoach(Object coachName) {
+    return '$coachName 코치와 함께하는';
+  }
+
+  @override
+  String get currentProgress => '현재 진척률';
+
+  @override
   String get cancel => '취소';
 
   @override
