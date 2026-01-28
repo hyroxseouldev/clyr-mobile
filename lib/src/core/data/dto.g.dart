@@ -61,7 +61,7 @@ UserProfileDto _$UserProfileDtoFromJson(Map<String, dynamic> json) =>
       accountId: json['account_id'] as String?,
       nickname: json['nickname'] as String?,
       bio: json['bio'] as String?,
-      profileImageUrl: json['profile_image_url'] as String?,
+      profileImageUrl: json['profile_image_url'] as String? ?? '',
       phoneNumber: json['phone_number'] as String?,
       fitnessGoals: (json['fitness_goals'] as List<dynamic>?)
           ?.map((e) => e as String)

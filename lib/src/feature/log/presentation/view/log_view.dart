@@ -1,10 +1,9 @@
 import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/feature/home/infra/entity/home_entity.dart';
-import 'package:clyr_mobile/src/feature/home/presentation/provider/blueprint_section_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/home_controller.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/selected_date_provider.dart';
 import 'package:clyr_mobile/src/feature/log/infra/entity/log_entity.dart';
-import 'package:clyr_mobile/src/feature/log/presentation/provider/leaderboard_provider.dart';
+import 'package:clyr_mobile/src/feature/log/presentation/provider/today_leaderboard_provider.dart';
 import 'package:clyr_mobile/src/feature/log/presentation/widget/leaderboard_session_box.dart';
 import 'package:clyr_mobile/src/feature/log/presentation/widget/log_leader_board_widget.dart';
 import 'package:clyr_mobile/src/shared/async_widget.dart';
@@ -12,6 +11,7 @@ import 'package:clyr_mobile/src/shared/widgets/date_selection/date_selection_typ
 import 'package:clyr_mobile/src/shared/widgets/date_selection/date_selection_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LogView extends ConsumerWidget {
   const LogView({super.key});
@@ -22,9 +22,11 @@ class LogView extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final selectedDate = ref.watch(selectedDateProvider);
     final activeProgramState = ref.watch(homeControllerProvider);
-    final todaysSessionState = ref.watch(
-      todaysSessionStateProvider(selectedDate),
+    final todayLeaderBoardState = ref.watch(
+      todayLeaderboardProvider(selectedDate),
     );
+    final currentUser = Supabase.instance.client.auth.currentUser;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -72,45 +74,24 @@ class LogView extends ConsumerWidget {
             Expanded(
               child: Column(
                 children: [
-                  AsyncWidget<TodaysSessionState>(
-                    data: todaysSessionState,
+                  AsyncWidget<TodayLeaderBoardEntity>(
+                    data: todayLeaderBoardState,
                     minHeight: 80,
-                    builder: (sessionState) {
-                      // Find main_workout content
-                      final mainWorkoutContent = sessionState.when(
-                        empty: () => null,
-                        restDay: () => null,
-                        trainingDay: (sections, coachQuote, coachName) {
-                          final mainWorkoutSection = sections.firstWhere(
-                            (section) => section.title == 'main_workout',
-                            orElse: () => sections.isNotEmpty
-                                ? sections.first
-                                : const BlueprintSectionEntity(
-                                    id: '',
-                                    sectionId: '',
-                                    title: '',
-                                    content: '',
-                                    orderIndex: 0,
-                                    isCompleted: false,
-                                    isRecordable: false,
-                                  ),
-                          );
-                          return mainWorkoutSection.content;
-                        },
-                      );
-
+                    builder: (leaderboard) {
                       return LeaderboardSessionBox(
-                        description: mainWorkoutContent ?? '오늘의 세션',
+                        description: leaderboard.sectionContent ?? '오늘의 세션',
                       );
                     },
                   ),
                   const SizedBox(height: 16),
                   Expanded(
-                    child: AsyncWidget<List<LeaderboardEntryEntity>>(
-                      data: ref.watch(leaderboardProvider(selectedDate)),
-                      builder: (entries) {
+                    child: AsyncWidget<TodayLeaderBoardEntity>(
+                      data: todayLeaderBoardState,
+                      builder: (leaderboard) {
                         return LogLeaderBoardWidget(
-                          entries: entries,
+                          entries: leaderboard.entries,
+                          currentUserId: currentUser?.id,
+                          mySectionRecordId: leaderboard.mySectionRecordId,
                           emptyStateText: l10n.noLeaderboardEntries,
                         );
                       },

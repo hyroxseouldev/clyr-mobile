@@ -10,6 +10,12 @@ abstract class LogRepository {
   FutureEither<AppException, List<LeaderboardEntryEntity>> getLeaderboard({
     required DateTime date,
   });
+
+  /// 지정된 날짜의 오늘 리더보드를 가져옵니다 (내 기록 포함)
+  FutureEither<AppException, TodayLeaderBoardEntity> getTodayLeaderBoard({
+    required DateTime date,
+    bool isTest = false,
+  });
 }
 
 /// Log 데이터 소스 구현체
@@ -40,6 +46,25 @@ class LogRepositoryImpl implements LogRepository {
     } catch (e) {
       return left(
         LogException(code: 'LEADERBOARD_FETCH_FAILED', message: e.toString()),
+      );
+    }
+  }
+
+  @override
+  FutureEither<AppException, TodayLeaderBoardEntity> getTodayLeaderBoard({
+    required DateTime date,
+    bool isTest = false,
+  }) async {
+    try {
+      final dto = await dataSource.getTodayLeaderBoard(
+        date: date,
+        isTest: isTest,
+      );
+      final entity = TodayLeaderBoardEntity.fromDto(dto);
+      return right(entity);
+    } catch (e) {
+      return left(
+        LogException(code: 'TODAY_LEADERBOARD_FETCH_FAILED', message: e.toString()),
       );
     }
   }

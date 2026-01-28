@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:clyr_mobile/src/core/data/dto.dart';
 import 'package:clyr_mobile/src/core/data/home_dto.dart';
 import 'package:clyr_mobile/src/core/data/log_dto.dart';
@@ -28,7 +30,7 @@ abstract interface class CoreDataSource {
   });
 
   /// Get section records for main workout (main_workout) sections by date
-  Future<List<SectionRecordDto>> getMainWorkoutSectionRecords({
+  Future<List<SectionRecordWithUserProfileDto>> getMainWorkoutSectionRecords({
     required DateTime date,
     bool isTest = false,
   });
@@ -192,11 +194,12 @@ class SupabaseDataSource implements CoreDataSource {
               id,
               title,
               content,
+              record_type,
               is_recordable,
               created_at,
               updated_at
             ),
-            section_records!section_item_id (
+            section_records (
               id,
               user_id,
               user_profile_id,
@@ -212,9 +215,35 @@ class SupabaseDataSource implements CoreDataSource {
           .eq('blueprint_id', blueprintId)
           .order('order_index', ascending: true);
 
-      final sectionItemsList = sectionItems
-          .map((item) => BlueprintSectionItemsDto.fromJson(item))
-          .toList();
+      // Convert to flattened DTO with isCompleted check
+      final sectionItemsList = sectionItems.map((item) {
+        // Check if user has a record in section_records
+        bool isCompleted = false;
+        final records = item['section_records'];
+        if (records != null && records is List) {
+          final recordsList = records;
+          isCompleted = recordsList.any((record) {
+            if (record is Map) {
+              return record['user_id'] == userId;
+            }
+            return false;
+          });
+        }
+
+        // Create flattenData for manual conversion
+        final flattenData = {
+          'id': item['id'],
+          'blueprint_id': item['blueprint_id'],
+          'section_id': item['section_id'],
+          'order_index': item['order_index'],
+          'created_at': item['created_at'],
+          'blueprint_sections': item['blueprint_sections'],
+          'section_records': item['section_records'],
+          '_is_completed': isCompleted, // Add computed field
+        };
+
+        return FlattenBlueprintSectionItemsDto.fromJson(flattenData);
+      }).toList();
 
       return TodaysSessionDto(
         sections: sectionItemsList,
@@ -274,7 +303,7 @@ class SupabaseDataSource implements CoreDataSource {
   }
 
   @override
-  Future<List<SectionRecordDto>> getMainWorkoutSectionRecords({
+  Future<List<SectionRecordWithUserProfileDto>> getMainWorkoutSectionRecords({
     required DateTime date,
     bool isTest = false,
   }) async {
@@ -361,7 +390,7 @@ class SupabaseDataSource implements CoreDataSource {
           .eq('blueprint_id', blueprintId)
           .order('order_index', ascending: true);
       // 6. Filter for "main_workout" (main workout) sections and collect records
-      final List<SectionRecordDto> mainWorkoutRecords = [];
+      final List<SectionRecordWithUserProfileDto> mainWorkoutRecords = [];
 
       for (final item in sectionItems) {
         final section = item['blueprint_sections'];
@@ -372,7 +401,9 @@ class SupabaseDataSource implements CoreDataSource {
             final records = item['section_records'] as List?;
             if (records != null) {
               for (final record in records) {
-                mainWorkoutRecords.add(SectionRecordDto.fromJson(record));
+                mainWorkoutRecords.add(
+                  SectionRecordWithUserProfileDto.fromJson(record),
+                );
               }
             }
           }
@@ -455,7 +486,8 @@ class SupabaseDataSource implements CoreDataSource {
             blueprint_sections!section_id (
               id,
               title,
-              content
+              content,
+              record_type
             ),
             section_records!section_item_id (
               id,
@@ -476,9 +508,10 @@ class SupabaseDataSource implements CoreDataSource {
           .order('order_index', ascending: true);
 
       // 5. Collect records for main_workout sections and find my record
-      final List<SectionRecordDto> allRecords = [];
+      final List<SectionRecordWithUserProfileDto> allRecords = [];
       String? myRecordId;
       String? mainWorkoutContent;
+      String? recordType;
 
       for (final item in sectionItems) {
         final section = item['blueprint_sections'];
@@ -486,12 +519,32 @@ class SupabaseDataSource implements CoreDataSource {
           final title = section['title'] as String;
           if (title.contains('main_workout')) {
             // Capture the section content
-            mainWorkoutContent ??= section['content'] as String?;
+            if (section['content'] != null) {
+              mainWorkoutContent ??= section['content'] as String;
+            }
+
+            recordType ??= section['record_type'] as String;
 
             final records = item['section_records'] as List?;
             if (records != null) {
               for (final record in records) {
-                final recordDto = SectionRecordDto.fromJson(record);
+                final flattendData = {
+                  'id': record['id'],
+                  'user_id': record['user_id'],
+                  'user_profile_id': record['user_profile']['id'],
+                  'section_id': record['section_id'],
+                  'section_item_id': record['section_item_id'],
+                  'content': record['content'],
+                  'completed_at': record['completed_at'],
+                  'coach_comment': record['coach_comment'],
+                  'nickname': record['user_profile']['nickname'],
+                  'profile_image_url':
+                      record['user_profile']['profile_image_url'],
+                };
+                print('flattendData = $flattendData');
+                final recordDto = SectionRecordWithUserProfileDto.fromJson(
+                  flattendData,
+                );
                 allRecords.add(recordDto);
 
                 // Check if this is my record
@@ -503,6 +556,61 @@ class SupabaseDataSource implements CoreDataSource {
           }
         }
       }
+
+      // 6. Sort allRecords by recordType before returning
+      allRecords.sort((a, b) {
+        // Use captured recordType, default to TIME_BASED if not set
+        final recordTypeStr = recordType ?? 'TIME_BASED';
+
+        if (recordTypeStr == 'TIME_BASED') {
+          // Sort by content['record'] time string ascending (faster = better rank)
+          final aRecord = a.content?['record'];
+          final bRecord = b.content?['record'];
+
+          if (aRecord == null || bRecord == null) {
+            return 0; // Keep original order if null
+          }
+
+          // Parse time string (hh:mm:ss or mm:ss) to seconds
+          int parseTimeToSeconds(dynamic timeStr) {
+            if (timeStr == null) return 0;
+            final parts = timeStr.toString().split(':');
+            int seconds = 0;
+            for (int i = 0; i < parts.length; i++) {
+              final value = int.tryParse(parts[i]) ?? 0;
+              // Rightmost part is seconds, then minutes, then hours
+              seconds += value * math.pow(60, parts.length - 1 - i).toInt();
+            }
+            return seconds;
+          }
+
+          final aSeconds = parseTimeToSeconds(aRecord);
+          final bSeconds = parseTimeToSeconds(bRecord);
+
+          // Ascending: less time = better rank
+          return aSeconds.compareTo(bSeconds);
+        } else if (recordTypeStr == 'WEIGHT_BASED' ||
+            recordTypeStr == 'REP_BASED' ||
+            recordTypeStr == 'DISTANCE_BASED') {
+          // Sort by content['record'] as number descending (larger = better)
+          final aRecord = a.content?['record'];
+          final bRecord = b.content?['record'];
+
+          if (aRecord == null || bRecord == null) {
+            return 0; // Keep original order if null
+          }
+
+          // Parse as double for comparison (handles both double and string)
+          final aValue = double.tryParse(aRecord.toString()) ?? 0.0;
+          final bValue = double.tryParse(bRecord.toString()) ?? 0.0;
+
+          // Descending: larger value = better rank
+          return bValue.compareTo(aValue);
+        }
+
+        // Default: sort by completedAt ascending
+        return a.completedAt.compareTo(b.completedAt);
+      });
 
       return LeaderboardDto(
         sectionRecords: allRecords,

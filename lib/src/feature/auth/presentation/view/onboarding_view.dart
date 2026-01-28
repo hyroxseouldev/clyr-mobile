@@ -24,22 +24,19 @@ class OnboardingView extends HookConsumerWidget {
     const totalSteps = 4;
 
     // Listen to controller state changes
-    ref.listen<AsyncValue>(
-      onboardingControllerProvider,
-      (previous, next) {
-        next.when(
-          data: (_) {
-            context.go(RoutePaths.home);
-          },
-          error: (error, _) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Error: $error')),
-            );
-          },
-          loading: () {},
-        );
-      },
-    );
+    ref.listen<AsyncValue>(onboardingControllerProvider, (previous, next) {
+      next.when(
+        data: (_) {
+          context.go(RoutePaths.home);
+        },
+        error: (error, _) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error: $error')));
+        },
+        loading: () {},
+      );
+    });
 
     // Helper functions
     bool canProceedToNextStep() {
@@ -77,7 +74,9 @@ class OnboardingView extends HookConsumerWidget {
         return;
       }
 
-      ref.read(onboardingControllerProvider.notifier).completeOnboarding(
+      ref
+          .read(onboardingControllerProvider.notifier)
+          .completeOnboarding(
             gender: selectedGender.value!,
             exerciseType: selectedExercise.value!,
             experience: selectedExperience.value!,
@@ -176,19 +175,16 @@ class OnboardingView extends HookConsumerWidget {
           const SizedBox(height: 8),
           Text(
             l10n.onboardingStep(currentStep + 1, totalSteps),
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.grey[600],
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildWelcomeHeader(
-    BuildContext context,
-    AppLocalizations l10n,
-  ) {
+  Widget _buildWelcomeHeader(BuildContext context, AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -201,9 +197,9 @@ class OnboardingView extends HookConsumerWidget {
           const SizedBox(height: 8),
           Text(
             l10n.onboardingSubtitle,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
           ),
         ],
       ),
@@ -401,7 +397,11 @@ class OnboardingView extends HookConsumerWidget {
                       width: 20,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : Text(isLastStep ? l10n.onboardingCompleteStart : l10n.onboardingNext),
+                  : Text(
+                      isLastStep
+                          ? l10n.onboardingCompleteStart
+                          : l10n.onboardingNext,
+                    ),
             ),
           ),
         ],
@@ -437,7 +437,9 @@ class _GenderOption extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(12),
           color: isSelected
-              ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3)
+              ? Theme.of(
+                  context,
+                ).colorScheme.primaryContainer.withValues(alpha: 0.3)
               : null,
         ),
         child: Row(
@@ -491,7 +493,9 @@ class _ExerciseChip extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(12),
           color: isSelected
-              ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3)
+              ? Theme.of(
+                  context,
+                ).colorScheme.primaryContainer.withValues(alpha: 0.3)
               : null,
         ),
         child: Row(
@@ -545,7 +549,9 @@ class _ExperienceOption extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(12),
           color: isSelected
-              ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3)
+              ? Theme.of(
+                  context,
+                ).colorScheme.primaryContainer.withValues(alpha: 0.3)
               : null,
         ),
         child: Row(
@@ -581,6 +587,7 @@ class _AnimatedSlideIn extends StatelessWidget {
   const _AnimatedSlideIn({
     required this.child,
     this.delay = Duration.zero,
+    // ignore: unused_element_parameter
     this.offset = const Offset(0, -0.5),
   });
 
@@ -627,10 +634,7 @@ class _SummaryRow extends StatelessWidget {
   final String label;
   final String value;
 
-  const _SummaryRow({
-    required this.label,
-    required this.value,
-  });
+  const _SummaryRow({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -639,15 +643,15 @@ class _SummaryRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[600],
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
         ),
         Text(
           value,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
         ),
       ],
     );
@@ -734,9 +738,9 @@ class _CompletionStepWidget extends StatelessWidget {
           delay: const Duration(milliseconds: 200),
           child: Text(
             l10n.onboardingCompleteSubtitle,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.grey[600],
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(color: Colors.grey[600]),
             textAlign: TextAlign.center,
           ),
         ),
@@ -763,9 +767,9 @@ class _CompletionStepWidget extends StatelessWidget {
           delay: const Duration(milliseconds: 400),
           child: Text(
             l10n.onboardingCompleteReady,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[700],
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: Colors.grey[700]),
             textAlign: TextAlign.center,
           ),
         ),

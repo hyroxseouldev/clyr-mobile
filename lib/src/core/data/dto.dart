@@ -104,7 +104,7 @@ class UserProfileDto {
   final String? accountId;
   final String? nickname;
   final String? bio;
-  @JsonKey(name: 'profile_image_url')
+  @JsonKey(name: 'profile_image_url', defaultValue: '')
   final String? profileImageUrl;
   @JsonKey(name: 'phone_number')
   final String? phoneNumber;

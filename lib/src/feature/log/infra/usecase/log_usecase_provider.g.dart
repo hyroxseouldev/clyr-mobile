@@ -60,3 +60,57 @@ final class GetLeaderboardUseCaseProvider
 
 String _$getLeaderboardUseCaseHash() =>
     r'68592f6c8bfce0b20a30dedaafa92184b8718030';
+
+/// 오늘 리더보드 조회 UseCase 프로바이더
+
+@ProviderFor(getTodayLeaderBoardUseCase)
+final getTodayLeaderBoardUseCaseProvider =
+    GetTodayLeaderBoardUseCaseProvider._();
+
+/// 오늘 리더보드 조회 UseCase 프로바이더
+
+final class GetTodayLeaderBoardUseCaseProvider
+    extends
+        $FunctionalProvider<
+          GetTodayLeaderBoardUseCase,
+          GetTodayLeaderBoardUseCase,
+          GetTodayLeaderBoardUseCase
+        >
+    with $Provider<GetTodayLeaderBoardUseCase> {
+  /// 오늘 리더보드 조회 UseCase 프로바이더
+  GetTodayLeaderBoardUseCaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getTodayLeaderBoardUseCaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$getTodayLeaderBoardUseCaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetTodayLeaderBoardUseCase> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  GetTodayLeaderBoardUseCase create(Ref ref) {
+    return getTodayLeaderBoardUseCase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetTodayLeaderBoardUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetTodayLeaderBoardUseCase>(value),
+    );
+  }
+}
+
+String _$getTodayLeaderBoardUseCaseHash() =>
+    r'bd88ad4f1ebeb8e00df487e650ab15493a8c5c20';

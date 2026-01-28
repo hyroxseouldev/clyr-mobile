@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:clyr_mobile/src/core/data/dto.dart';
+import 'package:clyr_mobile/src/core/data/log_dto.dart';
 
 part 'log_entity.freezed.dart';
 
@@ -14,15 +14,41 @@ abstract class LeaderboardEntryEntity with _$LeaderboardEntryEntity {
     required int rank,
   }) = _LeaderboardEntryEntity;
 
-  factory LeaderboardEntryEntity.fromDto(SectionRecordDto dto, int rank) {
-    final profile = dto.userProfile;
+  factory LeaderboardEntryEntity.fromDto(
+    SectionRecordWithUserProfileDto dto,
+    int rank,
+  ) {
     return LeaderboardEntryEntity(
       userId: dto.userId,
-      userName: profile?.nickname ?? dto.userId,
-      userProfileImageUrl: profile?.profileImageUrl,
+      userName: dto.nickname ?? 'Unknown',
+      userProfileImageUrl: dto.profileImageUrl,
       completedAt: dto.completedAt,
       content: dto.content,
       rank: rank,
+    );
+  }
+}
+
+@freezed
+abstract class TodayLeaderBoardEntity with _$TodayLeaderBoardEntity {
+  const factory TodayLeaderBoardEntity({
+    required List<LeaderboardEntryEntity> entries,
+    String? mySectionRecordId,
+    String? sectionContent,
+  }) = _TodayLeaderBoardEntity;
+
+  factory TodayLeaderBoardEntity.fromDto(LeaderboardDto dto) {
+    final entries = dto.sectionRecords
+        .asMap()
+        .entries
+        .map((entry) =>
+            LeaderboardEntryEntity.fromDto(entry.value, entry.key + 1))
+        .toList();
+
+    return TodayLeaderBoardEntity(
+      entries: entries,
+      mySectionRecordId: dto.mySectionRecordId,
+      sectionContent: dto.sectionItemContent,
     );
   }
 }

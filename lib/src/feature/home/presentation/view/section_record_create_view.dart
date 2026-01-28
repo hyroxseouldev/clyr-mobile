@@ -188,7 +188,8 @@ class SectionRecordCreateView extends HookConsumerWidget {
           final h = hoursController.text.trim();
           final m = minutesController.text.trim();
           final s = secondsController.text.trim();
-          return '$h시간 $m분 $s초';
+          // Format as hh:mm:ss
+          return '${h.padLeft(2, '0')}:${m.padLeft(2, '0')}:${s.padLeft(2, '0')}';
         case RecordType.repBased:
           final r = roundsController.text.trim();
           final rep = repsController.text.trim();

@@ -291,4 +291,273 @@ as int,
 
 }
 
+/// @nodoc
+mixin _$TodayLeaderBoardEntity {
+
+ List<LeaderboardEntryEntity> get entries; String? get mySectionRecordId; String? get sectionContent;
+/// Create a copy of TodayLeaderBoardEntity
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TodayLeaderBoardEntityCopyWith<TodayLeaderBoardEntity> get copyWith => _$TodayLeaderBoardEntityCopyWithImpl<TodayLeaderBoardEntity>(this as TodayLeaderBoardEntity, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TodayLeaderBoardEntity&&const DeepCollectionEquality().equals(other.entries, entries)&&(identical(other.mySectionRecordId, mySectionRecordId) || other.mySectionRecordId == mySectionRecordId)&&(identical(other.sectionContent, sectionContent) || other.sectionContent == sectionContent));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(entries),mySectionRecordId,sectionContent);
+
+@override
+String toString() {
+  return 'TodayLeaderBoardEntity(entries: $entries, mySectionRecordId: $mySectionRecordId, sectionContent: $sectionContent)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $TodayLeaderBoardEntityCopyWith<$Res>  {
+  factory $TodayLeaderBoardEntityCopyWith(TodayLeaderBoardEntity value, $Res Function(TodayLeaderBoardEntity) _then) = _$TodayLeaderBoardEntityCopyWithImpl;
+@useResult
+$Res call({
+ List<LeaderboardEntryEntity> entries, String? mySectionRecordId, String? sectionContent
+});
+
+
+
+
+}
+/// @nodoc
+class _$TodayLeaderBoardEntityCopyWithImpl<$Res>
+    implements $TodayLeaderBoardEntityCopyWith<$Res> {
+  _$TodayLeaderBoardEntityCopyWithImpl(this._self, this._then);
+
+  final TodayLeaderBoardEntity _self;
+  final $Res Function(TodayLeaderBoardEntity) _then;
+
+/// Create a copy of TodayLeaderBoardEntity
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? entries = null,Object? mySectionRecordId = freezed,Object? sectionContent = freezed,}) {
+  return _then(_self.copyWith(
+entries: null == entries ? _self.entries : entries // ignore: cast_nullable_to_non_nullable
+as List<LeaderboardEntryEntity>,mySectionRecordId: freezed == mySectionRecordId ? _self.mySectionRecordId : mySectionRecordId // ignore: cast_nullable_to_non_nullable
+as String?,sectionContent: freezed == sectionContent ? _self.sectionContent : sectionContent // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [TodayLeaderBoardEntity].
+extension TodayLeaderBoardEntityPatterns on TodayLeaderBoardEntity {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TodayLeaderBoardEntity value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _TodayLeaderBoardEntity() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TodayLeaderBoardEntity value)  $default,){
+final _that = this;
+switch (_that) {
+case _TodayLeaderBoardEntity():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TodayLeaderBoardEntity value)?  $default,){
+final _that = this;
+switch (_that) {
+case _TodayLeaderBoardEntity() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<LeaderboardEntryEntity> entries,  String? mySectionRecordId,  String? sectionContent)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _TodayLeaderBoardEntity() when $default != null:
+return $default(_that.entries,_that.mySectionRecordId,_that.sectionContent);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<LeaderboardEntryEntity> entries,  String? mySectionRecordId,  String? sectionContent)  $default,) {final _that = this;
+switch (_that) {
+case _TodayLeaderBoardEntity():
+return $default(_that.entries,_that.mySectionRecordId,_that.sectionContent);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<LeaderboardEntryEntity> entries,  String? mySectionRecordId,  String? sectionContent)?  $default,) {final _that = this;
+switch (_that) {
+case _TodayLeaderBoardEntity() when $default != null:
+return $default(_that.entries,_that.mySectionRecordId,_that.sectionContent);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _TodayLeaderBoardEntity implements TodayLeaderBoardEntity {
+  const _TodayLeaderBoardEntity({required final  List<LeaderboardEntryEntity> entries, this.mySectionRecordId, this.sectionContent}): _entries = entries;
+  
+
+ final  List<LeaderboardEntryEntity> _entries;
+@override List<LeaderboardEntryEntity> get entries {
+  if (_entries is EqualUnmodifiableListView) return _entries;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_entries);
+}
+
+@override final  String? mySectionRecordId;
+@override final  String? sectionContent;
+
+/// Create a copy of TodayLeaderBoardEntity
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$TodayLeaderBoardEntityCopyWith<_TodayLeaderBoardEntity> get copyWith => __$TodayLeaderBoardEntityCopyWithImpl<_TodayLeaderBoardEntity>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TodayLeaderBoardEntity&&const DeepCollectionEquality().equals(other._entries, _entries)&&(identical(other.mySectionRecordId, mySectionRecordId) || other.mySectionRecordId == mySectionRecordId)&&(identical(other.sectionContent, sectionContent) || other.sectionContent == sectionContent));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_entries),mySectionRecordId,sectionContent);
+
+@override
+String toString() {
+  return 'TodayLeaderBoardEntity(entries: $entries, mySectionRecordId: $mySectionRecordId, sectionContent: $sectionContent)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$TodayLeaderBoardEntityCopyWith<$Res> implements $TodayLeaderBoardEntityCopyWith<$Res> {
+  factory _$TodayLeaderBoardEntityCopyWith(_TodayLeaderBoardEntity value, $Res Function(_TodayLeaderBoardEntity) _then) = __$TodayLeaderBoardEntityCopyWithImpl;
+@override @useResult
+$Res call({
+ List<LeaderboardEntryEntity> entries, String? mySectionRecordId, String? sectionContent
+});
+
+
+
+
+}
+/// @nodoc
+class __$TodayLeaderBoardEntityCopyWithImpl<$Res>
+    implements _$TodayLeaderBoardEntityCopyWith<$Res> {
+  __$TodayLeaderBoardEntityCopyWithImpl(this._self, this._then);
+
+  final _TodayLeaderBoardEntity _self;
+  final $Res Function(_TodayLeaderBoardEntity) _then;
+
+/// Create a copy of TodayLeaderBoardEntity
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? entries = null,Object? mySectionRecordId = freezed,Object? sectionContent = freezed,}) {
+  return _then(_TodayLeaderBoardEntity(
+entries: null == entries ? _self._entries : entries // ignore: cast_nullable_to_non_nullable
+as List<LeaderboardEntryEntity>,mySectionRecordId: freezed == mySectionRecordId ? _self.mySectionRecordId : mySectionRecordId // ignore: cast_nullable_to_non_nullable
+as String?,sectionContent: freezed == sectionContent ? _self.sectionContent : sectionContent // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
 // dart format on

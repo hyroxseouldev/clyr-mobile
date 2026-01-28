@@ -53,18 +53,17 @@ abstract class BlueprintSectionEntity with _$BlueprintSectionEntity {
   }) = BlueprintSectionData;
 
   /// DTO로부터 엔티티 생성
-  factory BlueprintSectionEntity.fromDto(BlueprintSectionItemsDto dto) {
-    final section = dto.blueprintSection;
+  factory BlueprintSectionEntity.fromDto(FlattenBlueprintSectionItemsDto dto) {
     return BlueprintSectionEntity(
       id: dto.id, // sectionItemId
       sectionId: dto.sectionId, // sectionId
-      title: section?.title ?? '',
-      content: section?.content ?? '',
+      title: dto.sectionTitle,
+      content: dto.sectionContent,
       orderIndex: dto.orderIndex,
-      isCompleted: dto.sectionRecord != null,
-      isRecordable: section?.isRecordable ?? false,
-      recordType: section?.recordType != null
-          ? RecordTypeX.fromString(section?.recordType)
+      isCompleted: dto.isCompleted,
+      isRecordable: dto.sectionIsRecordable ?? false,
+      recordType: dto.sectionRecordType != null
+          ? RecordTypeX.fromString(dto.sectionRecordType)
           : null,
     );
   }
