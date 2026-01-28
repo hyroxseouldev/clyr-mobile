@@ -160,7 +160,7 @@ class HomeView extends ConsumerWidget {
                                   index: index + 1,
                                   isCompleted: entry.value.isCompleted,
                                   showingCompleteButton:
-                                      entry.value.title == "main_workout",
+                                      entry.value.isRecordable,
                                   completedText: l10n.completed,
                                   completeWorkoutText: l10n.completeWorkout,
                                 );

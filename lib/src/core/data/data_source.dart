@@ -166,11 +166,7 @@ class SupabaseDataSource implements CoreDataSource {
           .maybeSingle();
 
       if (programBlueprint == null) {
-        return TodaysSessionDto(
-          sections: [],
-          notes: '',
-          coachName: '',
-        );
+        return TodaysSessionDto(sections: [], notes: '', coachName: '');
       }
 
       final blueprintId = programBlueprint['id'] as String;
@@ -189,6 +185,7 @@ class SupabaseDataSource implements CoreDataSource {
               id,
               title,
               content,
+              is_recordable,
               created_at,
               updated_at
             ),

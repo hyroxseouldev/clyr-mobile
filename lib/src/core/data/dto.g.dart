@@ -201,6 +201,8 @@ BlueprintSectionsDto _$BlueprintSectionsDtoFromJson(
   id: json['id'] as String,
   title: json['title'] as String,
   content: json['content'] as String,
+  recordType: json['record_type'] as String?,
+  isRecordable: json['is_recordable'] as bool?,
   createdAt: DateTime.parse(json['created_at'] as String),
   updatedAt: DateTime.parse(json['updated_at'] as String),
 );
@@ -211,6 +213,8 @@ Map<String, dynamic> _$BlueprintSectionsDtoToJson(
   'id': instance.id,
   'title': instance.title,
   'content': instance.content,
+  'record_type': instance.recordType,
+  'is_recordable': instance.isRecordable,
   'created_at': instance.createdAt.toIso8601String(),
   'updated_at': instance.updatedAt.toIso8601String(),
 };

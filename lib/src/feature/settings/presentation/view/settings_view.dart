@@ -1,6 +1,7 @@
 import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/core/theme/theme.dart';
+import 'package:clyr_mobile/src/feature/auth/infra/entity/user_profile_entity.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/provider/user_profile_controller.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/widget/singout_button.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/widget/user_avatar_card_widget.dart';
@@ -26,11 +27,6 @@ class SettingView extends HookConsumerWidget {
     // 프로필 메뉴 와 아이콘 정리
     final List<SettingMenu> settingMenus = [
       SettingMenu(
-        icon: Icons.person,
-        title: l10n.settingsProfile,
-        route: RoutePaths.userProfile,
-      ),
-      SettingMenu(
         icon: Icons.notifications,
         title: l10n.settingsPurchaseHistory,
         route: RoutePaths.purchaseHistory,
@@ -45,14 +41,19 @@ class SettingView extends HookConsumerWidget {
         title: l10n.settingsTerms,
         route: RoutePaths.termsOfService,
       ),
-      SettingMenu(icon: Icons.info, title: l10n.settingsAppInfo, route: RoutePaths.appInfo),
+      SettingMenu(
+        icon: Icons.info,
+        title: l10n.settingsAppInfo,
+        route: RoutePaths.appInfo,
+      ),
     ];
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
         children: [
           // 사용자 프로필 카드
-          AsyncWidget(
+          AsyncWidget<UserProfileEntity>(
+            minHeight: 240,
             data: ref.watch(userProfileControllerProvider),
             builder: (userProfile) {
               return UserAvatarCard(

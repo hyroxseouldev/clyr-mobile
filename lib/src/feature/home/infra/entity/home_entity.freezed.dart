@@ -296,7 +296,7 @@ mixin _$BlueprintSectionEntity {
 
  String get id;// sectionItemId
  String get sectionId;// sectionId
- String get title; String get content; int get orderIndex; bool get isCompleted;
+ String get title; String get content; int get orderIndex; bool get isCompleted; bool get isRecordable; RecordType? get recordType;
 /// Create a copy of BlueprintSectionEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -307,16 +307,16 @@ $BlueprintSectionEntityCopyWith<BlueprintSectionEntity> get copyWith => _$Bluepr
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BlueprintSectionEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.sectionId, sectionId) || other.sectionId == sectionId)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&(identical(other.orderIndex, orderIndex) || other.orderIndex == orderIndex)&&(identical(other.isCompleted, isCompleted) || other.isCompleted == isCompleted));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BlueprintSectionEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.sectionId, sectionId) || other.sectionId == sectionId)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&(identical(other.orderIndex, orderIndex) || other.orderIndex == orderIndex)&&(identical(other.isCompleted, isCompleted) || other.isCompleted == isCompleted)&&(identical(other.isRecordable, isRecordable) || other.isRecordable == isRecordable)&&(identical(other.recordType, recordType) || other.recordType == recordType));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,sectionId,title,content,orderIndex,isCompleted);
+int get hashCode => Object.hash(runtimeType,id,sectionId,title,content,orderIndex,isCompleted,isRecordable,recordType);
 
 @override
 String toString() {
-  return 'BlueprintSectionEntity(id: $id, sectionId: $sectionId, title: $title, content: $content, orderIndex: $orderIndex, isCompleted: $isCompleted)';
+  return 'BlueprintSectionEntity(id: $id, sectionId: $sectionId, title: $title, content: $content, orderIndex: $orderIndex, isCompleted: $isCompleted, isRecordable: $isRecordable, recordType: $recordType)';
 }
 
 
@@ -327,7 +327,7 @@ abstract mixin class $BlueprintSectionEntityCopyWith<$Res>  {
   factory $BlueprintSectionEntityCopyWith(BlueprintSectionEntity value, $Res Function(BlueprintSectionEntity) _then) = _$BlueprintSectionEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, String sectionId, String title, String content, int orderIndex, bool isCompleted
+ String id, String sectionId, String title, String content, int orderIndex, bool isCompleted, bool isRecordable, RecordType? recordType
 });
 
 
@@ -344,7 +344,7 @@ class _$BlueprintSectionEntityCopyWithImpl<$Res>
 
 /// Create a copy of BlueprintSectionEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? sectionId = null,Object? title = null,Object? content = null,Object? orderIndex = null,Object? isCompleted = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? sectionId = null,Object? title = null,Object? content = null,Object? orderIndex = null,Object? isCompleted = null,Object? isRecordable = null,Object? recordType = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,sectionId: null == sectionId ? _self.sectionId : sectionId // ignore: cast_nullable_to_non_nullable
@@ -352,7 +352,9 @@ as String,title: null == title ? _self.title : title // ignore: cast_nullable_to
 as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String,orderIndex: null == orderIndex ? _self.orderIndex : orderIndex // ignore: cast_nullable_to_non_nullable
 as int,isCompleted: null == isCompleted ? _self.isCompleted : isCompleted // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,isRecordable: null == isRecordable ? _self.isRecordable : isRecordable // ignore: cast_nullable_to_non_nullable
+as bool,recordType: freezed == recordType ? _self.recordType : recordType // ignore: cast_nullable_to_non_nullable
+as RecordType?,
   ));
 }
 
@@ -437,10 +439,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String sectionId,  String title,  String content,  int orderIndex,  bool isCompleted)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String sectionId,  String title,  String content,  int orderIndex,  bool isCompleted,  bool isRecordable,  RecordType? recordType)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case BlueprintSectionData() when $default != null:
-return $default(_that.id,_that.sectionId,_that.title,_that.content,_that.orderIndex,_that.isCompleted);case _:
+return $default(_that.id,_that.sectionId,_that.title,_that.content,_that.orderIndex,_that.isCompleted,_that.isRecordable,_that.recordType);case _:
   return orElse();
 
 }
@@ -458,10 +460,10 @@ return $default(_that.id,_that.sectionId,_that.title,_that.content,_that.orderIn
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String sectionId,  String title,  String content,  int orderIndex,  bool isCompleted)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String sectionId,  String title,  String content,  int orderIndex,  bool isCompleted,  bool isRecordable,  RecordType? recordType)  $default,) {final _that = this;
 switch (_that) {
 case BlueprintSectionData():
-return $default(_that.id,_that.sectionId,_that.title,_that.content,_that.orderIndex,_that.isCompleted);case _:
+return $default(_that.id,_that.sectionId,_that.title,_that.content,_that.orderIndex,_that.isCompleted,_that.isRecordable,_that.recordType);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -478,10 +480,10 @@ return $default(_that.id,_that.sectionId,_that.title,_that.content,_that.orderIn
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String sectionId,  String title,  String content,  int orderIndex,  bool isCompleted)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String sectionId,  String title,  String content,  int orderIndex,  bool isCompleted,  bool isRecordable,  RecordType? recordType)?  $default,) {final _that = this;
 switch (_that) {
 case BlueprintSectionData() when $default != null:
-return $default(_that.id,_that.sectionId,_that.title,_that.content,_that.orderIndex,_that.isCompleted);case _:
+return $default(_that.id,_that.sectionId,_that.title,_that.content,_that.orderIndex,_that.isCompleted,_that.isRecordable,_that.recordType);case _:
   return null;
 
 }
@@ -493,7 +495,7 @@ return $default(_that.id,_that.sectionId,_that.title,_that.content,_that.orderIn
 
 
 class BlueprintSectionData implements BlueprintSectionEntity {
-  const BlueprintSectionData({required this.id, required this.sectionId, required this.title, required this.content, required this.orderIndex, required this.isCompleted});
+  const BlueprintSectionData({required this.id, required this.sectionId, required this.title, required this.content, required this.orderIndex, required this.isCompleted, required this.isRecordable, this.recordType});
   
 
 @override final  String id;
@@ -504,6 +506,8 @@ class BlueprintSectionData implements BlueprintSectionEntity {
 @override final  String content;
 @override final  int orderIndex;
 @override final  bool isCompleted;
+@override final  bool isRecordable;
+@override final  RecordType? recordType;
 
 /// Create a copy of BlueprintSectionEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -515,16 +519,16 @@ $BlueprintSectionDataCopyWith<BlueprintSectionData> get copyWith => _$BlueprintS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BlueprintSectionData&&(identical(other.id, id) || other.id == id)&&(identical(other.sectionId, sectionId) || other.sectionId == sectionId)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&(identical(other.orderIndex, orderIndex) || other.orderIndex == orderIndex)&&(identical(other.isCompleted, isCompleted) || other.isCompleted == isCompleted));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BlueprintSectionData&&(identical(other.id, id) || other.id == id)&&(identical(other.sectionId, sectionId) || other.sectionId == sectionId)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&(identical(other.orderIndex, orderIndex) || other.orderIndex == orderIndex)&&(identical(other.isCompleted, isCompleted) || other.isCompleted == isCompleted)&&(identical(other.isRecordable, isRecordable) || other.isRecordable == isRecordable)&&(identical(other.recordType, recordType) || other.recordType == recordType));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,sectionId,title,content,orderIndex,isCompleted);
+int get hashCode => Object.hash(runtimeType,id,sectionId,title,content,orderIndex,isCompleted,isRecordable,recordType);
 
 @override
 String toString() {
-  return 'BlueprintSectionEntity(id: $id, sectionId: $sectionId, title: $title, content: $content, orderIndex: $orderIndex, isCompleted: $isCompleted)';
+  return 'BlueprintSectionEntity(id: $id, sectionId: $sectionId, title: $title, content: $content, orderIndex: $orderIndex, isCompleted: $isCompleted, isRecordable: $isRecordable, recordType: $recordType)';
 }
 
 
@@ -535,7 +539,7 @@ abstract mixin class $BlueprintSectionDataCopyWith<$Res> implements $BlueprintSe
   factory $BlueprintSectionDataCopyWith(BlueprintSectionData value, $Res Function(BlueprintSectionData) _then) = _$BlueprintSectionDataCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String sectionId, String title, String content, int orderIndex, bool isCompleted
+ String id, String sectionId, String title, String content, int orderIndex, bool isCompleted, bool isRecordable, RecordType? recordType
 });
 
 
@@ -552,7 +556,7 @@ class _$BlueprintSectionDataCopyWithImpl<$Res>
 
 /// Create a copy of BlueprintSectionEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? sectionId = null,Object? title = null,Object? content = null,Object? orderIndex = null,Object? isCompleted = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? sectionId = null,Object? title = null,Object? content = null,Object? orderIndex = null,Object? isCompleted = null,Object? isRecordable = null,Object? recordType = freezed,}) {
   return _then(BlueprintSectionData(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,sectionId: null == sectionId ? _self.sectionId : sectionId // ignore: cast_nullable_to_non_nullable
@@ -560,7 +564,9 @@ as String,title: null == title ? _self.title : title // ignore: cast_nullable_to
 as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String,orderIndex: null == orderIndex ? _self.orderIndex : orderIndex // ignore: cast_nullable_to_non_nullable
 as int,isCompleted: null == isCompleted ? _self.isCompleted : isCompleted // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,isRecordable: null == isRecordable ? _self.isRecordable : isRecordable // ignore: cast_nullable_to_non_nullable
+as bool,recordType: freezed == recordType ? _self.recordType : recordType // ignore: cast_nullable_to_non_nullable
+as RecordType?,
   ));
 }
 

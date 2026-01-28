@@ -317,6 +317,10 @@ class BlueprintSectionsDto {
   final String id;
   final String title;
   final String content;
+  @JsonKey(name: 'record_type')
+  final String? recordType;
+  @JsonKey(name: 'is_recordable')
+  final bool? isRecordable;
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
   @JsonKey(name: 'updated_at')
@@ -326,6 +330,8 @@ class BlueprintSectionsDto {
     required this.id,
     required this.title,
     required this.content,
+    this.recordType,
+    this.isRecordable,
     required this.createdAt,
     required this.updatedAt,
   });

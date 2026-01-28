@@ -559,4 +559,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String coachQuoteTitle(Object coachName) {
     return 'Coach $coachName\'s Message';
   }
+
+  @override
+  String get recordTypeTimeBased => 'Time Based';
+
+  @override
+  String get recordTypeWeightBased => 'Weight Based';
+
+  @override
+  String get recordTypeRepBased => 'Rep Based';
+
+  @override
+  String get recordTypeDistanceBased => 'Distance Based';
+
+  @override
+  String get recordTypeSurvey => 'Survey';
+
+  @override
+  String get recordTypeChecklist => 'Checklist';
+
+  @override
+  String get recordTypePhoto => 'Photo';
+
+  @override
+  String get recordTypeOther => 'Other';
 }

@@ -198,5 +198,14 @@
 
   "leaderboard": "리더보드",
   "noLeaderboardEntries": "리더보드 기록이 없습니다",
-  "coachQuoteTitle": "{coachName} 코치의 한마디"
+  "coachQuoteTitle": "{coachName} 코치의 한마디",
+
+  "recordTypeTimeBased": "시간 기반",
+  "recordTypeWeightBased": "무게 기반",
+  "recordTypeRepBased": "횟수 기반",
+  "recordTypeDistanceBased": "거리 기반",
+  "recordTypeSurvey": "설문",
+  "recordTypeChecklist": "체크리스트",
+  "recordTypePhoto": "사진",
+  "recordTypeOther": "기타"
 }

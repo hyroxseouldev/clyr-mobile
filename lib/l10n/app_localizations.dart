@@ -1171,6 +1171,54 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'{coachName} 코치의 한마디'**
   String coachQuoteTitle(Object coachName);
+
+  /// No description provided for @recordTypeTimeBased.
+  ///
+  /// In ko, this message translates to:
+  /// **'시간 기반'**
+  String get recordTypeTimeBased;
+
+  /// No description provided for @recordTypeWeightBased.
+  ///
+  /// In ko, this message translates to:
+  /// **'무게 기반'**
+  String get recordTypeWeightBased;
+
+  /// No description provided for @recordTypeRepBased.
+  ///
+  /// In ko, this message translates to:
+  /// **'횟수 기반'**
+  String get recordTypeRepBased;
+
+  /// No description provided for @recordTypeDistanceBased.
+  ///
+  /// In ko, this message translates to:
+  /// **'거리 기반'**
+  String get recordTypeDistanceBased;
+
+  /// No description provided for @recordTypeSurvey.
+  ///
+  /// In ko, this message translates to:
+  /// **'설문'**
+  String get recordTypeSurvey;
+
+  /// No description provided for @recordTypeChecklist.
+  ///
+  /// In ko, this message translates to:
+  /// **'체크리스트'**
+  String get recordTypeChecklist;
+
+  /// No description provided for @recordTypePhoto.
+  ///
+  /// In ko, this message translates to:
+  /// **'사진'**
+  String get recordTypePhoto;
+
+  /// No description provided for @recordTypeOther.
+  ///
+  /// In ko, this message translates to:
+  /// **'기타'**
+  String get recordTypeOther;
 }
 
 class _AppLocalizationsDelegate

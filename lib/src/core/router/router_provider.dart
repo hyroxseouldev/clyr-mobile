@@ -78,9 +78,11 @@ GoRouter router(Ref ref) {
                 builder: (context, state) {
                   final sectionId = state.pathParameters['sectionId']!;
                   final sectionItemId = state.pathParameters['sectionItemId']!;
+                  final recordType = state.uri.queryParameters['recordType'];
                   return SectionRecordCreateView(
                     sectionId: sectionId,
                     sectionItemId: sectionItemId,
+                    recordType: recordType,
                   );
                 },
               ),

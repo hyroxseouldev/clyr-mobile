@@ -30,6 +30,10 @@ class BlueprintSectionCard extends StatelessWidget {
         'sectionId': item.sectionId,
         'sectionItemId': item.id,
       },
+      queryParameters: {
+        if (item.recordType != null)
+          'recordType': item.recordType!.value,
+      },
     );
   }
 

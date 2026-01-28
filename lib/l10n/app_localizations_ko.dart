@@ -552,4 +552,28 @@ class AppLocalizationsKo extends AppLocalizations {
   String coachQuoteTitle(Object coachName) {
     return '$coachName 코치의 한마디';
   }
+
+  @override
+  String get recordTypeTimeBased => '시간 기반';
+
+  @override
+  String get recordTypeWeightBased => '무게 기반';
+
+  @override
+  String get recordTypeRepBased => '횟수 기반';
+
+  @override
+  String get recordTypeDistanceBased => '거리 기반';
+
+  @override
+  String get recordTypeSurvey => '설문';
+
+  @override
+  String get recordTypeChecklist => '체크리스트';
+
+  @override
+  String get recordTypePhoto => '사진';
+
+  @override
+  String get recordTypeOther => '기타';
 }

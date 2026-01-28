@@ -198,5 +198,14 @@
 
   "leaderboard": "Leaderboard",
   "noLeaderboardEntries": "No leaderboard entries",
-  "coachQuoteTitle": "Coach {coachName}'s Message"
+  "coachQuoteTitle": "Coach {coachName}'s Message",
+
+  "recordTypeTimeBased": "Time Based",
+  "recordTypeWeightBased": "Weight Based",
+  "recordTypeRepBased": "Rep Based",
+  "recordTypeDistanceBased": "Distance Based",
+  "recordTypeSurvey": "Survey",
+  "recordTypeChecklist": "Checklist",
+  "recordTypePhoto": "Photo",
+  "recordTypeOther": "Other"
 }
