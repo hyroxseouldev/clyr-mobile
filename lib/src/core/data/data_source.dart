@@ -1,5 +1,6 @@
 import 'package:clyr_mobile/src/core/data/dto.dart';
 import 'package:clyr_mobile/src/core/data/home_dto.dart';
+import 'package:clyr_mobile/src/core/data/log_dto.dart';
 import 'package:clyr_mobile/src/core/supabase/supabase_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as sb;
@@ -28,6 +29,12 @@ abstract interface class CoreDataSource {
 
   /// Get section records for main workout (main_workout) sections by date
   Future<List<SectionRecordDto>> getMainWorkoutSectionRecords({
+    required DateTime date,
+    bool isTest = false,
+  });
+
+  /// Get leaderboard for main_workout sections with current user's record ID and section content
+  Future<LeaderboardDto> getTodayLeaderBoard({
     required DateTime date,
     bool isTest = false,
   });
@@ -376,6 +383,135 @@ class SupabaseDataSource implements CoreDataSource {
     } catch (e) {
       print('getMainWorkoutSectionRecords: error = $e');
       throw Exception('Failed to get main workout section records: $e');
+    }
+  }
+
+  @override
+  Future<LeaderboardDto> getTodayLeaderBoard({
+    required DateTime date,
+    bool isTest = false,
+  }) async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) {
+      throw Exception('User not authenticated');
+    }
+
+    try {
+      // 1. Get active enrollment
+      final enrollmentResponse = await supabase
+          .from('enrollments')
+          .select('start_date, program_id')
+          .eq('user_id', userId)
+          .eq('status', 'ACTIVE')
+          .maybeSingle();
+
+      if (enrollmentResponse == null) {
+        return LeaderboardDto(
+          sectionRecords: [],
+          mySectionRecordId: null,
+          sectionItemContent: null,
+        );
+      }
+
+      final startDate = DateTime.parse(enrollmentResponse['start_date']);
+      final programId = enrollmentResponse['program_id'];
+
+      // 2. Calculate day number and phase number
+      final dayNumber = isTest ? 1 : date.difference(startDate).inDays + 1;
+      if (dayNumber < 1) {
+        return LeaderboardDto(
+          sectionRecords: [],
+          mySectionRecordId: null,
+          sectionItemContent: null,
+        );
+      }
+
+      final phaseNumber = isTest ? 1 : (dayNumber - 1) ~/ 7 + 1;
+
+      // 3. Query blueprint
+      final programBlueprint = await supabase
+          .from('program_blueprints')
+          .select('id')
+          .eq('program_id', programId)
+          .eq('phase_number', phaseNumber)
+          .eq('day_number', dayNumber)
+          .maybeSingle();
+
+      if (programBlueprint == null) {
+        return LeaderboardDto(
+          sectionRecords: [],
+          mySectionRecordId: null,
+          sectionItemContent: null,
+        );
+      }
+
+      final blueprintId = programBlueprint['id'] as String;
+
+      // 4. Get blueprint_section_items with nested sections and records
+      final sectionItems = await supabase
+          .from('blueprint_section_items')
+          .select('''
+            id,
+            blueprint_sections!section_id (
+              id,
+              title,
+              content
+            ),
+            section_records!section_item_id (
+              id,
+              user_id,
+              section_id,
+              section_item_id,
+              content,
+              completed_at,
+              user_profile!user_profile_id (
+                id,
+                account_id,
+                nickname,
+                profile_image_url
+              )
+            )
+          ''')
+          .eq('blueprint_id', blueprintId)
+          .order('order_index', ascending: true);
+
+      // 5. Collect records for main_workout sections and find my record
+      final List<SectionRecordDto> allRecords = [];
+      String? myRecordId;
+      String? mainWorkoutContent;
+
+      for (final item in sectionItems) {
+        final section = item['blueprint_sections'];
+        if (section != null && section['title'] != null) {
+          final title = section['title'] as String;
+          if (title.contains('main_workout')) {
+            // Capture the section content
+            mainWorkoutContent ??= section['content'] as String?;
+
+            final records = item['section_records'] as List?;
+            if (records != null) {
+              for (final record in records) {
+                final recordDto = SectionRecordDto.fromJson(record);
+                allRecords.add(recordDto);
+
+                // Check if this is my record
+                if (recordDto.userId == userId && myRecordId == null) {
+                  myRecordId = recordDto.id;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return LeaderboardDto(
+        sectionRecords: allRecords,
+        mySectionRecordId: myRecordId,
+        sectionItemContent: mainWorkoutContent,
+      );
+    } catch (e) {
+      print('getTodayLeaderBoard: error = $e');
+      throw Exception('Failed to get today leaderboard: $e');
     }
   }
 

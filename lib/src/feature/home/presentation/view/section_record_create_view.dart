@@ -27,6 +27,7 @@ class SectionRecordCreateView extends HookConsumerWidget {
     RecordType.timeBased,
     RecordType.repBased,
     RecordType.weightBased,
+    RecordType.distanceBased,
   ];
 
   @override
@@ -49,18 +50,168 @@ class SectionRecordCreateView extends HookConsumerWidget {
     }, [initialRecordType]);
 
     final selectedRecordType = useState<RecordType>(initialCategory);
-    final notesController = useTextEditingController();
+
+    // Time-based controllers
+    final hoursController = useTextEditingController();
+    final minutesController = useTextEditingController();
+    final secondsController = useTextEditingController();
+
+    // Rep-based controllers
+    final roundsController = useTextEditingController();
+    final repsController = useTextEditingController();
+
+    // Weight-based controller
+    final weightController = useTextEditingController();
+
+    // Distance-based controller
+    final distanceController = useTextEditingController();
+
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
     final controllerState = ref.watch(sectionRecordCreateControllerProvider);
     final isSubmitting = controllerState.isLoading;
 
+    IconData _getIconForType(RecordType type) {
+      switch (type) {
+        case RecordType.timeBased:
+          return Icons.schedule;
+        case RecordType.repBased:
+          return Icons.repeat;
+        case RecordType.weightBased:
+          return Icons.fitness_center;
+        case RecordType.distanceBased:
+          return Icons.straighten;
+        default:
+          return Icons.category;
+      }
+    }
+
+    Widget _buildNumberField({
+      required String label,
+      required int maxValue,
+      TextEditingController? controller,
+    }) {
+      return TextFormField(
+        controller: controller,
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+          isDense: true,
+        ),
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return '$label을 입력해주세요';
+          }
+          final number = int.tryParse(value);
+          if (number == null || number < 0) {
+            return '유효한 숫자를 입력해주세요';
+          }
+          if (number > maxValue) {
+            return '$maxValue 이하의 값을 입력해주세요';
+          }
+          return null;
+        },
+      );
+    }
+
+    Widget _buildTypeSpecificInputs(RecordType type) {
+      switch (type) {
+        case RecordType.timeBased:
+          return Row(
+            children: [
+              Expanded(
+                child: _buildNumberField(
+                  label: '시간',
+                  maxValue: 23,
+                  controller: hoursController,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildNumberField(
+                  label: '분',
+                  maxValue: 59,
+                  controller: minutesController,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildNumberField(
+                  label: '초',
+                  maxValue: 59,
+                  controller: secondsController,
+                ),
+              ),
+            ],
+          );
+        case RecordType.repBased:
+          return Row(
+            children: [
+              Expanded(
+                child: _buildNumberField(
+                  label: 'Round',
+                  maxValue: 99,
+                  controller: roundsController,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildNumberField(
+                  label: 'Rep',
+                  maxValue: 999,
+                  controller: repsController,
+                ),
+              ),
+            ],
+          );
+        case RecordType.weightBased:
+          return _buildNumberField(
+            label: 'kg',
+            maxValue: 999,
+            controller: weightController,
+          );
+        case RecordType.distanceBased:
+          return _buildNumberField(
+            label: 'm',
+            maxValue: 99999,
+            controller: distanceController,
+          );
+        default:
+          return const SizedBox.shrink();
+      }
+    }
+
+    String _formatNotes(RecordType type) {
+      switch (type) {
+        case RecordType.timeBased:
+          final h = hoursController.text.trim();
+          final m = minutesController.text.trim();
+          final s = secondsController.text.trim();
+          return '$h시간 $m분 $s초';
+        case RecordType.repBased:
+          final r = roundsController.text.trim();
+          final rep = repsController.text.trim();
+          return '$r Round $rep Rep';
+        case RecordType.weightBased:
+          final kg = weightController.text.trim();
+          return '$kg kg';
+        case RecordType.distanceBased:
+          final m = distanceController.text.trim();
+          return '$m m';
+        default:
+          return '';
+      }
+    }
+
     void handleConfirm() {
       if (!formKey.currentState!.validate()) return;
 
+      final notes = _formatNotes(selectedRecordType.value);
+
       final content = {
-        'category': selectedRecordType.value.value,
-        'notes': notesController.text,
+        'recordType': selectedRecordType.value.value,
+        'record': notes,
       };
 
       ref
@@ -101,44 +252,28 @@ class SectionRecordCreateView extends HookConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            // Record Type Selector
+            // Record Type Display (Fixed, not changeable)
             InputDecorator(
               decoration: InputDecoration(
                 labelText: l10n.category,
                 border: const OutlineInputBorder(),
+                filled: true,
+                fillColor: Theme.of(
+                  context,
+                ).colorScheme.surfaceContainerHighest,
               ),
-              child: SegmentedButton<RecordType>(
-                segments: availableRecordTypes.map((type) {
-                  return ButtonSegment(
-                    value: type,
-                    label: Text(type.getLocalizedName(l10n)),
-                  );
-                }).toList(),
-                selected: {selectedRecordType.value},
-                onSelectionChanged: (Set<RecordType> newSelection) {
-                  selectedRecordType.value = newSelection.first;
-                },
+              child: Row(
+                children: [
+                  Icon(_getIconForType(selectedRecordType.value)),
+                  const SizedBox(width: 8),
+                  Text(selectedRecordType.value.getLocalizedName(l10n)),
+                ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
 
-            // Notes Field
-            TextFormField(
-              controller: notesController,
-              maxLines: null,
-              minLines: 8,
-              decoration: InputDecoration(
-                labelText: l10n.notes,
-                hintText: l10n.workoutNotesHint,
-                border: const OutlineInputBorder(),
-              ),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return l10n.notesRequired;
-                }
-                return null;
-              },
-            ),
+            // Type-Specific Input Fields
+            _buildTypeSpecificInputs(selectedRecordType.value),
             const SizedBox(height: 24),
 
             // Action Buttons
