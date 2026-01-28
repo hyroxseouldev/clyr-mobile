@@ -564,4 +564,299 @@ as bool,
 
 }
 
+/// @nodoc
+mixin _$SectionRecordEntity {
+
+ String get id; String get userId; String get userProfileId; String get sectionId; String get sectionItemId; Map<String, dynamic>? get content; DateTime? get completedAt; String? get coachComment; RecordType? get recordType; DateTime? get createdAt; DateTime? get updatedAt;
+/// Create a copy of SectionRecordEntity
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SectionRecordEntityCopyWith<SectionRecordEntity> get copyWith => _$SectionRecordEntityCopyWithImpl<SectionRecordEntity>(this as SectionRecordEntity, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SectionRecordEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.userProfileId, userProfileId) || other.userProfileId == userProfileId)&&(identical(other.sectionId, sectionId) || other.sectionId == sectionId)&&(identical(other.sectionItemId, sectionItemId) || other.sectionItemId == sectionItemId)&&const DeepCollectionEquality().equals(other.content, content)&&(identical(other.completedAt, completedAt) || other.completedAt == completedAt)&&(identical(other.coachComment, coachComment) || other.coachComment == coachComment)&&(identical(other.recordType, recordType) || other.recordType == recordType)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id,userId,userProfileId,sectionId,sectionItemId,const DeepCollectionEquality().hash(content),completedAt,coachComment,recordType,createdAt,updatedAt);
+
+@override
+String toString() {
+  return 'SectionRecordEntity(id: $id, userId: $userId, userProfileId: $userProfileId, sectionId: $sectionId, sectionItemId: $sectionItemId, content: $content, completedAt: $completedAt, coachComment: $coachComment, recordType: $recordType, createdAt: $createdAt, updatedAt: $updatedAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SectionRecordEntityCopyWith<$Res>  {
+  factory $SectionRecordEntityCopyWith(SectionRecordEntity value, $Res Function(SectionRecordEntity) _then) = _$SectionRecordEntityCopyWithImpl;
+@useResult
+$Res call({
+ String id, String userId, String userProfileId, String sectionId, String sectionItemId, Map<String, dynamic>? content, DateTime? completedAt, String? coachComment, RecordType? recordType, DateTime? createdAt, DateTime? updatedAt
+});
+
+
+
+
+}
+/// @nodoc
+class _$SectionRecordEntityCopyWithImpl<$Res>
+    implements $SectionRecordEntityCopyWith<$Res> {
+  _$SectionRecordEntityCopyWithImpl(this._self, this._then);
+
+  final SectionRecordEntity _self;
+  final $Res Function(SectionRecordEntity) _then;
+
+/// Create a copy of SectionRecordEntity
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? userProfileId = null,Object? sectionId = null,Object? sectionItemId = null,Object? content = freezed,Object? completedAt = freezed,Object? coachComment = freezed,Object? recordType = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String,userProfileId: null == userProfileId ? _self.userProfileId : userProfileId // ignore: cast_nullable_to_non_nullable
+as String,sectionId: null == sectionId ? _self.sectionId : sectionId // ignore: cast_nullable_to_non_nullable
+as String,sectionItemId: null == sectionItemId ? _self.sectionItemId : sectionItemId // ignore: cast_nullable_to_non_nullable
+as String,content: freezed == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,completedAt: freezed == completedAt ? _self.completedAt : completedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,coachComment: freezed == coachComment ? _self.coachComment : coachComment // ignore: cast_nullable_to_non_nullable
+as String?,recordType: freezed == recordType ? _self.recordType : recordType // ignore: cast_nullable_to_non_nullable
+as RecordType?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [SectionRecordEntity].
+extension SectionRecordEntityPatterns on SectionRecordEntity {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SectionRecordEntity value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _SectionRecordEntity() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SectionRecordEntity value)  $default,){
+final _that = this;
+switch (_that) {
+case _SectionRecordEntity():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SectionRecordEntity value)?  $default,){
+final _that = this;
+switch (_that) {
+case _SectionRecordEntity() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String userId,  String userProfileId,  String sectionId,  String sectionItemId,  Map<String, dynamic>? content,  DateTime? completedAt,  String? coachComment,  RecordType? recordType,  DateTime? createdAt,  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _SectionRecordEntity() when $default != null:
+return $default(_that.id,_that.userId,_that.userProfileId,_that.sectionId,_that.sectionItemId,_that.content,_that.completedAt,_that.coachComment,_that.recordType,_that.createdAt,_that.updatedAt);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String userId,  String userProfileId,  String sectionId,  String sectionItemId,  Map<String, dynamic>? content,  DateTime? completedAt,  String? coachComment,  RecordType? recordType,  DateTime? createdAt,  DateTime? updatedAt)  $default,) {final _that = this;
+switch (_that) {
+case _SectionRecordEntity():
+return $default(_that.id,_that.userId,_that.userProfileId,_that.sectionId,_that.sectionItemId,_that.content,_that.completedAt,_that.coachComment,_that.recordType,_that.createdAt,_that.updatedAt);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String userId,  String userProfileId,  String sectionId,  String sectionItemId,  Map<String, dynamic>? content,  DateTime? completedAt,  String? coachComment,  RecordType? recordType,  DateTime? createdAt,  DateTime? updatedAt)?  $default,) {final _that = this;
+switch (_that) {
+case _SectionRecordEntity() when $default != null:
+return $default(_that.id,_that.userId,_that.userProfileId,_that.sectionId,_that.sectionItemId,_that.content,_that.completedAt,_that.coachComment,_that.recordType,_that.createdAt,_that.updatedAt);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _SectionRecordEntity implements SectionRecordEntity {
+  const _SectionRecordEntity({required this.id, required this.userId, required this.userProfileId, required this.sectionId, required this.sectionItemId, final  Map<String, dynamic>? content, this.completedAt, this.coachComment, this.recordType, this.createdAt, this.updatedAt}): _content = content;
+  
+
+@override final  String id;
+@override final  String userId;
+@override final  String userProfileId;
+@override final  String sectionId;
+@override final  String sectionItemId;
+ final  Map<String, dynamic>? _content;
+@override Map<String, dynamic>? get content {
+  final value = _content;
+  if (value == null) return null;
+  if (_content is EqualUnmodifiableMapView) return _content;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
+}
+
+@override final  DateTime? completedAt;
+@override final  String? coachComment;
+@override final  RecordType? recordType;
+@override final  DateTime? createdAt;
+@override final  DateTime? updatedAt;
+
+/// Create a copy of SectionRecordEntity
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SectionRecordEntityCopyWith<_SectionRecordEntity> get copyWith => __$SectionRecordEntityCopyWithImpl<_SectionRecordEntity>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SectionRecordEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.userProfileId, userProfileId) || other.userProfileId == userProfileId)&&(identical(other.sectionId, sectionId) || other.sectionId == sectionId)&&(identical(other.sectionItemId, sectionItemId) || other.sectionItemId == sectionItemId)&&const DeepCollectionEquality().equals(other._content, _content)&&(identical(other.completedAt, completedAt) || other.completedAt == completedAt)&&(identical(other.coachComment, coachComment) || other.coachComment == coachComment)&&(identical(other.recordType, recordType) || other.recordType == recordType)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id,userId,userProfileId,sectionId,sectionItemId,const DeepCollectionEquality().hash(_content),completedAt,coachComment,recordType,createdAt,updatedAt);
+
+@override
+String toString() {
+  return 'SectionRecordEntity(id: $id, userId: $userId, userProfileId: $userProfileId, sectionId: $sectionId, sectionItemId: $sectionItemId, content: $content, completedAt: $completedAt, coachComment: $coachComment, recordType: $recordType, createdAt: $createdAt, updatedAt: $updatedAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SectionRecordEntityCopyWith<$Res> implements $SectionRecordEntityCopyWith<$Res> {
+  factory _$SectionRecordEntityCopyWith(_SectionRecordEntity value, $Res Function(_SectionRecordEntity) _then) = __$SectionRecordEntityCopyWithImpl;
+@override @useResult
+$Res call({
+ String id, String userId, String userProfileId, String sectionId, String sectionItemId, Map<String, dynamic>? content, DateTime? completedAt, String? coachComment, RecordType? recordType, DateTime? createdAt, DateTime? updatedAt
+});
+
+
+
+
+}
+/// @nodoc
+class __$SectionRecordEntityCopyWithImpl<$Res>
+    implements _$SectionRecordEntityCopyWith<$Res> {
+  __$SectionRecordEntityCopyWithImpl(this._self, this._then);
+
+  final _SectionRecordEntity _self;
+  final $Res Function(_SectionRecordEntity) _then;
+
+/// Create a copy of SectionRecordEntity
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? userProfileId = null,Object? sectionId = null,Object? sectionItemId = null,Object? content = freezed,Object? completedAt = freezed,Object? coachComment = freezed,Object? recordType = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+  return _then(_SectionRecordEntity(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String,userProfileId: null == userProfileId ? _self.userProfileId : userProfileId // ignore: cast_nullable_to_non_nullable
+as String,sectionId: null == sectionId ? _self.sectionId : sectionId // ignore: cast_nullable_to_non_nullable
+as String,sectionItemId: null == sectionItemId ? _self.sectionItemId : sectionItemId // ignore: cast_nullable_to_non_nullable
+as String,content: freezed == content ? _self._content : content // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,completedAt: freezed == completedAt ? _self.completedAt : completedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,coachComment: freezed == coachComment ? _self.coachComment : coachComment // ignore: cast_nullable_to_non_nullable
+as String?,recordType: freezed == recordType ? _self.recordType : recordType // ignore: cast_nullable_to_non_nullable
+as RecordType?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
+  ));
+}
+
+
+}
+
 // dart format on

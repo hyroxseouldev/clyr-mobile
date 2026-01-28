@@ -331,6 +331,7 @@ SectionRecordDto _$SectionRecordDtoFromJson(Map<String, dynamic> json) =>
       content: json['content'] as Map<String, dynamic>?,
       completedAt: DateTime.parse(json['completed_at'] as String),
       coachComment: json['coach_comment'] as String?,
+      recordType: json['record_type'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
@@ -345,6 +346,7 @@ Map<String, dynamic> _$SectionRecordDtoToJson(SectionRecordDto instance) =>
       'content': instance.content,
       'completed_at': instance.completedAt.toIso8601String(),
       'coach_comment': instance.coachComment,
+      'record_type': instance.recordType,
       'created_at': instance.createdAt.toIso8601String(),
       'updated_at': instance.updatedAt.toIso8601String(),
     };

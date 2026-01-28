@@ -55,6 +55,11 @@
   "onboardingStep": "Step {current} of {total}",
   "onboardingNext": "Next",
   "onboardingBack": "Back",
+  "onboardingCompleteTitle": "Welcome!",
+  "onboardingCompleteSubtitle": "All setup is complete",
+  "onboardingCompleteReady": "You're ready to start the app",
+  "onboardingCompleteStart": "Start App",
+  "onboardingCompleteSummary": "We'll provide personalized services based on your preferences",
 
   "settingsTitle": "Settings",
   "settingsProfile": "Profile",

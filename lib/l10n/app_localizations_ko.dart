@@ -161,6 +161,21 @@ class AppLocalizationsKo extends AppLocalizations {
   String get onboardingBack => '이전';
 
   @override
+  String get onboardingCompleteTitle => '환영합니다!';
+
+  @override
+  String get onboardingCompleteSubtitle => '모든 설정이 완료되었습니다';
+
+  @override
+  String get onboardingCompleteReady => '이제 앱을 시작할 준비가 되었습니다';
+
+  @override
+  String get onboardingCompleteStart => '앱 시작하기';
+
+  @override
+  String get onboardingCompleteSummary => '선택하신 정보를 바탕으로 맞춤 서비스를 제공합니다';
+
+  @override
   String get settingsTitle => '설정';
 
   @override

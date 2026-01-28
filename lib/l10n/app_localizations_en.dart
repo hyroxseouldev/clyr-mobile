@@ -161,6 +161,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingBack => 'Back';
 
   @override
+  String get onboardingCompleteTitle => 'Welcome!';
+
+  @override
+  String get onboardingCompleteSubtitle => 'All setup is complete';
+
+  @override
+  String get onboardingCompleteReady => 'You\'re ready to start the app';
+
+  @override
+  String get onboardingCompleteStart => 'Start App';
+
+  @override
+  String get onboardingCompleteSummary =>
+      'We\'ll provide personalized services based on your preferences';
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override

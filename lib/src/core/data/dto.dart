@@ -574,6 +574,8 @@ class SectionRecordDto {
   final DateTime completedAt;
   @JsonKey(name: 'coach_comment')
   final String? coachComment;
+  @JsonKey(name: 'record_type')
+  final String? recordType;
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
   @JsonKey(name: 'updated_at')
@@ -591,6 +593,7 @@ class SectionRecordDto {
     this.content,
     required this.completedAt,
     this.coachComment,
+    this.recordType,
     required this.createdAt,
     required this.updatedAt,
     this.userProfile,
@@ -623,6 +626,7 @@ class SectionRecordDto {
       content: json['content'] as Map<String, dynamic>?,
       completedAt: DateTime.parse(json['completed_at'] as String),
       coachComment: json['coach_comment'] as String?,
+      recordType: json['record_type'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
       userProfile: profile,

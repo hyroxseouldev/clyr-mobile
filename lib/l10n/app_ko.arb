@@ -55,6 +55,11 @@
   "onboardingStep": "{current}단계 / {total}단계",
   "onboardingNext": "다음",
   "onboardingBack": "이전",
+  "onboardingCompleteTitle": "환영합니다!",
+  "onboardingCompleteSubtitle": "모든 설정이 완료되었습니다",
+  "onboardingCompleteReady": "이제 앱을 시작할 준비가 되었습니다",
+  "onboardingCompleteStart": "앱 시작하기",
+  "onboardingCompleteSummary": "선택하신 정보를 바탕으로 맞춤 서비스를 제공합니다",
 
   "settingsTitle": "설정",
   "settingsProfile": "프로필",

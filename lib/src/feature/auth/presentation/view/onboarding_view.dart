@@ -21,7 +21,7 @@ class OnboardingView extends HookConsumerWidget {
     final selectedExperience = useState<ExperienceLevel?>(null);
 
     // Total steps constant
-    const totalSteps = 3;
+    const totalSteps = 4;
 
     // Listen to controller state changes
     ref.listen<AsyncValue>(
@@ -50,6 +50,9 @@ class OnboardingView extends HookConsumerWidget {
           return selectedExercise.value != null;
         case 2:
           return selectedExperience.value != null;
+        case 3:
+          // Completion step - always can proceed (to submit)
+          return true;
         default:
           return false;
       }
@@ -134,31 +137,26 @@ class OnboardingView extends HookConsumerWidget {
     int currentStep,
     int totalSteps,
   ) {
+    final progress = (currentStep + 1) / totalSteps;
+
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
         children: [
-          // Progress dots
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(totalSteps, (index) {
-              final isActive = index == currentStep;
-              final isCompleted = index < currentStep;
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                width: isActive ? 32 : 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: isActive
-                      ? Theme.of(context).colorScheme.primary
-                      : isCompleted
-                          ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)
-                          : Colors.grey[300],
-                  borderRadius: BorderRadius.circular(4),
-                ),
+          // Animated progress bar
+          TweenAnimationBuilder<double>(
+            key: ValueKey(currentStep),
+            tween: Tween(begin: (currentStep) / totalSteps, end: progress),
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+            builder: (context, value, child) {
+              return LinearProgressIndicator(
+                value: value,
+                minHeight: 8,
+                borderRadius: BorderRadius.circular(4),
+                backgroundColor: Colors.grey[300],
               );
-            }),
+            },
           ),
           const SizedBox(height: 8),
           Text(
@@ -212,6 +210,14 @@ class OnboardingView extends HookConsumerWidget {
         return _buildExerciseStep(context, l10n, selectedExercise);
       case 2:
         return _buildExperienceStep(context, l10n, selectedExperience);
+      case 3:
+        return _buildCompletionStep(
+          context,
+          l10n,
+          selectedGender.value,
+          selectedExercise.value,
+          selectedExperience.value,
+        );
       default:
         return const SizedBox.shrink();
     }
@@ -329,6 +335,21 @@ class OnboardingView extends HookConsumerWidget {
     );
   }
 
+  Widget _buildCompletionStep(
+    BuildContext context,
+    AppLocalizations l10n,
+    Gender? gender,
+    ExerciseType? exercise,
+    ExperienceLevel? experience,
+  ) {
+    return _CompletionStepWidget(
+      l10n: l10n,
+      gender: gender,
+      exercise: exercise,
+      experience: experience,
+    );
+  }
+
   Widget _buildNavigationButtons(
     BuildContext context,
     AsyncValue controllerState,
@@ -342,19 +363,21 @@ class OnboardingView extends HookConsumerWidget {
   ) {
     final isLastStep = currentStep == totalSteps - 1;
     final canGoNext = canProceedToNextStep();
+    // Don't show back button on completion step (step 3)
+    final showBackButton = currentStep > 0 && currentStep < totalSteps - 1;
 
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Row(
         children: [
-          if (currentStep > 0)
+          if (showBackButton)
             Expanded(
               child: OutlinedButton(
                 onPressed: goToPreviousStep,
                 child: Text(l10n.onboardingBack),
               ),
             ),
-          if (currentStep > 0) const SizedBox(width: 12),
+          if (showBackButton) const SizedBox(width: 12),
           Expanded(
             child: FilledButton(
               onPressed: (canGoNext && !controllerState.isLoading)
@@ -366,7 +389,7 @@ class OnboardingView extends HookConsumerWidget {
                       width: 20,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : Text(isLastStep ? l10n.onboardingStart : l10n.onboardingNext),
+                  : Text(isLastStep ? l10n.onboardingCompleteStart : l10n.onboardingNext),
             ),
           ),
         ],
@@ -497,6 +520,208 @@ class _ExperienceOption extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Fade-in slide animation widget
+class _AnimatedSlideIn extends StatelessWidget {
+  final Widget child;
+  final Duration delay;
+  final Offset offset;
+
+  const _AnimatedSlideIn({
+    required this.child,
+    this.delay = Duration.zero,
+    this.offset = const Offset(0, -0.1),
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (delay == Duration.zero) {
+      return TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0, end: 1),
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeOut,
+        builder: (context, value, child) {
+          return Opacity(
+            opacity: value,
+            child: Transform.translate(
+              offset: offset * (1 - value),
+              child: child,
+            ),
+          );
+        },
+        child: child,
+      );
+    }
+
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 400) + delay,
+      curve: Interval(delay.inMilliseconds / 400, 1, curve: Curves.easeOut),
+      builder: (context, value, child) {
+        return Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: offset * (1 - value),
+            child: child,
+          ),
+        );
+      },
+      child: child,
+    );
+  }
+}
+
+/// Summary row widget for completion page
+class _SummaryRow extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _SummaryRow({
+    required this.label,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Colors.grey[600],
+              ),
+        ),
+        Text(
+          value,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Completion step widget showing summary
+class _CompletionStepWidget extends StatelessWidget {
+  final AppLocalizations l10n;
+  final Gender? gender;
+  final ExerciseType? exercise;
+  final ExperienceLevel? experience;
+
+  const _CompletionStepWidget({
+    required this.l10n,
+    required this.gender,
+    required this.exercise,
+    required this.experience,
+  });
+
+  String _genderToString() {
+    if (gender == null) return '-';
+    return switch (gender!) {
+      Gender.male => l10n.genderMale,
+      Gender.female => l10n.genderFemale,
+      Gender.other => l10n.exerciseOther,
+    };
+  }
+
+  String _exerciseToString() {
+    if (exercise == null) return '-';
+    return switch (exercise!) {
+      ExerciseType.hyrox => l10n.exerciseHyrox,
+      ExerciseType.crossfit => l10n.exerciseCrossfit,
+      ExerciseType.running => l10n.exerciseRunning,
+      ExerciseType.gym => l10n.exerciseGym,
+      ExerciseType.other => l10n.exerciseOther,
+    };
+  }
+
+  String _experienceToString() {
+    if (experience == null) return '-';
+    return switch (experience!) {
+      ExperienceLevel.less3m => l10n.experienceLess3m,
+      ExperienceLevel.less6m => l10n.experienceLess6m,
+      ExperienceLevel.less1y => l10n.experienceLess1y,
+      ExperienceLevel.more1y => l10n.experienceMore1y,
+      ExperienceLevel.more3y => l10n.experienceMore3y,
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Success icon with animation
+        _AnimatedSlideIn(
+          child: Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.check_rounded,
+              size: 60,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
+        const SizedBox(height: 32),
+        _AnimatedSlideIn(
+          delay: const Duration(milliseconds: 100),
+          child: Text(
+            l10n.onboardingCompleteTitle,
+            style: Theme.of(context).textTheme.headlineMedium,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        const SizedBox(height: 16),
+        _AnimatedSlideIn(
+          delay: const Duration(milliseconds: 200),
+          child: Text(
+            l10n.onboardingCompleteSubtitle,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Colors.grey[600],
+                ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        const SizedBox(height: 24),
+        _AnimatedSlideIn(
+          delay: const Duration(milliseconds: 300),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  _SummaryRow(label: "성별", value: _genderToString()),
+                  const Divider(height: 24),
+                  _SummaryRow(label: "운동", value: _exerciseToString()),
+                  const Divider(height: 24),
+                  _SummaryRow(label: "경력", value: _experienceToString()),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
+        _AnimatedSlideIn(
+          delay: const Duration(milliseconds: 400),
+          child: Text(
+            l10n.onboardingCompleteReady,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.grey[700],
+                ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
     );
   }
 }

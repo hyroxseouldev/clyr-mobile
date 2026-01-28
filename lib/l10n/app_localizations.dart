@@ -398,6 +398,36 @@ abstract class AppLocalizations {
   /// **'이전'**
   String get onboardingBack;
 
+  /// No description provided for @onboardingCompleteTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'환영합니다!'**
+  String get onboardingCompleteTitle;
+
+  /// No description provided for @onboardingCompleteSubtitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'모든 설정이 완료되었습니다'**
+  String get onboardingCompleteSubtitle;
+
+  /// No description provided for @onboardingCompleteReady.
+  ///
+  /// In ko, this message translates to:
+  /// **'이제 앱을 시작할 준비가 되었습니다'**
+  String get onboardingCompleteReady;
+
+  /// No description provided for @onboardingCompleteStart.
+  ///
+  /// In ko, this message translates to:
+  /// **'앱 시작하기'**
+  String get onboardingCompleteStart;
+
+  /// No description provided for @onboardingCompleteSummary.
+  ///
+  /// In ko, this message translates to:
+  /// **'선택하신 정보를 바탕으로 맞춤 서비스를 제공합니다'**
+  String get onboardingCompleteSummary;
+
   /// No description provided for @settingsTitle.
   ///
   /// In ko, this message translates to:
