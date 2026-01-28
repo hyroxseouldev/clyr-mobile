@@ -1,4 +1,4 @@
-import 'package:clyr_mobile/src/feature/auth/data/user_repository.dart';
+import 'package:clyr_mobile/src/feature/auth/infra/repository/user_repository.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/usecase/auth_usecases.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/usecase/onboarding_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

@@ -150,6 +150,17 @@ class AppLocalizationsKo extends AppLocalizations {
   String get pleaseFillAllFields => '모든 항목을 선택해주세요';
 
   @override
+  String onboardingStep(Object current, Object total) {
+    return '$current단계 / $total단계';
+  }
+
+  @override
+  String get onboardingNext => '다음';
+
+  @override
+  String get onboardingBack => '이전';
+
+  @override
   String get settingsTitle => '설정';
 
   @override

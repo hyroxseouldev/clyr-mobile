@@ -7,7 +7,8 @@ part 'data_source.g.dart';
 
 @Riverpod(keepAlive: true)
 CoreDataSource coreDataSource(Ref ref) {
-  return SupabaseDataSource(supabase: ref.watch(supabaseClientProvider));
+  final supabase = ref.watch(supabaseClientProvider);
+  return SupabaseDataSource(supabase: supabase);
 }
 
 abstract interface class CoreDataSource {
@@ -376,12 +377,15 @@ class SupabaseDataSource implements CoreDataSource {
     }
 
     try {
-      await supabase.from('user_profile').update({
-        'onboarding_completed': true,
-        'onboarding_data': data,
-        'onboarding_completed_at': DateTime.now().toIso8601String(),
-        'updated_at': DateTime.now().toIso8601String(),
-      }).eq('account_id', userId);
+      await supabase
+          .from('user_profile')
+          .update({
+            'onboarding_completed': true,
+            'onboarding_data': data,
+            'onboarding_completed_at': DateTime.now().toIso8601String(),
+            'updated_at': DateTime.now().toIso8601String(),
+          })
+          .eq('account_id', userId);
     } catch (e) {
       print('completeOnboarding: error = $e');
       throw Exception('Failed to complete onboarding: $e');

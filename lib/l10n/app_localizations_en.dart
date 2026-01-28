@@ -150,6 +150,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pleaseFillAllFields => 'Please fill in all fields';
 
   @override
+  String onboardingStep(Object current, Object total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String get onboardingNext => 'Next';
+
+  @override
+  String get onboardingBack => 'Back';
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override

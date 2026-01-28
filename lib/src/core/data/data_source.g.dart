@@ -48,4 +48,4 @@ final class CoreDataSourceProvider
   }
 }
 
-String _$coreDataSourceHash() => r'614c3198b226643844f889ea6fcefbad9c9a847a';
+String _$coreDataSourceHash() => r'3c2d9d2a44d2ea520dc58a896c6e47a2d5b2a02c';

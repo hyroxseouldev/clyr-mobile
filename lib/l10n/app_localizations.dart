@@ -380,6 +380,24 @@ abstract class AppLocalizations {
   /// **'모든 항목을 선택해주세요'**
   String get pleaseFillAllFields;
 
+  /// No description provided for @onboardingStep.
+  ///
+  /// In ko, this message translates to:
+  /// **'{current}단계 / {total}단계'**
+  String onboardingStep(Object current, Object total);
+
+  /// No description provided for @onboardingNext.
+  ///
+  /// In ko, this message translates to:
+  /// **'다음'**
+  String get onboardingNext;
+
+  /// No description provided for @onboardingBack.
+  ///
+  /// In ko, this message translates to:
+  /// **'이전'**
+  String get onboardingBack;
+
   /// No description provided for @settingsTitle.
   ///
   /// In ko, this message translates to:

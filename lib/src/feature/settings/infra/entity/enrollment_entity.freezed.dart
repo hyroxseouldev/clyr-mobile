@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EnrollmentEntity {
 
- String get id; String get userId; String get programId; DateTime get startDate; EnrollmentStatus get status; DateTime get createdAt;
+ String get id; String get userId; String get programId; DateTime get startDate; EnrollmentStatus get status; DateTime get createdAt; String? get orderId; DateTime? get endDate; DateTime? get updatedAt;
 /// Create a copy of EnrollmentEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $EnrollmentEntityCopyWith<EnrollmentEntity> get copyWith => _$EnrollmentEntityCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EnrollmentEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.programId, programId) || other.programId == programId)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.status, status) || other.status == status)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EnrollmentEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.programId, programId) || other.programId == programId)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.status, status) || other.status == status)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.orderId, orderId) || other.orderId == orderId)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,programId,startDate,status,createdAt);
+int get hashCode => Object.hash(runtimeType,id,userId,programId,startDate,status,createdAt,orderId,endDate,updatedAt);
 
 @override
 String toString() {
-  return 'EnrollmentEntity(id: $id, userId: $userId, programId: $programId, startDate: $startDate, status: $status, createdAt: $createdAt)';
+  return 'EnrollmentEntity(id: $id, userId: $userId, programId: $programId, startDate: $startDate, status: $status, createdAt: $createdAt, orderId: $orderId, endDate: $endDate, updatedAt: $updatedAt)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $EnrollmentEntityCopyWith<$Res>  {
   factory $EnrollmentEntityCopyWith(EnrollmentEntity value, $Res Function(EnrollmentEntity) _then) = _$EnrollmentEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, String userId, String programId, DateTime startDate, EnrollmentStatus status, DateTime createdAt
+ String id, String userId, String programId, DateTime startDate, EnrollmentStatus status, DateTime createdAt, String? orderId, DateTime? endDate, DateTime? updatedAt
 });
 
 
@@ -62,7 +62,7 @@ class _$EnrollmentEntityCopyWithImpl<$Res>
 
 /// Create a copy of EnrollmentEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? programId = null,Object? startDate = null,Object? status = null,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? programId = null,Object? startDate = null,Object? status = null,Object? createdAt = null,Object? orderId = freezed,Object? endDate = freezed,Object? updatedAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
@@ -70,7 +70,10 @@ as String,programId: null == programId ? _self.programId : programId // ignore: 
 as String,startDate: null == startDate ? _self.startDate : startDate // ignore: cast_nullable_to_non_nullable
 as DateTime,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as EnrollmentStatus,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,orderId: freezed == orderId ? _self.orderId : orderId // ignore: cast_nullable_to_non_nullable
+as String?,endDate: freezed == endDate ? _self.endDate : endDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -155,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String userId,  String programId,  DateTime startDate,  EnrollmentStatus status,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String userId,  String programId,  DateTime startDate,  EnrollmentStatus status,  DateTime createdAt,  String? orderId,  DateTime? endDate,  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EnrollmentEntity() when $default != null:
-return $default(_that.id,_that.userId,_that.programId,_that.startDate,_that.status,_that.createdAt);case _:
+return $default(_that.id,_that.userId,_that.programId,_that.startDate,_that.status,_that.createdAt,_that.orderId,_that.endDate,_that.updatedAt);case _:
   return orElse();
 
 }
@@ -176,10 +179,10 @@ return $default(_that.id,_that.userId,_that.programId,_that.startDate,_that.stat
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String userId,  String programId,  DateTime startDate,  EnrollmentStatus status,  DateTime createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String userId,  String programId,  DateTime startDate,  EnrollmentStatus status,  DateTime createdAt,  String? orderId,  DateTime? endDate,  DateTime? updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _EnrollmentEntity():
-return $default(_that.id,_that.userId,_that.programId,_that.startDate,_that.status,_that.createdAt);case _:
+return $default(_that.id,_that.userId,_that.programId,_that.startDate,_that.status,_that.createdAt,_that.orderId,_that.endDate,_that.updatedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +199,10 @@ return $default(_that.id,_that.userId,_that.programId,_that.startDate,_that.stat
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String userId,  String programId,  DateTime startDate,  EnrollmentStatus status,  DateTime createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String userId,  String programId,  DateTime startDate,  EnrollmentStatus status,  DateTime createdAt,  String? orderId,  DateTime? endDate,  DateTime? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _EnrollmentEntity() when $default != null:
-return $default(_that.id,_that.userId,_that.programId,_that.startDate,_that.status,_that.createdAt);case _:
+return $default(_that.id,_that.userId,_that.programId,_that.startDate,_that.status,_that.createdAt,_that.orderId,_that.endDate,_that.updatedAt);case _:
   return null;
 
 }
@@ -211,7 +214,7 @@ return $default(_that.id,_that.userId,_that.programId,_that.startDate,_that.stat
 
 
 class _EnrollmentEntity implements EnrollmentEntity {
-  const _EnrollmentEntity({required this.id, required this.userId, required this.programId, required this.startDate, required this.status, required this.createdAt});
+  const _EnrollmentEntity({required this.id, required this.userId, required this.programId, required this.startDate, required this.status, required this.createdAt, this.orderId, this.endDate, this.updatedAt});
   
 
 @override final  String id;
@@ -220,6 +223,9 @@ class _EnrollmentEntity implements EnrollmentEntity {
 @override final  DateTime startDate;
 @override final  EnrollmentStatus status;
 @override final  DateTime createdAt;
+@override final  String? orderId;
+@override final  DateTime? endDate;
+@override final  DateTime? updatedAt;
 
 /// Create a copy of EnrollmentEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +237,16 @@ _$EnrollmentEntityCopyWith<_EnrollmentEntity> get copyWith => __$EnrollmentEntit
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EnrollmentEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.programId, programId) || other.programId == programId)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.status, status) || other.status == status)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EnrollmentEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.programId, programId) || other.programId == programId)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.status, status) || other.status == status)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.orderId, orderId) || other.orderId == orderId)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,programId,startDate,status,createdAt);
+int get hashCode => Object.hash(runtimeType,id,userId,programId,startDate,status,createdAt,orderId,endDate,updatedAt);
 
 @override
 String toString() {
-  return 'EnrollmentEntity(id: $id, userId: $userId, programId: $programId, startDate: $startDate, status: $status, createdAt: $createdAt)';
+  return 'EnrollmentEntity(id: $id, userId: $userId, programId: $programId, startDate: $startDate, status: $status, createdAt: $createdAt, orderId: $orderId, endDate: $endDate, updatedAt: $updatedAt)';
 }
 
 
@@ -251,7 +257,7 @@ abstract mixin class _$EnrollmentEntityCopyWith<$Res> implements $EnrollmentEnti
   factory _$EnrollmentEntityCopyWith(_EnrollmentEntity value, $Res Function(_EnrollmentEntity) _then) = __$EnrollmentEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String userId, String programId, DateTime startDate, EnrollmentStatus status, DateTime createdAt
+ String id, String userId, String programId, DateTime startDate, EnrollmentStatus status, DateTime createdAt, String? orderId, DateTime? endDate, DateTime? updatedAt
 });
 
 
@@ -268,7 +274,7 @@ class __$EnrollmentEntityCopyWithImpl<$Res>
 
 /// Create a copy of EnrollmentEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? programId = null,Object? startDate = null,Object? status = null,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? programId = null,Object? startDate = null,Object? status = null,Object? createdAt = null,Object? orderId = freezed,Object? endDate = freezed,Object? updatedAt = freezed,}) {
   return _then(_EnrollmentEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
@@ -276,7 +282,10 @@ as String,programId: null == programId ? _self.programId : programId // ignore: 
 as String,startDate: null == startDate ? _self.startDate : startDate // ignore: cast_nullable_to_non_nullable
 as DateTime,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as EnrollmentStatus,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,orderId: freezed == orderId ? _self.orderId : orderId // ignore: cast_nullable_to_non_nullable
+as String?,endDate: freezed == endDate ? _self.endDate : endDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 

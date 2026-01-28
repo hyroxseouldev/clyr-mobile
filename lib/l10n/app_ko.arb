@@ -52,6 +52,9 @@
   "experienceMore1y": "1년 이상",
   "experienceMore3y": "3년 이상",
   "pleaseFillAllFields": "모든 항목을 선택해주세요",
+  "onboardingStep": "{current}단계 / {total}단계",
+  "onboardingNext": "다음",
+  "onboardingBack": "이전",
 
   "settingsTitle": "설정",
   "settingsProfile": "프로필",

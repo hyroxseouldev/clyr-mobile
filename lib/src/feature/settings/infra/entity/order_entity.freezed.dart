@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OrderEntity {
 
- String get id; String get buyerId; String get programId; String get coachId; double get amount; OrderStatus get status; String? get paymentKey; DateTime get createdAt;
+ String get id; String get buyerId; String get programId; String get coachId; double get amount; OrderStatus get status; String? get paymentKey; DateTime get createdAt; DateTime? get updatedAt;
 /// Create a copy of OrderEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $OrderEntityCopyWith<OrderEntity> get copyWith => _$OrderEntityCopyWithImpl<Orde
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.buyerId, buyerId) || other.buyerId == buyerId)&&(identical(other.programId, programId) || other.programId == programId)&&(identical(other.coachId, coachId) || other.coachId == coachId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.status, status) || other.status == status)&&(identical(other.paymentKey, paymentKey) || other.paymentKey == paymentKey)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.buyerId, buyerId) || other.buyerId == buyerId)&&(identical(other.programId, programId) || other.programId == programId)&&(identical(other.coachId, coachId) || other.coachId == coachId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.status, status) || other.status == status)&&(identical(other.paymentKey, paymentKey) || other.paymentKey == paymentKey)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,buyerId,programId,coachId,amount,status,paymentKey,createdAt);
+int get hashCode => Object.hash(runtimeType,id,buyerId,programId,coachId,amount,status,paymentKey,createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'OrderEntity(id: $id, buyerId: $buyerId, programId: $programId, coachId: $coachId, amount: $amount, status: $status, paymentKey: $paymentKey, createdAt: $createdAt)';
+  return 'OrderEntity(id: $id, buyerId: $buyerId, programId: $programId, coachId: $coachId, amount: $amount, status: $status, paymentKey: $paymentKey, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $OrderEntityCopyWith<$Res>  {
   factory $OrderEntityCopyWith(OrderEntity value, $Res Function(OrderEntity) _then) = _$OrderEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, String buyerId, String programId, String coachId, double amount, OrderStatus status, String? paymentKey, DateTime createdAt
+ String id, String buyerId, String programId, String coachId, double amount, OrderStatus status, String? paymentKey, DateTime createdAt, DateTime? updatedAt
 });
 
 
@@ -62,7 +62,7 @@ class _$OrderEntityCopyWithImpl<$Res>
 
 /// Create a copy of OrderEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? buyerId = null,Object? programId = null,Object? coachId = null,Object? amount = null,Object? status = null,Object? paymentKey = freezed,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? buyerId = null,Object? programId = null,Object? coachId = null,Object? amount = null,Object? status = null,Object? paymentKey = freezed,Object? createdAt = null,Object? updatedAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,buyerId: null == buyerId ? _self.buyerId : buyerId // ignore: cast_nullable_to_non_nullable
@@ -72,7 +72,8 @@ as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullabl
 as double,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as OrderStatus,paymentKey: freezed == paymentKey ? _self.paymentKey : paymentKey // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -157,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String buyerId,  String programId,  String coachId,  double amount,  OrderStatus status,  String? paymentKey,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String buyerId,  String programId,  String coachId,  double amount,  OrderStatus status,  String? paymentKey,  DateTime createdAt,  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderEntity() when $default != null:
-return $default(_that.id,_that.buyerId,_that.programId,_that.coachId,_that.amount,_that.status,_that.paymentKey,_that.createdAt);case _:
+return $default(_that.id,_that.buyerId,_that.programId,_that.coachId,_that.amount,_that.status,_that.paymentKey,_that.createdAt,_that.updatedAt);case _:
   return orElse();
 
 }
@@ -178,10 +179,10 @@ return $default(_that.id,_that.buyerId,_that.programId,_that.coachId,_that.amoun
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String buyerId,  String programId,  String coachId,  double amount,  OrderStatus status,  String? paymentKey,  DateTime createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String buyerId,  String programId,  String coachId,  double amount,  OrderStatus status,  String? paymentKey,  DateTime createdAt,  DateTime? updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _OrderEntity():
-return $default(_that.id,_that.buyerId,_that.programId,_that.coachId,_that.amount,_that.status,_that.paymentKey,_that.createdAt);case _:
+return $default(_that.id,_that.buyerId,_that.programId,_that.coachId,_that.amount,_that.status,_that.paymentKey,_that.createdAt,_that.updatedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +199,10 @@ return $default(_that.id,_that.buyerId,_that.programId,_that.coachId,_that.amoun
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String buyerId,  String programId,  String coachId,  double amount,  OrderStatus status,  String? paymentKey,  DateTime createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String buyerId,  String programId,  String coachId,  double amount,  OrderStatus status,  String? paymentKey,  DateTime createdAt,  DateTime? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderEntity() when $default != null:
-return $default(_that.id,_that.buyerId,_that.programId,_that.coachId,_that.amount,_that.status,_that.paymentKey,_that.createdAt);case _:
+return $default(_that.id,_that.buyerId,_that.programId,_that.coachId,_that.amount,_that.status,_that.paymentKey,_that.createdAt,_that.updatedAt);case _:
   return null;
 
 }
@@ -213,7 +214,7 @@ return $default(_that.id,_that.buyerId,_that.programId,_that.coachId,_that.amoun
 
 
 class _OrderEntity implements OrderEntity {
-  const _OrderEntity({required this.id, required this.buyerId, required this.programId, required this.coachId, required this.amount, required this.status, this.paymentKey, required this.createdAt});
+  const _OrderEntity({required this.id, required this.buyerId, required this.programId, required this.coachId, required this.amount, required this.status, this.paymentKey, required this.createdAt, this.updatedAt});
   
 
 @override final  String id;
@@ -224,6 +225,7 @@ class _OrderEntity implements OrderEntity {
 @override final  OrderStatus status;
 @override final  String? paymentKey;
 @override final  DateTime createdAt;
+@override final  DateTime? updatedAt;
 
 /// Create a copy of OrderEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +237,16 @@ _$OrderEntityCopyWith<_OrderEntity> get copyWith => __$OrderEntityCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.buyerId, buyerId) || other.buyerId == buyerId)&&(identical(other.programId, programId) || other.programId == programId)&&(identical(other.coachId, coachId) || other.coachId == coachId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.status, status) || other.status == status)&&(identical(other.paymentKey, paymentKey) || other.paymentKey == paymentKey)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.buyerId, buyerId) || other.buyerId == buyerId)&&(identical(other.programId, programId) || other.programId == programId)&&(identical(other.coachId, coachId) || other.coachId == coachId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.status, status) || other.status == status)&&(identical(other.paymentKey, paymentKey) || other.paymentKey == paymentKey)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,buyerId,programId,coachId,amount,status,paymentKey,createdAt);
+int get hashCode => Object.hash(runtimeType,id,buyerId,programId,coachId,amount,status,paymentKey,createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'OrderEntity(id: $id, buyerId: $buyerId, programId: $programId, coachId: $coachId, amount: $amount, status: $status, paymentKey: $paymentKey, createdAt: $createdAt)';
+  return 'OrderEntity(id: $id, buyerId: $buyerId, programId: $programId, coachId: $coachId, amount: $amount, status: $status, paymentKey: $paymentKey, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -255,7 +257,7 @@ abstract mixin class _$OrderEntityCopyWith<$Res> implements $OrderEntityCopyWith
   factory _$OrderEntityCopyWith(_OrderEntity value, $Res Function(_OrderEntity) _then) = __$OrderEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String buyerId, String programId, String coachId, double amount, OrderStatus status, String? paymentKey, DateTime createdAt
+ String id, String buyerId, String programId, String coachId, double amount, OrderStatus status, String? paymentKey, DateTime createdAt, DateTime? updatedAt
 });
 
 
@@ -272,7 +274,7 @@ class __$OrderEntityCopyWithImpl<$Res>
 
 /// Create a copy of OrderEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? buyerId = null,Object? programId = null,Object? coachId = null,Object? amount = null,Object? status = null,Object? paymentKey = freezed,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? buyerId = null,Object? programId = null,Object? coachId = null,Object? amount = null,Object? status = null,Object? paymentKey = freezed,Object? createdAt = null,Object? updatedAt = freezed,}) {
   return _then(_OrderEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,buyerId: null == buyerId ? _self.buyerId : buyerId // ignore: cast_nullable_to_non_nullable
@@ -282,7 +284,8 @@ as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullabl
 as double,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as OrderStatus,paymentKey: freezed == paymentKey ? _self.paymentKey : paymentKey // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 

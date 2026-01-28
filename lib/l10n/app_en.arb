@@ -52,6 +52,9 @@
   "experienceMore1y": "1 year or more",
   "experienceMore3y": "3 years or more",
   "pleaseFillAllFields": "Please fill in all fields",
+  "onboardingStep": "Step {current} of {total}",
+  "onboardingNext": "Next",
+  "onboardingBack": "Back",
 
   "settingsTitle": "Settings",
   "settingsProfile": "Profile",

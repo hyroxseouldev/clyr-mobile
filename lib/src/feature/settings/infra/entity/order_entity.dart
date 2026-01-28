@@ -1,4 +1,4 @@
-import 'package:clyr_mobile/src/feature/settings/data/dto/order_dto.dart';
+import 'package:clyr_mobile/src/core/data/dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'order_entity.freezed.dart';
@@ -20,7 +20,8 @@ enum OrderStatus {
     };
   }
 
-  static OrderStatus fromString(String value) {
+  static OrderStatus fromString(String? value) {
+    if (value == null) return OrderStatus.pending;
     return switch (value.toUpperCase()) {
       'PENDING' => OrderStatus.pending,
       'COMPLETED' => OrderStatus.completed,
@@ -42,18 +43,20 @@ abstract class OrderEntity with _$OrderEntity {
     required OrderStatus status,
     String? paymentKey,
     required DateTime createdAt,
+    DateTime? updatedAt,
   }) = _OrderEntity;
 
-  factory OrderEntity.fromDto(OrderDto dto) {
+  factory OrderEntity.fromDto(OrdersDto dto) {
     return OrderEntity(
       id: dto.id,
       buyerId: dto.buyerId,
       programId: dto.programId,
       coachId: dto.coachId,
-      amount: dto.amount.toDouble(),
+      amount: double.tryParse(dto.amount ?? '') ?? 0.0,
       status: OrderStatus.fromString(dto.status),
       paymentKey: dto.paymentKey,
       createdAt: dto.createdAt,
+      updatedAt: dto.updatedAt,
     );
   }
 }

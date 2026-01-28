@@ -1,7 +1,7 @@
 import 'package:clyr_mobile/src/core/exception/exception.dart';
 import 'package:clyr_mobile/src/core/typedef/typedef.dart';
 import 'package:clyr_mobile/src/core/usecase/usecase.dart';
-import 'package:clyr_mobile/src/feature/auth/data/user_repository.dart';
+import 'package:clyr_mobile/src/feature/auth/infra/repository/user_repository.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/entity/user_profile_entity.dart';
 
 /// 사용자 프로필 조회 UseCase

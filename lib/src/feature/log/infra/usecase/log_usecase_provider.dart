@@ -1,4 +1,4 @@
-import 'package:clyr_mobile/src/feature/log/data/repository/log_repository_provider.dart';
+import 'package:clyr_mobile/src/feature/log/infra/repository/log_repository_provider.dart';
 import 'package:clyr_mobile/src/feature/log/infra/usecase/get_leaderboard_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

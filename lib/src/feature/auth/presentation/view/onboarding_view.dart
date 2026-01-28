@@ -5,42 +5,25 @@ import 'package:clyr_mobile/src/feature/auth/presentation/provider/onboarding_co
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class OnboardingView extends ConsumerStatefulWidget {
+class OnboardingView extends HookConsumerWidget {
   const OnboardingView({super.key});
 
   @override
-  ConsumerState<OnboardingView> createState() => _OnboardingViewState();
-}
-
-class _OnboardingViewState extends ConsumerState<OnboardingView> {
-  Gender? _selectedGender;
-  ExerciseType? _selectedExercise;
-  ExperienceLevel? _selectedExperience;
-
-  void _onSubmit() {
-    if (_selectedGender == null ||
-        _selectedExercise == null ||
-        _selectedExperience == null) {
-      // Show validation error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.pleaseFillAllFields)),
-      );
-      return;
-    }
-
-    ref.read(onboardingControllerProvider.notifier).completeOnboarding(
-          gender: _selectedGender!,
-          exerciseType: _selectedExercise!,
-          experience: _selectedExperience!,
-        );
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final controllerState = ref.watch(onboardingControllerProvider);
 
+    // State hooks
+    final currentStep = useState<int>(0);
+    final selectedGender = useState<Gender?>(null);
+    final selectedExercise = useState<ExerciseType?>(null);
+    final selectedExperience = useState<ExperienceLevel?>(null);
+
+    // Total steps constant
+    const totalSteps = 3;
+
+    // Listen to controller state changes
     ref.listen<AsyncValue>(
       onboardingControllerProvider,
       (previous, next) {
@@ -58,60 +41,86 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
       },
     );
 
+    // Helper functions
+    bool canProceedToNextStep() {
+      switch (currentStep.value) {
+        case 0:
+          return selectedGender.value != null;
+        case 1:
+          return selectedExercise.value != null;
+        case 2:
+          return selectedExperience.value != null;
+        default:
+          return false;
+      }
+    }
+
+    void goToNextStep() {
+      if (canProceedToNextStep()) {
+        currentStep.value++;
+      }
+    }
+
+    void goToPreviousStep() {
+      if (currentStep.value > 0) {
+        currentStep.value--;
+      }
+    }
+
+    void onSubmit() {
+      if (selectedGender.value == null ||
+          selectedExercise.value == null ||
+          selectedExperience.value == null) {
+        return;
+      }
+
+      ref.read(onboardingControllerProvider.notifier).completeOnboarding(
+            gender: selectedGender.value!,
+            exerciseType: selectedExercise.value!,
+            experience: selectedExperience.value!,
+          );
+    }
+
+    final controllerState = ref.watch(onboardingControllerProvider);
+
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            // Header
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.onboardingWelcome,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    l10n.onboardingSubtitle,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey[600],
-                        ),
-                  ),
-                ],
-              ),
+            // Progress Indicator
+            _buildProgressIndicator(
+              context,
+              l10n,
+              currentStep.value,
+              totalSteps,
             ),
-            // Form fields
+            // Header (welcome text - only on first step)
+            if (currentStep.value == 0) _buildWelcomeHeader(context, l10n),
+            // Step Content
             Expanded(
-              child: ListView(
+              child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                children: [
-                  _buildGenderSelector(context),
-                  const SizedBox(height: 24),
-                  _buildExerciseSelector(context),
-                  const SizedBox(height: 24),
-                  _buildExperienceSelector(context),
-                  const SizedBox(height: 32),
-                ],
-              ),
-            ),
-            // Start button
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: controllerState.isLoading ? null : _onSubmit,
-                  child: controllerState.isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : Text(l10n.onboardingStart),
+                child: _buildStepContent(
+                  context,
+                  currentStep.value,
+                  l10n,
+                  selectedGender,
+                  selectedExercise,
+                  selectedExperience,
                 ),
               ),
+            ),
+            // Navigation Buttons
+            _buildNavigationButtons(
+              context,
+              controllerState,
+              l10n,
+              currentStep.value,
+              totalSteps,
+              canProceedToNextStep,
+              goToNextStep,
+              goToPreviousStep,
+              onSubmit,
             ),
           ],
         ),
@@ -119,31 +128,125 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
     );
   }
 
-  Widget _buildGenderSelector(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+  Widget _buildProgressIndicator(
+    BuildContext context,
+    AppLocalizations l10n,
+    int currentStep,
+    int totalSteps,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        children: [
+          // Progress dots
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(totalSteps, (index) {
+              final isActive = index == currentStep;
+              final isCompleted = index < currentStep;
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                width: isActive ? 32 : 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: isActive
+                      ? Theme.of(context).colorScheme.primary
+                      : isCompleted
+                          ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)
+                          : Colors.grey[300],
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              );
+            }),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            l10n.onboardingStep(currentStep + 1, totalSteps),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Colors.grey[600],
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWelcomeHeader(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.onboardingWelcome,
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            l10n.onboardingSubtitle,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.grey[600],
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStepContent(
+    BuildContext context,
+    int step,
+    AppLocalizations l10n,
+    ValueNotifier<Gender?> selectedGender,
+    ValueNotifier<ExerciseType?> selectedExercise,
+    ValueNotifier<ExperienceLevel?> selectedExperience,
+  ) {
+    switch (step) {
+      case 0:
+        return _buildGenderStep(context, l10n, selectedGender);
+      case 1:
+        return _buildExerciseStep(context, l10n, selectedExercise);
+      case 2:
+        return _buildExperienceStep(context, l10n, selectedExperience);
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
+  Widget _buildGenderStep(
+    BuildContext context,
+    AppLocalizations l10n,
+    ValueNotifier<Gender?> selectedGender,
+  ) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           l10n.onboardingGender,
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context).textTheme.headlineSmall,
+          textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 32),
         Row(
           children: [
             Expanded(
               child: _GenderOption(
                 label: l10n.genderMale,
-                isSelected: _selectedGender == Gender.male,
-                onTap: () => setState(() => _selectedGender = Gender.male),
+                isSelected: selectedGender.value == Gender.male,
+                onTap: () => selectedGender.value = Gender.male,
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 16),
             Expanded(
               child: _GenderOption(
                 label: l10n.genderFemale,
-                isSelected: _selectedGender == Gender.female,
-                onTap: () => setState(() => _selectedGender = Gender.female),
+                isSelected: selectedGender.value == Gender.female,
+                onTap: () => selectedGender.value = Gender.female,
               ),
             ),
           ],
@@ -152,8 +255,11 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
     );
   }
 
-  Widget _buildExerciseSelector(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+  Widget _buildExerciseStep(
+    BuildContext context,
+    AppLocalizations l10n,
+    ValueNotifier<ExerciseType?> selectedExercise,
+  ) {
     final exercises = [
       (ExerciseType.hyrox, l10n.exerciseHyrox),
       (ExerciseType.crossfit, l10n.exerciseCrossfit),
@@ -163,21 +269,24 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
     ];
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           l10n.onboardingExerciseType,
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context).textTheme.headlineSmall,
+          textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 32),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: 12,
+          runSpacing: 12,
+          alignment: WrapAlignment.center,
           children: exercises
               .map((e) => _ExerciseChip(
                     label: e.$2,
-                    isSelected: _selectedExercise == e.$1,
-                    onTap: () => setState(() => _selectedExercise = e.$1),
+                    isSelected: selectedExercise.value == e.$1,
+                    onTap: () => selectedExercise.value = e.$1,
                   ))
               .toList(),
         ),
@@ -185,8 +294,11 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
     );
   }
 
-  Widget _buildExperienceSelector(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+  Widget _buildExperienceStep(
+    BuildContext context,
+    AppLocalizations l10n,
+    ValueNotifier<ExperienceLevel?> selectedExperience,
+  ) {
     final experiences = [
       (ExperienceLevel.less3m, l10n.experienceLess3m),
       (ExperienceLevel.less6m, l10n.experienceLess6m),
@@ -196,19 +308,69 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
     ];
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           l10n.onboardingExperience,
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context).textTheme.headlineSmall,
+          textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 12),
-        ...experiences.map((e) => _ExperienceOption(
-              label: e.$2,
-              isSelected: _selectedExperience == e.$1,
-              onTap: () => setState(() => _selectedExperience = e.$1),
+        const SizedBox(height: 32),
+        ...experiences.map((e) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _ExperienceOption(
+                label: e.$2,
+                isSelected: selectedExperience.value == e.$1,
+                onTap: () => selectedExperience.value = e.$1,
+              ),
             )),
       ],
+    );
+  }
+
+  Widget _buildNavigationButtons(
+    BuildContext context,
+    AsyncValue controllerState,
+    AppLocalizations l10n,
+    int currentStep,
+    int totalSteps,
+    bool Function() canProceedToNextStep,
+    VoidCallback goToNextStep,
+    VoidCallback goToPreviousStep,
+    VoidCallback onSubmit,
+  ) {
+    final isLastStep = currentStep == totalSteps - 1;
+    final canGoNext = canProceedToNextStep();
+
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Row(
+        children: [
+          if (currentStep > 0)
+            Expanded(
+              child: OutlinedButton(
+                onPressed: goToPreviousStep,
+                child: Text(l10n.onboardingBack),
+              ),
+            ),
+          if (currentStep > 0) const SizedBox(width: 12),
+          Expanded(
+            child: FilledButton(
+              onPressed: (canGoNext && !controllerState.isLoading)
+                  ? (isLastStep ? onSubmit : goToNextStep)
+                  : null,
+              child: controllerState.isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(isLastStep ? l10n.onboardingStart : l10n.onboardingNext),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -229,19 +391,26 @@ class _GenderOption extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(vertical: 48),
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.primary
               : Colors.grey[200],
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Colors.transparent,
+            width: 2,
+          ),
         ),
         child: Center(
           child: Text(
             label,
             style: TextStyle(
               color: isSelected ? Colors.white : Colors.black87,
-              fontWeight: FontWeight.w500,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -269,6 +438,11 @@ class _ExerciseChip extends StatelessWidget {
       onSelected: (_) => onTap(),
       selectedColor: Theme.of(context).colorScheme.primaryContainer,
       checkmarkColor: Theme.of(context).colorScheme.primary,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      labelStyle: TextStyle(
+        fontSize: 16,
+        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+      ),
     );
   }
 }
@@ -288,16 +462,17 @@ class _ExperienceOption extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(12),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         decoration: BoxDecoration(
           border: Border.all(
             color: isSelected
                 ? Theme.of(context).colorScheme.primary
                 : Colors.grey[300]!,
+            width: 2,
           ),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           color: isSelected
               ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3)
               : null,
@@ -309,9 +484,16 @@ class _ExperienceOption extends StatelessWidget {
               color: isSelected
                   ? Theme.of(context).colorScheme.primary
                   : Colors.grey,
+              size: 24,
             ),
-            const SizedBox(width: 12),
-            Text(label),
+            const SizedBox(width: 16),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+              ),
+            ),
           ],
         ),
       ),

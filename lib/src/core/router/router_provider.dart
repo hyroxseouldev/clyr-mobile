@@ -8,7 +8,6 @@ import 'package:clyr_mobile/src/feature/auth/presentation/view/user_profile_view
 import 'package:clyr_mobile/src/feature/community/presentation/view/commnunity_view.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/home_view.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/section_record_create_view.dart';
-import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_create_view.dart';
 import 'package:clyr_mobile/src/feature/log/presentation/view/log_view.dart';
 import 'package:clyr_mobile/src/feature/ranking/presentation/view/ranking_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/app_info_view.dart';
@@ -17,12 +16,6 @@ import 'package:clyr_mobile/src/feature/settings/presentation/view/purchase_hist
 import 'package:clyr_mobile/src/feature/settings/presentation/view/terms_of_service_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/settings_view.dart';
 import 'package:clyr_mobile/src/feature/stats/presentation/view/stats_view.dart';
-import 'package:clyr_mobile/src/feature/workout/presentation/view/program_detail_view.dart';
-import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_detail_view.dart';
-import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_edit_view.dart';
-import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_log_view.dart';
-import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_view.dart';
-import 'package:clyr_mobile/src/feature/workout/presentation/view/workout_start_date_setup_view.dart';
 import 'package:clyr_mobile/src/shared/widgets/main_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -108,69 +101,6 @@ GoRouter router(Ref ref) {
           GoRoute(
             path: RoutePaths.stats,
             builder: (context, state) => const StatsView(),
-          ),
-
-          GoRoute(
-            path: RoutePaths.workout,
-            builder: (context, state) => const WorkoutView(),
-            routes: [
-              GoRoute(
-                path: 'program/:id',
-                builder: (context, state) {
-                  final programId = state.pathParameters['id']!;
-                  final workoutId = state.uri.queryParameters['workoutId'];
-                  return ProgramDetailView(
-                    programId: programId,
-                    workoutId: workoutId,
-                  );
-                },
-                routes: [
-                  GoRoute(
-                    path: 'workout-log-create',
-                    builder: (context, state) {
-                      final programId = state.pathParameters['id']!;
-                      return WorkoutLogCreateView(programId: programId);
-                    },
-                  ),
-                  GoRoute(
-                    path: 'start-date-setup',
-                    builder: (context, state) {
-                      final programId = state.pathParameters['id']!;
-                      return WorkoutStartDateSetupView(programId: programId);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-          GoRoute(
-            path: RoutePaths.workoutLog,
-            builder: (context, state) => const WorkoutLogView(),
-            routes: [
-              GoRoute(
-                path: 'detail/:id',
-                builder: (context, state) {
-                  final logId = state.pathParameters['id']!;
-                  return WorkoutLogDetailView(logId: logId);
-                },
-                routes: [
-                  GoRoute(
-                    path: 'edit',
-                    builder: (context, state) {
-                      final logId = state.pathParameters['id']!;
-                      return WorkoutLogEditView(logId: logId);
-                    },
-                  ),
-                ],
-              ),
-              GoRoute(
-                path: 'edit/:id',
-                builder: (context, state) {
-                  final logId = state.pathParameters['id']!;
-                  return WorkoutLogEditView(logId: logId);
-                },
-              ),
-            ],
           ),
           GoRoute(
             path: RoutePaths.settings,

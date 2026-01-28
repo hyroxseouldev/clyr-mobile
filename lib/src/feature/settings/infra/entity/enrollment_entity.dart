@@ -1,4 +1,4 @@
-import 'package:clyr_mobile/src/feature/settings/data/dto/enrollment_dto.dart';
+import 'package:clyr_mobile/src/core/data/dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'enrollment_entity.freezed.dart';
@@ -23,7 +23,8 @@ enum EnrollmentStatus {
     };
   }
 
-  static EnrollmentStatus fromString(String value) {
+  static EnrollmentStatus fromString(String? value) {
+    if (value == null) return EnrollmentStatus.inactive;
     return switch (value.toUpperCase()) {
       'ACTIVE' => EnrollmentStatus.active,
       'INACTIVE' => EnrollmentStatus.inactive,
@@ -44,16 +45,22 @@ abstract class EnrollmentEntity with _$EnrollmentEntity {
     required DateTime startDate,
     required EnrollmentStatus status,
     required DateTime createdAt,
+    String? orderId,
+    DateTime? endDate,
+    DateTime? updatedAt,
   }) = _EnrollmentEntity;
 
-  factory EnrollmentEntity.fromDto(EnrollmentDto dto) {
+  factory EnrollmentEntity.fromDto(EnrollmentsDto dto) {
     return EnrollmentEntity(
       id: dto.id,
       userId: dto.userId,
       programId: dto.programId,
-      startDate: dto.startDate,
+      startDate: dto.startDate ?? DateTime.now(),
       status: EnrollmentStatus.fromString(dto.status),
       createdAt: dto.createdAt,
+      orderId: dto.orderId,
+      endDate: dto.endDate,
+      updatedAt: dto.updatedAt,
     );
   }
 }

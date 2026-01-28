@@ -93,11 +93,16 @@ lib/src/
 │   ├── typedef/       # FutureEither typedef
 │   └── usecase/       # Base usecase interface
 │
-├── feature/           # Feature modules (auth, home, workout, etc.)
+├── feature/           # Feature modules (auth, home, log, etc.)
 │   └── [feature_name]/
-│       ├── data/      # Data Layer: DTOs, data_source, repository
-│       ├── infra/     # Domain Layer: Entity, usecase
+│       ├── infra/     # Domain Layer: Entity, repository, usecase
+│       │   ├── entity/           # Freezed entities
+│       │   ├── repository/       # Repository interface + impl (uses core/data)
+│       │   └── usecase/          # Use case interfaces + providers
 │       └── presentation/  # UI Layer: provider, view, widget
+│           ├── provider/         # Riverpod controllers
+│           ├── view/             # UI views (*_view.dart)
+│           └── widget/           # Reusable widgets (*_widget.dart)
 │
 └── shared/            # Cross-feature shared widgets & utilities
 ```
@@ -106,19 +111,21 @@ lib/src/
 
 1. **Absolute Imports Only**: Never use relative imports (`../..`). Always use `package:clyr_mobile/...`
 
-2. **Data Layer** (`feature/*/data/`):
-   - **DTO**: Use `@JsonSerializable`, must implement `toEntity()` method
-   - **Data Source**: Direct API/DB communication (Dio, Supabase)
-   - **Repository**: Abstract interface + implementation, returns `FutureEither<AppException, Entity>`
+2. **Centralized Data Layer** (`core/data/`):
+   - **DTO**: All DTOs from Drizzle schema in `dto.dart` with `@JsonSerializable`
+   - **Data Source**: `CoreDataSource` interface for Supabase queries
+   - **AuthDataSource**: Separate interface for auth-related operations
+   - **Purpose**: Single source of truth for all data models, shared across features
 
 3. **Infra Layer** (`feature/*/infra/`):
-   - **Entity**: Immutable models for UI consumption
-   - **UseCase**: Abstract interface with `Named Record` params, integrate multiple usecases into single provider
+   - **Entity**: Freezed immutable models for UI consumption
+   - **Repository**: Uses `core/data` data sources, returns `FutureEither<AppException, Entity>`
+   - **UseCase**: Abstract interface with `Named Record` params
 
 4. **Presentation Layer** (`feature/*/presentation/`):
    - **Provider**: Use `@riverpod` with `Notifier`/`AsyncNotifier`, single `AsyncValue<T>` state
    - **View**: Files end with `_view.dart`, classes named `*View`
-   - **Widget**: Files end with `_widget.dart`, use `factory fromEntity()` for Entity-based widgets
+   - **Widget**: Files end with `_widget.dart`, receive Entity as parameter
 
 5. **State Management**: Riverpod v3+ with code generation
    - Prefer `Notifier`/`AsyncNotifier` over `StateProvider`
@@ -191,9 +198,20 @@ This section documents the Clean Architecture pattern implementation for the Hom
             ▼                      ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                            DATA LAYER                                   │
+│  ┌─────────────────┐    ┌─────────────────┐                              │
+│  │     DTO         │    │  Data Source    │                              │
+│  │  (dto.dart)     │    │ (data_source)   │                              │
+│  └─────────────────┘    └─────────────────┘                              │
+│           ▲                        ▲                                     │
+│           │                        │                                     │
+└───────────│────────────────────────│────────────────────────────────────┘
+            │                        │
+            ▼                        ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        INFRA LAYER (feature)                           │
 │  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    │
-│  │     DTO         │    │   Repository    │◄───┤  Data Source    │    │
-│  │  (dto.dart)     │    │ (*_repository)  │    │ (data_source)   │    │
+│  │     Entity      │◄───┤   Repository    │◄───┤    UseCase      │    │
+│  │  (*_entity)     │    │ (*_repository)  │    │  (*_usecase)    │    │
 │  └─────────────────┘    └─────────────────┘    └─────────────────┘    │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
@@ -203,15 +221,16 @@ This section documents the Clean Architecture pattern implementation for the Hom
 #### Flow 1: Active Program Display
 
 ```dart
-// 1. DATA LAYER: SupabaseDataSource (data_source.dart)
+// 1. DATA LAYER: CoreDataSource (lib/src/core/data/data_source.dart)
 Future<ActiveProgramDto> getCurrentActiveProgram() async {
   final response = await supabase.from('enrollments').select('*').eq('is_active', true).single();
   return ActiveProgramDto.fromJson(response);
 }
 
-// 2. DATA LAYER: HomeRepository (home_repository.dart)
+// 2. INFRA LAYER: HomeRepository (lib/src/feature/home/infra/repository/home_repository.dart)
 FutureEither<AppException, ActiveProgramEntity> getActiveProgram() async {
   try {
+    final dataSource = ref.read(coreDataSourceProvider);
     final dto = await dataSource.getCurrentActiveProgram();
     return right(ActiveProgramEntity.fromDto(dto));
   } catch (e) {
@@ -255,7 +274,7 @@ AsyncWidget<ActiveProgramEntity?>(
 #### Flow 2: Blueprint Sections by Date
 
 ```dart
-// 1. DATA LAYER: SupabaseDataSource (data_source.dart)
+// 1. DATA LAYER: CoreDataSource (lib/src/core/data/data_source.dart)
 Future<List<BlueprintSectionItemsDto>> getBlueprintSectionItemsByDate({
   required DateTime date,
 }) async {
@@ -297,11 +316,12 @@ Future<List<BlueprintSectionItemsDto>> getBlueprintSectionItemsByDate({
   }
 }
 
-// 2. DATA LAYER: HomeRepository (home_repository.dart)
+// 2. INFRA LAYER: HomeRepository (lib/src/feature/home/infra/repository/home_repository.dart)
 FutureEither<AppException, List<BlueprintSectionEntity>> getBlueprintSections({
   required DateTime date,
 }) async {
   try {
+    final dataSource = ref.read(coreDataSourceProvider);
     final dtos = await dataSource.getBlueprintSectionItemsByDate(date: date);
     final entities = dtos.map((dto) => BlueprintSectionEntity.fromDto(dto)).toList();
     return right(entities);
@@ -315,7 +335,7 @@ FutureEither<AppException, List<BlueprintSectionEntity>> getBlueprintSections({
   }
 }
 
-// 3. DOMAIN LAYER: BlueprintSectionEntity (home_entity.dart)
+// 3. INFRA LAYER: BlueprintSectionEntity (lib/src/feature/home/infra/entity/home_entity.dart)
 @freezed
 class BlueprintSectionEntity with _$BlueprintSectionEntity {
   const factory BlueprintSectionEntity({
@@ -447,14 +467,14 @@ AsyncWidget<List<BlueprintSectionEntity>>(
 
 ### Layer Responsibilities
 
-| Layer | Responsibility | Input | Output | Error Handling |
-|-------|---------------|-------|--------|----------------|
-| **Data Source** | API/DB communication, raw queries | Primitives | DTO | throws Exception |
-| **Repository** | DTO → Entity mapping | Primitives | `FutureEither<AppException, Entity>` | Maps to AppException |
-| **UseCase** | Business logic orchestration | Params Record | `FutureEither<AppException, Entity>` | Forwards from Repository |
-| **Provider** | State management, caching | Primitives | `AsyncValue<Entity>` | Throws on left |
-| **View** | UI rendering | `AsyncValue<Entity>` | Widget | AsyncWidget handles |
-| **Widget** | Reusable UI components | Entity | Widget | N/A |
+| Layer | Location | Responsibility | Input | Output | Error Handling |
+|-------|----------|---------------|-------|--------|----------------|
+| **Data Source** | `core/data/` | API/DB communication, raw queries | Primitives | DTO | throws Exception |
+| **Repository** | `feature/*/infra/repository/` | DTO → Entity mapping, uses data sources | Primitives | `FutureEither<AppException, Entity>` | Maps to AppException |
+| **UseCase** | `feature/*/infra/usecase/` | Business logic orchestration | Params Record | `FutureEither<AppException, Entity>` | Forwards from Repository |
+| **Provider** | `feature/*/presentation/provider/` | State management, caching | Primitives | `AsyncValue<Entity>` | Throws on left |
+| **View** | `feature/*/presentation/view/` | UI rendering | `AsyncValue<Entity>` | Widget | AsyncWidget handles |
+| **Widget** | `feature/*/presentation/widget/` | Reusable UI components | Entity | Widget | N/A |
 
 ### Implementation Rules
 
@@ -500,14 +520,12 @@ context.goNamed('/home/session-record-create/${item.id}');
 
 ```
 lib/src/feature/home/
-├── data/
+├── infra/
+│   ├── entity/
+│   │   └── home_entity.dart              # ActiveProgramEntity, BlueprintSectionEntity (Freezed)
 │   ├── repository/
 │   │   ├── home_repository.dart          # Repository interface + impl
 │   │   └── home_repository_provider.dart
-│   └── (DTOs are in lib/src/core/data/dto.dart)
-├── infra/
-│   ├── entity/
-│   │   └── home_entity.dart              # ActiveProgramEntity, BlueprintSectionEntity
 │   └── usecase/
 │       ├── get_active_program_usecase.dart
 │       ├── get_blueprint_sections_usecase.dart
@@ -521,4 +539,7 @@ lib/src/feature/home/
     └── widget/
         ├── program_selector.dart
         └── blueprint_section_card.dart
+
+# Note: DTOs are centralized in lib/src/core/data/dto.dart
+# Note: Data sources are in lib/src/core/data/data_source.dart
 ```

@@ -1,10 +1,9 @@
 import 'dart:developer';
 
+import 'package:clyr_mobile/src/core/data/dto.dart';
 import 'package:clyr_mobile/src/core/exception/exception.dart';
 import 'package:clyr_mobile/src/core/supabase/supabase_provider.dart';
 import 'package:clyr_mobile/src/core/typedef/typedef.dart';
-import 'package:clyr_mobile/src/feature/settings/data/dto/enrollment_dto.dart';
-import 'package:clyr_mobile/src/feature/settings/data/dto/order_dto.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/entity/enrollment_entity.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/entity/order_entity.dart';
 import 'package:fpdart/fpdart.dart';
@@ -68,7 +67,7 @@ class SettingRepositoryImpl implements SettingRepository {
       );
 
       final orders = response.map((json) {
-        final dto = OrderDto.fromJson(json);
+        final dto = OrdersDto.fromJson(json);
         return dto.toEntity();
       }).toList();
 
@@ -109,7 +108,7 @@ class SettingRepositoryImpl implements SettingRepository {
       );
 
       final enrollments = response.map((json) {
-        final dto = EnrollmentDto.fromJson(json);
+        final dto = EnrollmentsDto.fromJson(json);
         return dto.toEntity();
       }).toList();
 

@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/entity/user_profile_entity.dart';
+import 'package:clyr_mobile/src/feature/settings/infra/entity/enrollment_entity.dart';
+import 'package:clyr_mobile/src/feature/settings/infra/entity/order_entity.dart';
 
 part 'dto.g.dart';
 
@@ -512,6 +514,8 @@ class OrdersDto {
   factory OrdersDto.fromJson(Map<String, dynamic> json) =>
       _$OrdersDtoFromJson(json);
   Map<String, dynamic> toJson() => _$OrdersDtoToJson(this);
+
+  OrderEntity toEntity() => OrderEntity.fromDto(this);
 }
 
 /// [Enrollments] 실제 수강 권한
@@ -549,6 +553,8 @@ class EnrollmentsDto {
   factory EnrollmentsDto.fromJson(Map<String, dynamic> json) =>
       _$EnrollmentsDtoFromJson(json);
   Map<String, dynamic> toJson() => _$EnrollmentsDtoToJson(this);
+
+  EnrollmentEntity toEntity() => EnrollmentEntity.fromDto(this);
 }
 
 /// [SectionRecord] 섹션 완료 기록
