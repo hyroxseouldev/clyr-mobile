@@ -1,50 +1,120 @@
+import 'dart:ui';
 import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:video_player/video_player.dart';
 
-class SplashView extends StatelessWidget {
+class SplashView extends StatefulWidget {
   const SplashView({super.key});
+
+  @override
+  State<SplashView> createState() => _SplashViewState();
+}
+
+class _SplashViewState extends State<SplashView> {
+  late VideoPlayerController _videoController;
+  bool _isInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeVideo();
+  }
+
+  Future<void> _initializeVideo() async {
+    try {
+      _videoController = VideoPlayerController.networkUrl(
+        Uri.parse(
+          'https://res.cloudinary.com/sunmkimcloud/video/upload/IMG_0814_y1ucrw.mp4',
+        ),
+      );
+      await _videoController.initialize();
+      await _videoController.setLooping(true);
+      await _videoController.play();
+      if (mounted) {
+        setState(() => _isInitialized = true);
+      }
+    } catch (e) {
+      // Fallback to gradient background if video fails to load
+      debugPrint('Video initialization error: $e');
+      if (mounted) {
+        setState(() => _isInitialized = false);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _videoController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.blue.shade50,
-              Colors.white,
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // 로고 또는 아이콘
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.blue.shade600,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: const Icon(
-                      Icons.fitness_center,
-                      size: 50,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 32),
+      body: Stack(
+        children: [
+          // Video Background or Gradient Fallback
+          if (_isInitialized)
+            SizedBox.expand(
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  width: _videoController.value.size.width,
+                  height: _videoController.value.size.height,
+                  child: VideoPlayer(_videoController),
+                ),
+              ),
+            )
+          else
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.blue.shade50, Colors.white],
+                ),
+              ),
+            ),
 
-                  // 환영 문구
+          // Loading Blur Effect (shows until video is ready)
+          if (!_isInitialized)
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Container(color: Colors.white.withValues(alpha: 0.3)),
+            ),
+
+          // Bottom overlay for button visibility
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 250,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.white.withValues(alpha: 0.7),
+                    Colors.white.withValues(alpha: 0.9),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // Original Content
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24.0, 0, 24.0, 48.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  // Welcome text
                   Text(
                     l10n.splashWelcome,
                     style: const TextStyle(
@@ -56,14 +126,11 @@ class SplashView extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     l10n.splashTagline,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
                   ),
-                  const SizedBox(height: 64),
+                  const SizedBox(height: 16),
 
-                  // 로그인 버튼
+                  // Login button
                   SizedBox(
                     width: double.infinity,
                     height: 52,
@@ -88,7 +155,7 @@ class SplashView extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // 회원가입 버튼
+                  // Signup button
                   SizedBox(
                     width: double.infinity,
                     height: 52,
@@ -114,7 +181,7 @@ class SplashView extends StatelessWidget {
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
