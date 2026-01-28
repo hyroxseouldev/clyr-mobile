@@ -103,13 +103,28 @@ class OnboardingView extends HookConsumerWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: _buildStepContent(
-                  context,
-                  currentStep.value,
-                  l10n,
-                  selectedGender,
-                  selectedExercise,
-                  selectedExperience,
+                child: TweenAnimationBuilder<double>(
+                  key: ValueKey(currentStep.value),
+                  tween: Tween(begin: 0, end: 1),
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeOut,
+                  builder: (context, value, child) {
+                    return Opacity(
+                      opacity: value,
+                      child: Transform.translate(
+                        offset: Offset(0, -30 * (1 - value)),
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: _buildStepContent(
+                    context,
+                    currentStep.value,
+                    l10n,
+                    selectedGender,
+                    selectedExercise,
+                    selectedExperience,
+                  ),
                 ),
               ),
             ),
@@ -238,25 +253,20 @@ class OnboardingView extends HookConsumerWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
-        Row(
-          children: [
-            Expanded(
-              child: _GenderOption(
-                label: l10n.genderMale,
-                isSelected: selectedGender.value == Gender.male,
-                onTap: () => selectedGender.value = Gender.male,
-              ),
+        ...[
+          (l10n.genderMale, Gender.male),
+          (l10n.genderFemale, Gender.female),
+        ].asMap().entries.map((entry) {
+          final e = entry.value;
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _GenderOption(
+              label: e.$1,
+              isSelected: selectedGender.value == e.$2,
+              onTap: () => selectedGender.value = e.$2,
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: _GenderOption(
-                label: l10n.genderFemale,
-                isSelected: selectedGender.value == Gender.female,
-                onTap: () => selectedGender.value = Gender.female,
-              ),
-            ),
-          ],
-        ),
+          );
+        }),
       ],
     );
   }
@@ -284,18 +294,17 @@ class OnboardingView extends HookConsumerWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          alignment: WrapAlignment.center,
-          children: exercises
-              .map((e) => _ExerciseChip(
-                    label: e.$2,
-                    isSelected: selectedExercise.value == e.$1,
-                    onTap: () => selectedExercise.value = e.$1,
-                  ))
-              .toList(),
-        ),
+        ...exercises.asMap().entries.map((entry) {
+          final e = entry.value;
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _ExerciseChip(
+              label: e.$2,
+              isSelected: selectedExercise.value == e.$1,
+              onTap: () => selectedExercise.value = e.$1,
+            ),
+          );
+        }),
       ],
     );
   }
@@ -323,14 +332,17 @@ class OnboardingView extends HookConsumerWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
-        ...experiences.map((e) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: _ExperienceOption(
-                label: e.$2,
-                isSelected: selectedExperience.value == e.$1,
-                onTap: () => selectedExperience.value = e.$1,
-              ),
-            )),
+        ...experiences.asMap().entries.map((entry) {
+          final e = entry.value;
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _ExperienceOption(
+              label: e.$2,
+              isSelected: selectedExperience.value == e.$1,
+              onTap: () => selectedExperience.value = e.$1,
+            ),
+          );
+        }),
       ],
     );
   }
@@ -411,31 +423,41 @@ class _GenderOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 48),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         decoration: BoxDecoration(
-          color: isSelected
-              ? Theme.of(context).colorScheme.primary
-              : Colors.grey[200],
-          borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected
                 ? Theme.of(context).colorScheme.primary
-                : Colors.transparent,
+                : Colors.grey[300]!,
             width: 2,
           ),
+          borderRadius: BorderRadius.circular(12),
+          color: isSelected
+              ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3)
+              : null,
         ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? Colors.white : Colors.black87,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
+        child: Row(
+          children: [
+            Icon(
+              isSelected ? Icons.check_circle : Icons.radio_button_unchecked,
+              color: isSelected
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.grey,
+              size: 24,
             ),
-          ),
+            const SizedBox(width: 16),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -455,16 +477,42 @@ class _ExerciseChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilterChip(
-      label: Text(label),
-      selected: isSelected,
-      onSelected: (_) => onTap(),
-      selectedColor: Theme.of(context).colorScheme.primaryContainer,
-      checkmarkColor: Theme.of(context).colorScheme.primary,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      labelStyle: TextStyle(
-        fontSize: 16,
-        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Colors.grey[300]!,
+            width: 2,
+          ),
+          borderRadius: BorderRadius.circular(12),
+          color: isSelected
+              ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3)
+              : null,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              isSelected ? Icons.check_circle : Icons.radio_button_unchecked,
+              color: isSelected
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.grey,
+              size: 24,
+            ),
+            const SizedBox(width: 16),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -533,7 +581,7 @@ class _AnimatedSlideIn extends StatelessWidget {
   const _AnimatedSlideIn({
     required this.child,
     this.delay = Duration.zero,
-    this.offset = const Offset(0, -0.1),
+    this.offset = const Offset(0, -0.5),
   });
 
   @override
@@ -541,7 +589,7 @@ class _AnimatedSlideIn extends StatelessWidget {
     if (delay == Duration.zero) {
       return TweenAnimationBuilder<double>(
         tween: Tween(begin: 0, end: 1),
-        duration: const Duration(milliseconds: 400),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeOut,
         builder: (context, value, child) {
           return Opacity(
@@ -558,8 +606,8 @@ class _AnimatedSlideIn extends StatelessWidget {
 
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
-      duration: const Duration(milliseconds: 400) + delay,
-      curve: Interval(delay.inMilliseconds / 400, 1, curve: Curves.easeOut),
+      duration: const Duration(milliseconds: 500) + delay,
+      curve: Interval(delay.inMilliseconds / 500, 1, curve: Curves.easeOut),
       builder: (context, value, child) {
         return Opacity(
           opacity: value,
