@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/src/core/enum/enum.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/feature/home/infra/entity/home_entity.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,10 @@ class BlueprintSectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Convert title to enum display name
+    final titleEnum = BlueprintCardTitleEnumX.fromString(item.title);
+    final displayTitle = titleEnum?.displayName ?? item.title;
+
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ExpansionTile(
@@ -57,7 +62,7 @@ class BlueprintSectionCard extends StatelessWidget {
             ),
           ),
         ),
-        title: Text(item.title),
+        title: Text(displayTitle),
         trailing: const Icon(Icons.expand_more),
         children: [
           Padding(
