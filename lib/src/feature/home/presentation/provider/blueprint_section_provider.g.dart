@@ -86,7 +86,7 @@ final class TodaysSessionStateProvider
 }
 
 String _$todaysSessionStateHash() =>
-    r'7ee923d05c1c5b969a5c023ec1e573d175a6eb22';
+    r'96008116be7a889aaebb8608c9d75d9acc90b386';
 
 /// 오늘의 세션 상태 Provider
 ///

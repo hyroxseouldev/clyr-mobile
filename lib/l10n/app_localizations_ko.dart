@@ -179,6 +179,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsTitle => '설정';
 
   @override
+  String get settingsDefaultUserName => '사용자';
+
+  @override
   String get settingsProfile => '프로필';
 
   @override
@@ -544,4 +547,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get noLeaderboardEntries => '리더보드 기록이 없습니다';
+
+  @override
+  String coachQuoteTitle(Object coachName) {
+    return '$coachName 코치의 한마디';
+  }
 }

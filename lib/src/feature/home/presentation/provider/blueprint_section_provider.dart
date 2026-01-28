@@ -23,18 +23,29 @@ Future<TodaysSessionState> todaysSessionState(Ref ref, DateTime date) async {
     return const TodaysSessionState.empty();
   }
 
-  // Blueprint sections 로드
-  final usecase = ref.watch(getBlueprintSectionsUseCaseProvider);
-  final params = GetBlueprintSectionsParams(date: date);
+  // ActiveProgram에서 coachName 추출
+  final coachName = activeProgram.maybeWhen(
+    (id, title, programImage, mainImageList, description, startDate, endDate,
+        coachProfileUrl, coachName) => coachName,
+    orElse: () => '',
+  );
+
+  // 오늘의 세션 데이터 로드
+  final usecase = ref.watch(getTodaysSessionUseCaseProvider);
+  final params = GetTodaysSessionParams(date: date);
 
   final result = await usecase(params);
-  return result.fold((l) => throw l, (sections) {
+  return result.fold((l) => throw l, (sessionData) {
     // 섹션 리스트가 비어있으면 휴식일
-    if (sections.isEmpty) {
+    if (sessionData.sections.isEmpty) {
       return const TodaysSessionState.restDay();
     }
 
     // 섹션이 있으면 훈련일
-    return TodaysSessionState.trainingDay(sections, coachName, quote);
+    return TodaysSessionState.trainingDay(
+      sessionData.sections,
+      sessionData.notes,
+      coachName,
+    );
   });
 }

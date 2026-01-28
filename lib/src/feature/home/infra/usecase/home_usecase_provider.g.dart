@@ -61,59 +61,58 @@ final class GetActiveProgramUseCaseProvider
 String _$getActiveProgramUseCaseHash() =>
     r'cda90562ffcd609497e8f3f5e15823b99bdcba2d';
 
-/// Blueprint 섹션 조회 UseCase 프로바이더
+/// 오늘의 세션 조회 UseCase 프로바이더
 
-@ProviderFor(getBlueprintSectionsUseCase)
-final getBlueprintSectionsUseCaseProvider =
-    GetBlueprintSectionsUseCaseProvider._();
+@ProviderFor(getTodaysSessionUseCase)
+final getTodaysSessionUseCaseProvider = GetTodaysSessionUseCaseProvider._();
 
-/// Blueprint 섹션 조회 UseCase 프로바이더
+/// 오늘의 세션 조회 UseCase 프로바이더
 
-final class GetBlueprintSectionsUseCaseProvider
+final class GetTodaysSessionUseCaseProvider
     extends
         $FunctionalProvider<
-          GetBlueprintSectionsUseCase,
-          GetBlueprintSectionsUseCase,
-          GetBlueprintSectionsUseCase
+          GetTodaysSessionUseCase,
+          GetTodaysSessionUseCase,
+          GetTodaysSessionUseCase
         >
-    with $Provider<GetBlueprintSectionsUseCase> {
-  /// Blueprint 섹션 조회 UseCase 프로바이더
-  GetBlueprintSectionsUseCaseProvider._()
+    with $Provider<GetTodaysSessionUseCase> {
+  /// 오늘의 세션 조회 UseCase 프로바이더
+  GetTodaysSessionUseCaseProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'getBlueprintSectionsUseCaseProvider',
+        name: r'getTodaysSessionUseCaseProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$getBlueprintSectionsUseCaseHash();
+  String debugGetCreateSourceHash() => _$getTodaysSessionUseCaseHash();
 
   @$internal
   @override
-  $ProviderElement<GetBlueprintSectionsUseCase> $createElement(
+  $ProviderElement<GetTodaysSessionUseCase> $createElement(
     $ProviderPointer pointer,
   ) => $ProviderElement(pointer);
 
   @override
-  GetBlueprintSectionsUseCase create(Ref ref) {
-    return getBlueprintSectionsUseCase(ref);
+  GetTodaysSessionUseCase create(Ref ref) {
+    return getTodaysSessionUseCase(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(GetBlueprintSectionsUseCase value) {
+  Override overrideWithValue(GetTodaysSessionUseCase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<GetBlueprintSectionsUseCase>(value),
+      providerOverride: $SyncValueProvider<GetTodaysSessionUseCase>(value),
     );
   }
 }
 
-String _$getBlueprintSectionsUseCaseHash() =>
-    r'0afa83f862349fab5d7141dc6b068349bbc87f29';
+String _$getTodaysSessionUseCaseHash() =>
+    r'b4ff783e9553d3898093c18283b22a14c362378a';
 
 /// 섹션 완료 기록 생성 UseCase 프로바이더
 

@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 class CoachQuoteWidget extends StatelessWidget {
   final String title;
   final String content;
+  final bool enableNewLines;
 
   const CoachQuoteWidget({
     required this.title,
     required this.content,
+    this.enableNewLines = false,
     super.key,
   });
 
@@ -17,61 +19,33 @@ class CoachQuoteWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            theme.colorScheme.primary.withValues(alpha: 0.1),
-            theme.colorScheme.primary.withValues(alpha: 0.05),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: theme.colorScheme.primary.withValues(alpha: 0.2),
-          width: 1,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 인용구 아이콘
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.format_quote,
-              color: theme.colorScheme.primary,
-              size: 24,
-            ),
-          ),
-          const SizedBox(height: 16),
+    // 줄바꿈 비활성화면 \n을 공백으로 변환
+    final displayContent = enableNewLines ? content : content.replaceAll('\n', ' ');
 
-          // 제목 (코치 이름 포함)
-          Text(
-            title,
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: theme.colorScheme.primary,
-            ),
-          ),
-          const SizedBox(height: 12),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
 
-          // 내용
-          Text(
-            content,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
-              height: 1.5,
-            ),
+      children: [
+        // 제목 (코치 이름 포함)
+        Text(
+          title,
+          style: theme.textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: theme.colorScheme.primary,
           ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 4),
+        // 내용
+        Text(
+          displayContent,
+          maxLines: enableNewLines ? 3 : null,
+          overflow: enableNewLines ? TextOverflow.ellipsis : null,
+          softWrap: true,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+          ),
+        ),
+      ],
     );
   }
 }

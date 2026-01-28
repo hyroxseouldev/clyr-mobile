@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/src/core/data/dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'home_dto.g.dart';
@@ -39,4 +40,24 @@ class ActiveProgramDto {
       _$ActiveProgramDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$ActiveProgramDtoToJson(this);
+}
+
+/// Today's session data with sections and coach message
+/// Used by getTodaysSessionState in data_source.dart
+@JsonSerializable(explicitToJson: true)
+class TodaysSessionDto {
+  final List<BlueprintSectionItemsDto> sections;
+  final String notes;
+  final String coachName;
+
+  TodaysSessionDto({
+    required this.sections,
+    required this.notes,
+    required this.coachName,
+  });
+
+  factory TodaysSessionDto.fromJson(Map<String, dynamic> json) =>
+      _$TodaysSessionDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TodaysSessionDtoToJson(this);
 }

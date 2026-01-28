@@ -4,14 +4,25 @@ import 'package:clyr_mobile/src/core/exception/exception.dart';
 import 'package:clyr_mobile/src/core/typedef/typedef.dart';
 import 'package:clyr_mobile/src/feature/home/infra/entity/home_entity.dart';
 
+/// 오늘의 세션 데이터
+///
+/// 섹션 리스트, 코치의 한마디, 코치 이름을 포함합니다.
+typedef TodaysSessionData = ({
+  List<BlueprintSectionEntity> sections,
+  String notes,
+  String coachName,
+});
+
 /// 홈 데이터 소스 인터페이스
 abstract class HomeRepository {
   /// 현재 사용자의 활성화된 프로그램을 가져옵니다
   FutureEither<AppException, ActiveProgramEntity> getActiveProgram();
 
-  /// 지정된 날짜의 블루프린트 섹션들을 가져옵니다
-  FutureEither<AppException, List<BlueprintSectionEntity>>
-  getBlueprintSections({required DateTime date});
+  /// 지정된 날짜의 오늘의 세션 데이터를 가져옵니다
+  /// (섹션 리스트, 코치의 한마디, 코치 이름)
+  FutureEither<AppException, TodaysSessionData> getTodaysSessionData({
+    required DateTime date,
+  });
 
   /// 섹션 완료 기록을 생성합니다
   FutureEither<AppException, void> createSectionRecord({
@@ -46,21 +57,30 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  FutureEither<AppException, List<BlueprintSectionEntity>>
-  getBlueprintSections({required DateTime date}) async {
+  FutureEither<AppException, TodaysSessionData> getTodaysSessionData({
+    required DateTime date,
+  }) async {
     try {
-      final dtos = await dataSource.getBlueprintSectionItemsByDate(
+      final dto = await dataSource.getTodaysSessionState(
         date: date,
         isTest: true,
       );
-      final entities = dtos
-          .map((dto) => BlueprintSectionEntity.fromDto(dto))
+
+      final sections = dto.sections
+          .map((sectionDto) => BlueprintSectionEntity.fromDto(sectionDto))
           .toList();
-      return right(entities);
+
+      final sessionData = (
+        sections: sections,
+        notes: dto.notes,
+        coachName: dto.coachName,
+      );
+
+      return right(sessionData);
     } catch (e) {
       return left(
         HomeException(
-          code: 'BLUEPRINT_SECTIONS_FETCH_FAILED',
+          code: 'TODAYS_SESSION_FETCH_FAILED',
           message: e.toString(),
         ),
       );

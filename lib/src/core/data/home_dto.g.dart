@@ -39,3 +39,21 @@ Map<String, dynamic> _$ActiveProgramDtoToJson(ActiveProgramDto instance) =>
       'coachProfileUrl': instance.coachProfileUrl,
       'coachName': instance.coachName,
     };
+
+TodaysSessionDto _$TodaysSessionDtoFromJson(Map<String, dynamic> json) =>
+    TodaysSessionDto(
+      sections: (json['sections'] as List<dynamic>)
+          .map(
+            (e) => BlueprintSectionItemsDto.fromJson(e as Map<String, dynamic>),
+          )
+          .toList(),
+      notes: json['notes'] as String,
+      coachName: json['coachName'] as String,
+    );
+
+Map<String, dynamic> _$TodaysSessionDtoToJson(TodaysSessionDto instance) =>
+    <String, dynamic>{
+      'sections': instance.sections.map((e) => e.toJson()).toList(),
+      'notes': instance.notes,
+      'coachName': instance.coachName,
+    };

@@ -62,6 +62,7 @@
   "onboardingCompleteSummary": "We'll provide personalized services based on your preferences",
 
   "settingsTitle": "Settings",
+  "settingsDefaultUserName": "User",
   "settingsProfile": "Profile",
   "settingsPurchaseHistory": "Purchase History",
   "settingsMembership": "Membership",
@@ -196,5 +197,6 @@
   "invalidFormat": "Invalid format",
 
   "leaderboard": "Leaderboard",
-  "noLeaderboardEntries": "No leaderboard entries"
+  "noLeaderboardEntries": "No leaderboard entries",
+  "coachQuoteTitle": "Coach {coachName}'s Message"
 }

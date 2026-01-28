@@ -27,6 +27,10 @@ class HomeView extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final selectedDate = ref.watch(selectedDateProvider);
 
+    // Calculate minimum height for centered loader
+    final screenHeight = MediaQuery.of(context).size.height;
+    final loaderMinHeight = screenHeight * 0.75;
+
     // 현재 활성화된 프로그램 상태 감지
     final activeProgramState = ref.watch(homeControllerProvider);
 
@@ -62,6 +66,7 @@ class HomeView extends ConsumerWidget {
                 // 현재 등록된 프로그램 표시
                 AsyncWidget<ActiveProgramEntity>(
                   data: activeProgramState,
+                  minHeight: loaderMinHeight,
                   builder: (activeProgram) {
                     return activeProgram.maybeWhen(
                       (
@@ -116,6 +121,7 @@ class HomeView extends ConsumerWidget {
                 // Blueprint sections list
                 AsyncWidget<TodaysSessionState>(
                   data: ref.watch(todaysSessionStateProvider(selectedDate)),
+                  minHeight: loaderMinHeight,
                   builder: (sessionState) {
                     return sessionState.when(
                       empty: () => const SizedBox.shrink(),
@@ -135,9 +141,11 @@ class HomeView extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             CoachQuoteWidget(
-                              title: '$coachName 의 한마디',
+                              title: l10n.coachQuoteTitle(coachName),
                               content: coachQuote,
+                              enableNewLines: false,
                             ),
+                            const SizedBox(height: 24),
                             Text(
                               l10n.todaysSections,
                               style: Theme.of(context).textTheme.titleMedium,

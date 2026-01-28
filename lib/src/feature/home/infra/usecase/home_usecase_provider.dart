@@ -12,10 +12,10 @@ GetActiveProgramUseCase getActiveProgramUseCase(Ref ref) {
   return GetActiveProgramUseCase(ref.watch(homeRepositoryProvider));
 }
 
-/// Blueprint 섹션 조회 UseCase 프로바이더
+/// 오늘의 세션 조회 UseCase 프로바이더
 @riverpod
-GetBlueprintSectionsUseCase getBlueprintSectionsUseCase(Ref ref) {
-  return GetBlueprintSectionsUseCase(ref.watch(homeRepositoryProvider));
+GetTodaysSessionUseCase getTodaysSessionUseCase(Ref ref) {
+  return GetTodaysSessionUseCase(ref.watch(homeRepositoryProvider));
 }
 
 /// 섹션 완료 기록 생성 UseCase 프로바이더

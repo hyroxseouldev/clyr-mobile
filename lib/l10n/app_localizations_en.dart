@@ -180,6 +180,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTitle => 'Settings';
 
   @override
+  String get settingsDefaultUserName => 'User';
+
+  @override
   String get settingsProfile => 'Profile';
 
   @override
@@ -551,4 +554,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noLeaderboardEntries => 'No leaderboard entries';
+
+  @override
+  String coachQuoteTitle(Object coachName) {
+    return 'Coach $coachName\'s Message';
+  }
 }

@@ -434,6 +434,12 @@ abstract class AppLocalizations {
   /// **'설정'**
   String get settingsTitle;
 
+  /// No description provided for @settingsDefaultUserName.
+  ///
+  /// In ko, this message translates to:
+  /// **'사용자'**
+  String get settingsDefaultUserName;
+
   /// No description provided for @settingsProfile.
   ///
   /// In ko, this message translates to:
@@ -1159,6 +1165,12 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'리더보드 기록이 없습니다'**
   String get noLeaderboardEntries;
+
+  /// No description provided for @coachQuoteTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'{coachName} 코치의 한마디'**
+  String coachQuoteTitle(Object coachName);
 }
 
 class _AppLocalizationsDelegate

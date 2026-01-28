@@ -14,7 +14,7 @@ CoreDataSource coreDataSource(Ref ref) {
 
 abstract interface class CoreDataSource {
   Future<ActiveProgramDto?> getCurrentActiveProgram();
-  Future<List<BlueprintSectionItemsDto>> getBlueprintSectionItemsByDate({
+  Future<TodaysSessionDto> getTodaysSessionState({
     required DateTime date,
     bool isTest = false,
   });
@@ -118,7 +118,7 @@ class SupabaseDataSource implements CoreDataSource {
   }
 
   @override
-  Future<List<BlueprintSectionItemsDto>> getBlueprintSectionItemsByDate({
+  Future<TodaysSessionDto> getTodaysSessionState({
     required DateTime date,
     bool isTest = false,
   }) async {
@@ -131,7 +131,10 @@ class SupabaseDataSource implements CoreDataSource {
       // 1. Get active enrollment
       final enrollmentResponse = await supabase
           .from('enrollments')
-          .select('start_date, program_id')
+          .select('''
+            start_date,
+            program_id
+          ''')
           .eq('user_id', userId)
           .eq('status', 'ACTIVE')
           .maybeSingle();
@@ -153,24 +156,27 @@ class SupabaseDataSource implements CoreDataSource {
       // 3. Calculate phase number (1-indexed, 7 days per phase)
       final phaseNumber = isTest ? 1 : (dayNumber - 1) ~/ 7 + 1;
 
-      // 4. Query blueprint by program_id, phase_number, day_number
+      // 4. Query blueprint by program_id, phase_number, day_number with notes
       final programBlueprint = await supabase
           .from('program_blueprints')
-          .select('id')
+          .select('id, notes')
           .eq('program_id', programId)
           .eq('phase_number', phaseNumber)
           .eq('day_number', dayNumber)
           .maybeSingle();
 
       if (programBlueprint == null) {
-        return [];
+        return TodaysSessionDto(
+          sections: [],
+          notes: '',
+          coachName: '',
+        );
       }
 
       final blueprintId = programBlueprint['id'] as String;
+      final notes = programBlueprint['notes'] as String? ?? '';
 
       // 5. Get blueprint_section_items with nested sections and records, ordered
-      // Note: Supabase doesn't support filtering nested relationships directly,
-      // so we fetch all and filter in the DTO
       final sectionItems = await supabase
           .from('blueprint_section_items')
           .select('''
@@ -201,12 +207,19 @@ class SupabaseDataSource implements CoreDataSource {
           ''')
           .eq('blueprint_id', blueprintId)
           .order('order_index', ascending: true);
-      return sectionItems
+
+      final sectionItemsList = sectionItems
           .map((item) => BlueprintSectionItemsDto.fromJson(item))
           .toList();
+
+      return TodaysSessionDto(
+        sections: sectionItemsList,
+        notes: notes,
+        coachName: '', // coachName은 ActiveProgram에서 가져옵니다
+      );
     } catch (e) {
-      print('getBlueprintSectionItemsByDate: error = $e');
-      throw Exception('Failed to get blueprint sections: $e');
+      print('getTodaysSessionState: error = $e');
+      throw Exception('Failed to get today\'s session: $e');
     }
   }
 

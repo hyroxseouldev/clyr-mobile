@@ -1,7 +1,10 @@
 import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/core/theme/theme.dart';
+import 'package:clyr_mobile/src/feature/auth/presentation/provider/user_profile_controller.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/widget/singout_button.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/widget/user_avatar_card_widget.dart';
+import 'package:clyr_mobile/src/shared/async_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -48,6 +51,19 @@ class SettingView extends HookConsumerWidget {
       appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
         children: [
+          // 사용자 프로필 카드
+          AsyncWidget(
+            data: ref.watch(userProfileControllerProvider),
+            builder: (userProfile) {
+              return UserAvatarCard(
+                userAvatarUrl: userProfile.profileImageUrl ?? '',
+                userName: userProfile.nickname ?? l10n.settingsDefaultUserName,
+                onEditPressed: () => context.push(RoutePaths.userProfile),
+              );
+            },
+          ),
+          const SizedBox(height: 16),
+
           // 테마 설정
           const ThemeModeToggle(),
           const Divider(height: 32),
