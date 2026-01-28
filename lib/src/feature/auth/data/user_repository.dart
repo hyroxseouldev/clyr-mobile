@@ -11,7 +11,7 @@ part 'user_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 UserRepository userRepository(Ref ref) {
-  final supabase = ref.watch(supabaseClientProvider);
+  final supabase = ref.read(supabaseClientProvider);
   return UserRepositoryImpl(supabase: supabase);
 }
 

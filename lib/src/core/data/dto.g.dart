@@ -58,7 +58,7 @@ Map<String, dynamic> _$CoachProfileDtoToJson(CoachProfileDto instance) =>
 UserProfileDto _$UserProfileDtoFromJson(Map<String, dynamic> json) =>
     UserProfileDto(
       id: json['id'] as String,
-      accountId: json['account_id'] as String,
+      accountId: json['account_id'] as String?,
       nickname: json['nickname'] as String?,
       bio: json['bio'] as String?,
       profileImageUrl: json['profile_image_url'] as String?,
@@ -67,7 +67,9 @@ UserProfileDto _$UserProfileDtoFromJson(Map<String, dynamic> json) =>
           ?.map((e) => e as String)
           .toList(),
       fitnessLevel: json['fitness_level'] as String?,
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
     );
 
 Map<String, dynamic> _$UserProfileDtoToJson(UserProfileDto instance) =>
@@ -80,7 +82,7 @@ Map<String, dynamic> _$UserProfileDtoToJson(UserProfileDto instance) =>
       'phone_number': instance.phoneNumber,
       'fitness_goals': instance.fitnessGoals,
       'fitness_level': instance.fitnessLevel,
-      'updated_at': instance.updatedAt.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
     };
 
 WorkoutLibraryDto _$WorkoutLibraryDtoFromJson(Map<String, dynamic> json) =>
@@ -314,6 +316,7 @@ SectionRecordDto _$SectionRecordDtoFromJson(Map<String, dynamic> json) =>
     SectionRecordDto(
       id: json['id'] as String,
       userId: json['user_id'] as String,
+      userProfileId: json['user_profile_id'] as String?,
       sectionId: json['section_id'] as String,
       sectionItemId: json['section_item_id'] as String,
       content: json['content'] as Map<String, dynamic>?,
@@ -327,6 +330,7 @@ Map<String, dynamic> _$SectionRecordDtoToJson(SectionRecordDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'user_id': instance.userId,
+      'user_profile_id': instance.userProfileId,
       'section_id': instance.sectionId,
       'section_item_id': instance.sectionItemId,
       'content': instance.content,

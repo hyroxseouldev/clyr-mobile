@@ -98,7 +98,7 @@ class CoachProfileDto {
 class UserProfileDto {
   final String id;
   @JsonKey(name: 'account_id')
-  final String accountId;
+  final String? accountId;
   final String? nickname;
   final String? bio;
   @JsonKey(name: 'profile_image_url')
@@ -110,7 +110,7 @@ class UserProfileDto {
   @JsonKey(name: 'fitness_level')
   final String? fitnessLevel;
   @JsonKey(name: 'updated_at')
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
 
   UserProfileDto({
     required this.id,
@@ -125,7 +125,6 @@ class UserProfileDto {
   });
 
   factory UserProfileDto.fromJson(Map<String, dynamic> json) {
-    // Handle Supabase jsonb array quirks for fitness_goals
     List<String>? goals;
     if (json['fitness_goals'] != null) {
       if (json['fitness_goals'] is List) {
@@ -137,14 +136,16 @@ class UserProfileDto {
 
     return UserProfileDto(
       id: json['id'] as String,
-      accountId: json['account_id'] as String,
+      accountId: json['account_id'] as String?,
       nickname: json['nickname'] as String?,
       bio: json['bio'] as String?,
       profileImageUrl: json['profile_image_url'] as String?,
       phoneNumber: json['phone_number'] as String?,
       fitnessGoals: goals,
       fitnessLevel: json['fitness_level'] as String?,
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
+          : DateTime.now(),
     );
   }
 
@@ -345,7 +346,8 @@ class BlueprintSectionItemsDto {
       if (json['blueprint_sections'] != null &&
           json['blueprint_sections'] is Map) {
         section = BlueprintSectionsDto.fromJson(
-            json['blueprint_sections'] as Map<String, dynamic>);
+          json['blueprint_sections'] as Map<String, dynamic>,
+        );
       }
 
       // Extract nested section_records (filter by current user if multiple)
@@ -354,10 +356,16 @@ class BlueprintSectionItemsDto {
         final recordsData = json['section_records'];
         // Handle both single object and array
         if (recordsData is Map) {
-          record = SectionRecordDto.fromJson(recordsData as Map<String, dynamic>);
+          record = SectionRecordDto.fromJson(
+            recordsData as Map<String, dynamic>,
+          );
         } else if (recordsData is List && recordsData.isNotEmpty) {
+          print('recordsData: $recordsData');
+
           // Filter by current user's session records (we'd need userId here, but for now take first)
-          record = SectionRecordDto.fromJson(recordsData[0] as Map<String, dynamic>);
+          record = SectionRecordDto.fromJson(
+            recordsData[0] as Map<String, dynamic>,
+          );
         }
       }
 
@@ -373,7 +381,9 @@ class BlueprintSectionItemsDto {
       } else if (orderIndexValue is num) {
         orderIndex = orderIndexValue.toInt();
       } else {
-        print('Warning: order_index has unexpected type: ${orderIndexValue.runtimeType}, value: $orderIndexValue');
+        print(
+          'Warning: order_index has unexpected type: ${orderIndexValue.runtimeType}, value: $orderIndexValue',
+        );
         orderIndex = 0; // fallback
       }
 
@@ -530,6 +540,8 @@ class SectionRecordDto {
   final String id;
   @JsonKey(name: 'user_id')
   final String userId;
+  @JsonKey(name: 'user_profile_id')
+  final String? userProfileId;
   @JsonKey(name: 'section_id')
   final String sectionId;
   @JsonKey(name: 'section_item_id')
@@ -550,6 +562,7 @@ class SectionRecordDto {
   SectionRecordDto({
     required this.id,
     required this.userId,
+    required this.userProfileId,
     required this.sectionId,
     required this.sectionItemId,
     this.content,
@@ -561,15 +574,27 @@ class SectionRecordDto {
   });
 
   factory SectionRecordDto.fromJson(Map<String, dynamic> json) {
-    // Extract nested user_profiles from user_id
+    // Extract nested user_profile (now directly accessible via user_profile_id join)
     UserProfileDto? profile;
-    if (json['user_id'] != null && json['user_id']['user_profiles'] != null) {
-      profile = UserProfileDto.fromJson(json['user_id']['user_profiles']);
+    if (json['user_profile'] != null && json['user_profile'] is Map) {
+      print('userProfile: ${json['user_profile']}');
+      profile = UserProfileDto.fromJson(
+        json['user_profile'] as Map<String, dynamic>,
+      );
     }
+    print('userProfile Started');
+
+    // Handle userProfileId - may not be present in older queries
+    String? userProfileId;
+    if (json['user_profile_id'] != null) {
+      userProfileId = json['user_profile_id'] as String?;
+    }
+    print('userProfile Completed');
 
     return SectionRecordDto(
       id: json['id'] as String,
-      userId: json['user_id'] is String ? json['user_id'] : (json['user_id'] as Map<String, dynamic>)['id'] as String,
+      userId: json['user_id'] as String,
+      userProfileId: userProfileId ?? '',
       sectionId: json['section_id'] as String,
       sectionItemId: json['section_item_id'] as String,
       content: json['content'] as Map<String, dynamic>?,

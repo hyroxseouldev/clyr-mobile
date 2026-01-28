@@ -30,10 +30,19 @@ class LogLeaderBoardWidget extends StatelessWidget {
     };
   }
 
-  String _formatCompletedAt(BuildContext context, DateTime completedAt) {
-    final hour = completedAt.hour.toString().padLeft(2, '0');
-    final minute = completedAt.minute.toString().padLeft(2, '0');
-    return '$hour:$minute';
+  String _formatContent(Map<String, dynamic>? content) {
+    if (content == null || content.isEmpty) {
+      return '-';
+    }
+    // Display content as key-value pairs, e.g., "weight: 80kg, reps: 10"
+    final entries = content.entries.take(3).map((e) {
+      final value = e.value;
+      if (value is num) {
+        return '${e.key}: ${value.toString()}';
+      }
+      return '${e.key}: ${value.toString()}';
+    }).join(', ');
+    return entries;
   }
 
   @override
@@ -143,11 +152,16 @@ class LogLeaderBoardWidget extends StatelessWidget {
             subtitle: Row(
               children: [
                 const Icon(
-                  Icons.access_time,
+                  Icons.fitness_center,
                   size: 14,
                 ),
                 const SizedBox(width: 4),
-                Text(_formatCompletedAt(context, entry.completedAt)),
+                Expanded(
+                  child: Text(
+                    _formatContent(entry.content),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ],
             ),
             trailing: isTop3

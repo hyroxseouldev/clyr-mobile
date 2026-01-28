@@ -156,6 +156,8 @@ class SupabaseDataSource implements CoreDataSource {
             ),
             section_records!section_item_id (
               id,
+              user_id,
+              user_profile_id,
               section_id,
               section_item_id,
               content,
@@ -167,13 +169,6 @@ class SupabaseDataSource implements CoreDataSource {
           ''')
           .eq('blueprint_id', blueprintId)
           .order('order_index', ascending: true);
-
-      print('DEBUG: sectionItems count = ${sectionItems.length}');
-      if (sectionItems.isNotEmpty) {
-        print('DEBUG: first sectionItem = ${sectionItems[0]}');
-        print('DEBUG: order_index type = ${sectionItems[0]['order_index'].runtimeType}');
-      }
-
       return sectionItems
           .map((item) => BlueprintSectionItemsDto.fromJson(item))
           .toList();
@@ -195,8 +190,22 @@ class SupabaseDataSource implements CoreDataSource {
     }
 
     try {
+      // Get user profile ID
+      final profileResponse = await supabase
+          .from('user_profile')
+          .select('id')
+          .eq('account_id', userId)
+          .maybeSingle();
+
+      if (profileResponse == null) {
+        throw Exception('User profile not found for user: $userId');
+      }
+
+      final userProfileId = profileResponse['id'] as String;
+
       final insertData = {
         'user_id': userId,
+        'user_profile_id': userProfileId,
         'section_id': sectionId,
         'section_item_id': sectionItemId,
         'content': content ?? {},
@@ -292,19 +301,16 @@ class SupabaseDataSource implements CoreDataSource {
               coach_comment,
               created_at,
               updated_at,
-              user_id (
+              user_profile!user_profile_id (
                 id,
-                user_profiles!account_id (
-                  id,
-                  nickname,
-                  profile_image_url
-                )
+                account_id,
+                nickname,
+                profile_image_url
               )
             )
           ''')
           .eq('blueprint_id', blueprintId)
           .order('order_index', ascending: true);
-
       // 6. Filter for "main_workout" (main workout) sections and collect records
       final List<SectionRecordDto> mainWorkoutRecords = [];
 
