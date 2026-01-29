@@ -8,7 +8,7 @@ part 'auth_data_source.g.dart';
 /// Authentication Data Source Provider
 @Riverpod(keepAlive: true)
 AuthDataSource authDataSource(Ref ref) {
-  final supabase = ref.watch(supabaseClientProvider);
+  final supabase = ref.read(supabaseClientProvider);
   return SupabaseAuthDataSource(supabase: supabase);
 }
 
@@ -198,9 +198,11 @@ class SupabaseAuthDataSource implements AuthDataSource {
         if (phoneNumber != null) 'phone_number': phoneNumber,
         if (fitnessGoals != null) 'fitness_goals': fitnessGoals,
         if (fitnessLevel != null) 'fitness_level': fitnessLevel,
-        if (onboardingCompleted != null) 'onboarding_completed': onboardingCompleted,
+        if (onboardingCompleted != null)
+          'onboarding_completed': onboardingCompleted,
         if (onboardingData != null) 'onboarding_data': onboardingData,
-        if (onboardingCompleted == true) 'onboarding_completed_at': DateTime.now().toIso8601String(),
+        if (onboardingCompleted == true)
+          'onboarding_completed_at': DateTime.now().toIso8601String(),
         'updated_at': DateTime.now().toIso8601String(),
       };
 

@@ -117,6 +117,71 @@ lib/src/
    - **AuthDataSource**: Separate interface for auth-related operations
    - **Purpose**: Single source of truth for all data models, shared across features
 
+### DTO JSON Serialization Rule
+
+**Always use `@JsonSerializable` generated factories for all DTOs.**
+
+```dart
+// ✅ Correct: Use generated factory
+@JsonSerializable()
+class MyDto {
+  final String id;
+  final String name;
+
+  MyDto({required this.id, required this.name});
+
+  factory MyDto.fromJson(Map<String, dynamic> json) =>
+      _$MyDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$MyDtoToJson(this);
+}
+
+// ❌ Wrong: Custom fromJson implementation
+@JsonSerializable()
+class MyDto {
+  final String id;
+  final String name;
+
+  MyDto({required this.id, required this.name});
+
+  factory MyDto.fromJson(Map<String, dynamic> json) {
+    return MyDto(
+      id: json['id'] as String,
+      name: json['name'] as String,
+    );
+  }
+  Map<String, dynamic> toJson() => _$MyDtoToJson(this);
+}
+```
+
+**Why?**
+- **Consistency**: All DTOs follow the same pattern
+- **Maintainability**: Single source of truth for serialization logic
+- **Type Safety**: Generated code handles null safety and type conversions
+- **Nested Objects**: `@JsonSerializable` automatically handles nested DTO serialization
+- **JSONB Fields**: Use `@JsonKey` annotations for Supabase jsonb columns
+
+**For Supabase jsonb arrays/objects, use `@JsonKey` annotations:**
+```dart
+@JsonSerializable()
+class UserProfileDto {
+  final String id;
+  @JsonKey(name: 'fitness_goals')
+  final List<String>? fitnessGoals;  // JSONB array
+  @JsonKey(name: 'onboarding_data')
+  final Map<String, dynamic>? onboardingData;  // JSONB object
+
+  UserProfileDto({
+    required this.id,
+    this.fitnessGoals,
+    this.onboardingData,
+  });
+
+  factory UserProfileDto.fromJson(Map<String, dynamic> json) =>
+      _$UserProfileDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$UserProfileDtoToJson(this);
+}
+```
+
 3. **Infra Layer** (`feature/*/infra/`):
    - **Entity**: Freezed immutable models for UI consumption
    - **Repository**: Uses `core/data` data sources, returns `FutureEither<AppException, Entity>`

@@ -68,30 +68,8 @@ class CoachProfileDto {
     required this.updatedAt,
   });
 
-  factory CoachProfileDto.fromJson(Map<String, dynamic> json) {
-    // Handle Supabase jsonb array quirks for certifications
-    List<String>? certs;
-    if (json['certifications'] != null) {
-      if (json['certifications'] is List) {
-        certs = (json['certifications'] as List)
-            .map((e) => e.toString())
-            .toList();
-      }
-    }
-
-    return CoachProfileDto(
-      id: json['id'] as String,
-      accountId: json['account_id'] as String,
-      profileImageUrl: json['profile_image_url'] as String?,
-      nickname: json['nickname'] as String?,
-      introduction: json['introduction'] as String?,
-      experience: json['experience'] as String?,
-      certifications: certs,
-      contactNumber: json['contact_number'] as String?,
-      snsLinks: json['sns_links'] as Map<String, dynamic>?,
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-    );
-  }
+  factory CoachProfileDto.fromJson(Map<String, dynamic> json) =>
+      _$CoachProfileDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$CoachProfileDtoToJson(this);
 }
@@ -136,35 +114,8 @@ class UserProfileDto {
     required this.updatedAt,
   });
 
-  factory UserProfileDto.fromJson(Map<String, dynamic> json) {
-    List<String>? goals;
-    if (json['fitness_goals'] != null) {
-      if (json['fitness_goals'] is List) {
-        goals = (json['fitness_goals'] as List)
-            .map((e) => e.toString())
-            .toList();
-      }
-    }
-
-    return UserProfileDto(
-      id: json['id'] as String,
-      accountId: json['account_id'] as String?,
-      nickname: json['nickname'] as String?,
-      bio: json['bio'] as String?,
-      profileImageUrl: json['profile_image_url'] as String?,
-      phoneNumber: json['phone_number'] as String?,
-      fitnessGoals: goals,
-      fitnessLevel: json['fitness_level'] as String?,
-      onboardingCompleted: json['onboarding_completed'] as bool?,
-      onboardingData: json['onboarding_data'] as Map<String, dynamic>?,
-      onboardingCompletedAt: json['onboarding_completed_at'] != null
-          ? DateTime.parse(json['onboarding_completed_at'] as String)
-          : null,
-      updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'] as String)
-          : DateTime.now(),
-    );
-  }
+  factory UserProfileDto.fromJson(Map<String, dynamic> json) =>
+      _$UserProfileDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserProfileDtoToJson(this);
 
@@ -370,69 +321,8 @@ class BlueprintSectionItemsDto {
     this.sectionRecord,
   });
 
-  factory BlueprintSectionItemsDto.fromJson(Map<String, dynamic> json) {
-    try {
-      // Extract nested blueprint_sections
-      BlueprintSectionsDto? section;
-      if (json['blueprint_sections'] != null &&
-          json['blueprint_sections'] is Map) {
-        section = BlueprintSectionsDto.fromJson(
-          json['blueprint_sections'] as Map<String, dynamic>,
-        );
-      }
-
-      // Extract nested section_records (filter by current user if multiple)
-      SectionRecordDto? record;
-      if (json['section_records'] != null) {
-        final recordsData = json['section_records'];
-        // Handle both single object and array
-        if (recordsData is Map) {
-          record = SectionRecordDto.fromJson(
-            recordsData as Map<String, dynamic>,
-          );
-        } else if (recordsData is List && recordsData.isNotEmpty) {
-          print('recordsData: $recordsData');
-
-          // Filter by current user's session records (we'd need userId here, but for now take first)
-          record = SectionRecordDto.fromJson(
-            recordsData[0] as Map<String, dynamic>,
-          );
-        }
-      }
-
-      // Safely parse order_index (handle both int and String from Supabase)
-      final orderIndexValue = json['order_index'];
-      final int orderIndex;
-      if (orderIndexValue is int) {
-        orderIndex = orderIndexValue;
-      } else if (orderIndexValue is String) {
-        orderIndex = int.parse(orderIndexValue);
-      } else if (orderIndexValue is double) {
-        orderIndex = orderIndexValue.toInt();
-      } else if (orderIndexValue is num) {
-        orderIndex = orderIndexValue.toInt();
-      } else {
-        print(
-          'Warning: order_index has unexpected type: ${orderIndexValue.runtimeType}, value: $orderIndexValue',
-        );
-        orderIndex = 0; // fallback
-      }
-
-      return BlueprintSectionItemsDto(
-        id: json['id'] as String,
-        blueprintId: json['blueprint_id'] as String,
-        sectionId: json['section_id'] as String,
-        orderIndex: orderIndex,
-        createdAt: DateTime.parse(json['created_at'] as String),
-        blueprintSection: section,
-        sectionRecord: record,
-      );
-    } catch (e) {
-      print('Error parsing BlueprintSectionItemsDto: $e');
-      print('JSON data: $json');
-      rethrow;
-    }
-  }
+  factory BlueprintSectionItemsDto.fromJson(Map<String, dynamic> json) =>
+      _$BlueprintSectionItemsDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$BlueprintSectionItemsDtoToJson(this);
 }
@@ -611,39 +501,8 @@ class SectionRecordDto {
     this.userProfile,
   });
 
-  factory SectionRecordDto.fromJson(Map<String, dynamic> json) {
-    // Extract nested user_profile (now directly accessible via user_profile_id join)
-    UserProfileDto? profile;
-    if (json['user_profile'] != null && json['user_profile'] is Map) {
-      print('userProfile: ${json['user_profile']}');
-      profile = UserProfileDto.fromJson(
-        json['user_profile'] as Map<String, dynamic>,
-      );
-    }
-    print('userProfile Started');
-
-    // Handle userProfileId - may not be present in older queries
-    String? userProfileId;
-    if (json['user_profile_id'] != null) {
-      userProfileId = json['user_profile_id'] as String?;
-    }
-    print('userProfile Completed');
-
-    return SectionRecordDto(
-      id: json['id'] as String,
-      userId: json['user_id'] as String,
-      userProfileId: userProfileId ?? '',
-      sectionId: json['section_id'] as String,
-      sectionItemId: json['section_item_id'] as String,
-      content: json['content'] as Map<String, dynamic>?,
-      completedAt: DateTime.parse(json['completed_at'] as String),
-      coachComment: json['coach_comment'] as String?,
-      recordType: json['record_type'] as String?,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-      userProfile: profile,
-    );
-  }
+  factory SectionRecordDto.fromJson(Map<String, dynamic> json) =>
+      _$SectionRecordDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$SectionRecordDtoToJson(this);
 }

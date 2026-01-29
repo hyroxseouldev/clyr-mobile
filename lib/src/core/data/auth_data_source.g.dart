@@ -52,4 +52,4 @@ final class AuthDataSourceProvider
   }
 }
 
-String _$authDataSourceHash() => r'effe8925ac4abe5adf4b2a4b2fab81cc555acc62';
+String _$authDataSourceHash() => r'f132774b9ddac149093d5798a4b59e039ddf1983';

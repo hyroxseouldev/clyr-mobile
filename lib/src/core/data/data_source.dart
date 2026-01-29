@@ -1,6 +1,5 @@
-import 'dart:math' as math;
-
 import 'package:clyr_mobile/src/core/data/dto.dart';
+import 'package:clyr_mobile/src/core/enum/enum.dart';
 import 'package:clyr_mobile/src/core/data/home_dto.dart';
 import 'package:clyr_mobile/src/core/data/log_dto.dart';
 import 'package:clyr_mobile/src/core/supabase/supabase_provider.dart';
@@ -11,7 +10,7 @@ part 'data_source.g.dart';
 
 @Riverpod(keepAlive: true)
 CoreDataSource coreDataSource(Ref ref) {
-  final supabase = ref.watch(supabaseClientProvider);
+  final supabase = ref.read(supabaseClientProvider);
   return SupabaseDataSource(supabase: supabase);
 }
 
@@ -237,9 +236,11 @@ class SupabaseDataSource implements CoreDataSource {
           'section_id': item['section_id'],
           'order_index': item['order_index'],
           'created_at': item['created_at'],
-          'blueprint_sections': item['blueprint_sections'],
-          'section_records': item['section_records'],
-          '_is_completed': isCompleted, // Add computed field
+          'title': item['blueprint_sections']['title'],
+          'content': item['blueprint_sections']['content'],
+          'record_type': item['blueprint_sections']['record_type'],
+          'is_recordable': item['blueprint_sections']['is_recordable'],
+          'is_completed': isCompleted, // Add computed field
         };
 
         return FlattenBlueprintSectionItemsDto.fromJson(flattenData);
@@ -558,54 +559,17 @@ class SupabaseDataSource implements CoreDataSource {
       }
 
       // 6. Sort allRecords by recordType before returning
+      // Use captured recordType, default to timeBased if not set
+      final recordTypeEnum = recordType != null
+          ? RecordTypeX.fromString(recordType)
+          : RecordType.timeBased;
+
       allRecords.sort((a, b) {
-        // Use captured recordType, default to TIME_BASED if not set
-        final recordTypeStr = recordType ?? 'TIME_BASED';
+        final aRecord = a.content?['record']?.toString();
+        final bRecord = b.content?['record']?.toString();
 
-        if (recordTypeStr == 'TIME_BASED') {
-          // Sort by content['record'] time string ascending (faster = better rank)
-          final aRecord = a.content?['record'];
-          final bRecord = b.content?['record'];
-
-          if (aRecord == null || bRecord == null) {
-            return 0; // Keep original order if null
-          }
-
-          // Parse time string (hh:mm:ss or mm:ss) to seconds
-          int parseTimeToSeconds(dynamic timeStr) {
-            if (timeStr == null) return 0;
-            final parts = timeStr.toString().split(':');
-            int seconds = 0;
-            for (int i = 0; i < parts.length; i++) {
-              final value = int.tryParse(parts[i]) ?? 0;
-              // Rightmost part is seconds, then minutes, then hours
-              seconds += value * math.pow(60, parts.length - 1 - i).toInt();
-            }
-            return seconds;
-          }
-
-          final aSeconds = parseTimeToSeconds(aRecord);
-          final bSeconds = parseTimeToSeconds(bRecord);
-
-          // Ascending: less time = better rank
-          return aSeconds.compareTo(bSeconds);
-        } else if (recordTypeStr == 'WEIGHT_BASED' ||
-            recordTypeStr == 'REP_BASED' ||
-            recordTypeStr == 'DISTANCE_BASED') {
-          // Sort by content['record'] as number descending (larger = better)
-          final aRecord = a.content?['record'];
-          final bRecord = b.content?['record'];
-
-          if (aRecord == null || bRecord == null) {
-            return 0; // Keep original order if null
-          }
-
-          // Parse as double for comparison (handles both double and string)
-          final aValue = double.tryParse(aRecord.toString()) ?? 0.0;
-          final bValue = double.tryParse(bRecord.toString()) ?? 0.0;
-
-          // Descending: larger value = better rank
-          return bValue.compareTo(aValue);
+        if (recordTypeEnum != null) {
+          return recordTypeEnum.compareRecords(aRecord, bRecord);
         }
 
         // Default: sort by completedAt ascending

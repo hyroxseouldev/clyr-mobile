@@ -18,14 +18,14 @@ class FlattenBlueprintSectionItemsDto {
   final DateTime createdAt;
 
   // BlueprintSections fields (flattened)
-  @JsonKey(name: 'section_title')
-  final String sectionTitle;
-  @JsonKey(name: 'section_content')
-  final String sectionContent;
-  @JsonKey(name: 'section_record_type')
-  final String? sectionRecordType;
-  @JsonKey(name: 'section_is_recordable')
-  final bool? sectionIsRecordable;
+  @JsonKey(name: 'title')
+  final String title;
+  @JsonKey(name: 'content')
+  final String content;
+  @JsonKey(name: 'record_type')
+  final String? recordType;
+  @JsonKey(name: 'is_recordable')
+  final bool? isRecordable;
 
   // Completion status
   @JsonKey(name: 'is_completed')
@@ -37,64 +37,15 @@ class FlattenBlueprintSectionItemsDto {
     required this.sectionId,
     required this.orderIndex,
     required this.createdAt,
-    required this.sectionTitle,
-    required this.sectionContent,
-    this.sectionRecordType,
-    this.sectionIsRecordable,
+    required this.title,
+    required this.content,
+    this.recordType,
+    this.isRecordable,
     required this.isCompleted,
   });
 
-  factory FlattenBlueprintSectionItemsDto.fromJson(Map<String, dynamic> json) {
-    // Extract blueprint_sections nested data
-    String sectionTitle = '';
-    String sectionContent = '';
-    String? sectionRecordType;
-    bool? sectionIsRecordable;
-
-    final section = json['blueprint_sections'];
-    if (section != null && section is Map) {
-      final sectionData = section as Map<String, dynamic>;
-      if (sectionData['title'] != null && sectionData['title'] is String) {
-        sectionTitle = sectionData['title'] as String;
-      }
-      if (sectionData['content'] != null && sectionData['content'] is String) {
-        sectionContent = sectionData['content'] as String;
-      }
-      if (sectionData['record_type'] != null && sectionData['record_type'] is String) {
-        sectionRecordType = sectionData['record_type'] as String;
-      }
-      if (sectionData['is_recordable'] != null && sectionData['is_recordable'] is bool) {
-        sectionIsRecordable = sectionData['is_recordable'] as bool;
-      }
-    }
-
-    // Check isCompleted: use pre-computed value or check section_records
-    bool isCompleted = false;
-    if (json['_is_completed'] case bool completed) {
-      isCompleted = completed;
-    } else {
-      final records = json['section_records'];
-      if (records != null && records is List) {
-        isCompleted = records.isNotEmpty;
-      }
-    }
-
-    // Create flattened JSON for auto-generated serializer
-    final flattenedJson = {
-      'id': json['id'],
-      'blueprint_id': json['blueprint_id'],
-      'section_id': json['section_id'],
-      'order_index': json['order_index'],
-      'created_at': json['created_at'],
-      'section_title': sectionTitle,
-      'section_content': sectionContent,
-      'section_record_type': sectionRecordType,
-      'section_is_recordable': sectionIsRecordable,
-      'is_completed': isCompleted,
-    };
-
-    return _$FlattenBlueprintSectionItemsDtoFromJson(flattenedJson);
-  }
+  factory FlattenBlueprintSectionItemsDto.fromJson(Map<String, dynamic> json) =>
+      _$FlattenBlueprintSectionItemsDtoFromJson(json);
 
   Map<String, dynamic> toJson() =>
       _$FlattenBlueprintSectionItemsDtoToJson(this);

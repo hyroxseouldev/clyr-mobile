@@ -57,13 +57,13 @@ abstract class BlueprintSectionEntity with _$BlueprintSectionEntity {
     return BlueprintSectionEntity(
       id: dto.id, // sectionItemId
       sectionId: dto.sectionId, // sectionId
-      title: dto.sectionTitle,
-      content: dto.sectionContent,
+      title: dto.title,
+      content: dto.content,
       orderIndex: dto.orderIndex,
       isCompleted: dto.isCompleted,
-      isRecordable: dto.sectionIsRecordable ?? false,
-      recordType: dto.sectionRecordType != null
-          ? RecordTypeX.fromString(dto.sectionRecordType)
+      isRecordable: dto.isRecordable ?? false,
+      recordType: dto.recordType != null
+          ? RecordTypeX.fromString(dto.recordType)
           : null,
     );
   }

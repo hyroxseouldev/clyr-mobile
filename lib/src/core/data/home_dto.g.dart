@@ -14,10 +14,10 @@ FlattenBlueprintSectionItemsDto _$FlattenBlueprintSectionItemsDtoFromJson(
   sectionId: json['section_id'] as String,
   orderIndex: (json['order_index'] as num).toInt(),
   createdAt: DateTime.parse(json['created_at'] as String),
-  sectionTitle: json['section_title'] as String,
-  sectionContent: json['section_content'] as String,
-  sectionRecordType: json['section_record_type'] as String?,
-  sectionIsRecordable: json['section_is_recordable'] as bool?,
+  title: json['title'] as String,
+  content: json['content'] as String,
+  recordType: json['record_type'] as String?,
+  isRecordable: json['is_recordable'] as bool?,
   isCompleted: json['is_completed'] as bool,
 );
 
@@ -29,10 +29,10 @@ Map<String, dynamic> _$FlattenBlueprintSectionItemsDtoToJson(
   'section_id': instance.sectionId,
   'order_index': instance.orderIndex,
   'created_at': instance.createdAt.toIso8601String(),
-  'section_title': instance.sectionTitle,
-  'section_content': instance.sectionContent,
-  'section_record_type': instance.sectionRecordType,
-  'section_is_recordable': instance.sectionIsRecordable,
+  'title': instance.title,
+  'content': instance.content,
+  'record_type': instance.recordType,
+  'is_recordable': instance.isRecordable,
   'is_completed': instance.isCompleted,
 };
 

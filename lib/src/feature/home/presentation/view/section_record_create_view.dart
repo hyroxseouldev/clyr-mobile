@@ -182,33 +182,18 @@ class SectionRecordCreateView extends HookConsumerWidget {
       }
     }
 
-    String _formatNotes(RecordType type) {
-      switch (type) {
-        case RecordType.timeBased:
-          final h = hoursController.text.trim();
-          final m = minutesController.text.trim();
-          final s = secondsController.text.trim();
-          // Format as hh:mm:ss
-          return '${h.padLeft(2, '0')}:${m.padLeft(2, '0')}:${s.padLeft(2, '0')}';
-        case RecordType.repBased:
-          final r = roundsController.text.trim();
-          final rep = repsController.text.trim();
-          return '$r Round $rep Rep';
-        case RecordType.weightBased:
-          final kg = weightController.text.trim();
-          return '$kg kg';
-        case RecordType.distanceBased:
-          final m = distanceController.text.trim();
-          return '$m m';
-        default:
-          return '';
-      }
-    }
-
     void handleConfirm() {
       if (!formKey.currentState!.validate()) return;
 
-      final notes = _formatNotes(selectedRecordType.value);
+      final notes = selectedRecordType.value.formatNotes(
+        hours: hoursController.text.trim(),
+        minutes: minutesController.text.trim(),
+        seconds: secondsController.text.trim(),
+        rounds: roundsController.text.trim(),
+        reps: repsController.text.trim(),
+        weight: weightController.text.trim(),
+        distance: distanceController.text.trim(),
+      );
 
       final content = {
         'recordType': selectedRecordType.value.value,
