@@ -4,20 +4,20 @@ class LogLeaderboardItemTile extends StatelessWidget {
   final int rank;
   final String username;
   final String value;
-  final bool isHover;
   final String? avatarUrl;
   final VoidCallback? onTap;
   final bool isCurrentUser;
+  final Key? itemKey;
 
   const LogLeaderboardItemTile({
     super.key,
     required this.rank,
     required this.username,
     required this.value,
-    this.isHover = false,
     this.avatarUrl,
     this.onTap,
     this.isCurrentUser = false,
+    this.itemKey,
   });
 
   @override
@@ -26,40 +26,26 @@ class LogLeaderboardItemTile extends StatelessWidget {
     final rankColor = _getRankColor(context, rank);
     final theme = Theme.of(context);
 
-    // Background color with animation support
+    // Background color
     final backgroundColor = isCurrentUser
         ? theme.colorScheme.secondaryContainer.withValues(alpha: 0.5)
-        : isHover
-            ? theme.colorScheme.surfaceContainerHighest
-            : isTop3
-                ? theme.colorScheme.primaryContainer.withValues(alpha: 0.3)
-                : null;
+        : isTop3
+            ? theme.colorScheme.primaryContainer.withValues(alpha: 0.3)
+            : null;
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeInOut,
+    return Container(
+      key: itemKey, // Pass itemKey to Container for RenderBox access
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: isHover
-              ? theme.colorScheme.primary
-              : isCurrentUser
-                  ? theme.colorScheme.secondary.withValues(alpha: 0.5)
-                  : Colors.transparent,
-          width: isCurrentUser ? 2 : 1,
+          color: isCurrentUser
+              ? theme.colorScheme.secondary.withValues(alpha: 0.5)
+              : Colors.transparent,
+          width: 2,
         ),
-        boxShadow: isHover
-            ? [
-                BoxShadow(
-                  color: theme.colorScheme.primary.withValues(alpha: 0.2),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ]
-            : null,
       ),
       child: InkWell(
         onTap: onTap,
@@ -70,15 +56,13 @@ class LogLeaderboardItemTile extends StatelessWidget {
             _buildRankBadge(context, rank, rankColor),
             const SizedBox(width: 8),
 
-            // Avatar (optional)
-            if (avatarUrl != null) ...[
-              _buildAvatar(context, avatarUrl!),
-              const SizedBox(width: 12),
-            ],
+            // Avatar (always shown)
+            _buildAvatar(context, avatarUrl, username),
+            const SizedBox(width: 12),
 
-            // Username (flex: 3)
+            // Username (flex: 4)
             Expanded(
-              flex: 3,
+              flex: 4,
               child: Text(
                 username,
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -90,9 +74,9 @@ class LogLeaderboardItemTile extends StatelessWidget {
               ),
             ),
 
-            // Value (flex: 1)
+            // Value (flex: 2)
             Expanded(
-              flex: 1,
+              flex: 2,
               child: Text(
                 value,
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -130,7 +114,11 @@ class LogLeaderboardItemTile extends StatelessWidget {
     );
   }
 
-  Widget _buildAvatar(BuildContext context, String avatarUrl) {
+  Widget _buildAvatar(BuildContext context, String? avatarUrl, String username) {
+    if (avatarUrl == null || avatarUrl.isEmpty) {
+      return _buildAvatarFallback(context, username);
+    }
+
     return ClipOval(
       child: Image.network(
         avatarUrl,
@@ -138,28 +126,35 @@ class LogLeaderboardItemTile extends StatelessWidget {
         height: 40,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) {
-          return _buildAvatarFallback(context);
+          return _buildAvatarFallback(context, username);
         },
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;
-          return _buildAvatarFallback(context);
+          return _buildAvatarFallback(context, username);
         },
       ),
     );
   }
 
-  Widget _buildAvatarFallback(BuildContext context) {
+  Widget _buildAvatarFallback(BuildContext context, String username) {
+    final theme = Theme.of(context);
+    final firstLetter = username.isNotEmpty ? username[0].toUpperCase() : '?';
+
     return Container(
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        color: theme.colorScheme.primary.withValues(alpha: 0.2),
         shape: BoxShape.circle,
       ),
-      child: Icon(
-        Icons.person,
-        size: 24,
-        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      child: Center(
+        child: Text(
+          firstLetter,
+          style: theme.textTheme.titleMedium?.copyWith(
+            color: theme.colorScheme.primary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }

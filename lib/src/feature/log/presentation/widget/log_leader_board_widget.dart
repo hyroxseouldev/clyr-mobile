@@ -1,4 +1,5 @@
 import 'package:clyr_mobile/src/feature/log/infra/entity/log_entity.dart';
+import 'package:clyr_mobile/src/feature/log/presentation/widget/log_leaderboard_item_tile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -46,13 +47,29 @@ class _LogLeaderBoardWidgetState extends State<LogLeaderBoardWidget> {
 
     final position = renderBox.localToGlobal(Offset.zero);
     final screenHeight = MediaQuery.of(context).size.height;
-    final isVisible = position.dy >= 0 && position.dy < screenHeight;
+    final itemHeight = renderBox.size.height;
+
+    // Item is visible if any portion is within screen bounds
+    final itemTop = position.dy;
+    final itemBottom = position.dy + itemHeight;
+    final isVisible = itemBottom > 0 && itemTop < screenHeight;
 
     if (_isMyItemVisible != isVisible) {
       setState(() {
         _isMyItemVisible = isVisible;
       });
     }
+  }
+
+  void _scrollToMyItem() {
+    if (_itemKey.currentContext == null) return;
+
+    Scrollable.ensureVisible(
+      _itemKey.currentContext!,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      alignment: 0.5, // Center the item
+    );
   }
 
   @override
@@ -66,25 +83,20 @@ class _LogLeaderBoardWidgetState extends State<LogLeaderBoardWidget> {
     }
   }
 
-  Color _getRankColor(int rank) {
-    return switch (rank) {
-      1 => Colors.amber, // Gold
-      2 => Colors.grey.shade400, // Silver
-      3 => Colors.brown.shade400, // Bronze
-      _ => Colors.grey,
-    };
-  }
-
-  String _formatContent(Map<String, dynamic>? content) {
+  /// Extracts the "record" value from content map.
+  /// Returns '-' if content is null, empty, or record key doesn't exist.
+  String _getRecordValue(Map<String, dynamic>? content) {
     if (content == null || content.isEmpty) {
-      return '{ }';
+      return '-';
     }
-    // Display as { key: value, key: value }
-    final entries = content.entries
-        .take(3)
-        .map((e) => '${e.key}: ${e.value}')
-        .join(', ');
-    return '{ $entries }';
+
+    final recordValue = content['record'];
+    if (recordValue == null) {
+      return '-';
+    }
+
+    final valueStr = recordValue.toString();
+    return valueStr.isNotEmpty ? valueStr : '-';
   }
 
   @override
@@ -136,10 +148,13 @@ class _LogLeaderBoardWidgetState extends State<LogLeaderBoardWidget> {
               final entry = widget.entries[index];
               final isMyItem = entry.userId == widget.currentUserId;
 
-              return _buildListItem(
-                entry,
-                isMyItem,
-                isMyItem ? _itemKey : null,
+              return LogLeaderboardItemTile(
+                rank: entry.rank,
+                username: entry.userName,
+                value: _getRecordValue(entry.content),
+                isCurrentUser: isMyItem,
+                avatarUrl: entry.userProfileImageUrl,
+                itemKey: isMyItem ? _itemKey : null,
               );
             },
           ),
@@ -156,176 +171,79 @@ class _LogLeaderBoardWidgetState extends State<LogLeaderBoardWidget> {
     );
   }
 
-  Widget _buildListItem(LeaderboardEntryEntity entry, bool isMyItem, Key? key) {
-    final isTop3 = entry.rank <= 3;
-
-    return Container(
-      key: key,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: isMyItem
-          ? BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context).colorScheme.primary,
-                width: 2,
-              ),
-              borderRadius: BorderRadius.circular(12),
-            )
-          : null,
-      child: Card(
-        elevation: isTop3 ? 2 : 0,
-        color: isTop3 ? Theme.of(context).colorScheme.primaryContainer : null,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Row(
-            children: [
-              // Rank badge
-              _buildRankBadge(entry.rank),
-              const SizedBox(width: 8),
-              // Dot separator
-              Text(
-                '·',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(width: 8),
-              // User name (80%)
-              Expanded(
-                flex: 4,
-                child: Text(
-                  entry.userName,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: isTop3 ? FontWeight.bold : FontWeight.normal,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              const Spacer(flex: 1),
-              // Record label + value (20%)
-              Flexible(
-                flex: 1,
-                child: Text(
-                  '기록 ${_formatContent(entry.content)}',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRankBadge(int rank) {
-    if (rank <= 3) {
-      return Container(
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          color: _getRankColor(rank),
-          shape: BoxShape.circle,
-        ),
-        child: Center(
-          child: Text(
-            '$rank',
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-        ),
-      );
-    }
-    return Container(
-      width: 36,
-      height: 36,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade300,
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Text(
-          '$rank',
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildFloatingMyItem(LeaderboardEntryEntity entry) {
     return Material(
       elevation: 8,
       borderRadius: BorderRadius.circular(12),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Theme.of(context).colorScheme.primary,
-              Theme.of(context).colorScheme.primaryContainer,
+      child: InkWell(
+        onTap: _scrollToMyItem,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.primaryContainer,
+              ],
+            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              // User avatar and info
+              if (entry.userProfileImageUrl != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundImage: CachedNetworkImageProvider(
+                      entry.userProfileImageUrl!,
+                    ),
+                    onBackgroundImageError: (_, __) {},
+                  ),
+                )
+              else
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.white24,
+                    child: Text(
+                      entry.userName.isNotEmpty
+                          ? entry.userName[0].toUpperCase()
+                          : '?',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'MY RANK: #${entry.rank}',
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      entry.userName,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(Icons.arrow_downward, color: Colors.white),
             ],
           ),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          children: [
-            // User avatar and info
-            if (entry.userProfileImageUrl != null)
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundImage: CachedNetworkImageProvider(
-                    entry.userProfileImageUrl!,
-                  ),
-                  onBackgroundImageError: (_, __) {},
-                ),
-              )
-            else
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Colors.white24,
-                  child: Text(
-                    entry.userName.isNotEmpty
-                        ? entry.userName[0].toUpperCase()
-                        : '?',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'MY RANK: #${entry.rank}',
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    entry.userName,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
-                  ),
-                ],
-              ),
-            ),
-            Icon(Icons.arrow_downward, color: Colors.white),
-          ],
         ),
       ),
     );
