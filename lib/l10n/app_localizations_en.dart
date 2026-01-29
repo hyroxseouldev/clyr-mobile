@@ -583,4 +583,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recordTypeOther => 'Other';
+
+  @override
+  String get blueprintTitleCoolDown => 'Cool Down';
+
+  @override
+  String get blueprintTitleWarmUp => 'Warm Up';
+
+  @override
+  String get blueprintTitleMainWorkout => 'Main Workout';
+
+  @override
+  String get blueprintTitleAerobics => 'Aerobics';
+
+  @override
+  String get blueprintTitleAccessory => 'Accessory';
+
+  @override
+  String get enrollmentStatusActive => 'Active';
+
+  @override
+  String get enrollmentStatusInactive => 'Inactive';
+
+  @override
+  String get enrollmentStatusCancelled => 'Cancelled';
+
+  @override
+  String get enrollmentStatusExpired => 'Expired';
+
+  @override
+  String get orderStatusPending => 'Pending';
+
+  @override
+  String get orderStatusCompleted => 'Completed';
+
+  @override
+  String get orderStatusCancelled => 'Cancelled';
 }

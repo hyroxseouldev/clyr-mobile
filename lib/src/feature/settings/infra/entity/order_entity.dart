@@ -12,14 +12,6 @@ enum OrderStatus {
   @JsonValue('CANCELLED')
   cancelled;
 
-  String get displayName {
-    return switch (this) {
-      OrderStatus.pending => '결제 대기',
-      OrderStatus.completed => '결제 완료',
-      OrderStatus.cancelled => '결제 취소',
-    };
-  }
-
   static OrderStatus fromString(String? value) {
     if (value == null) return OrderStatus.pending;
     return switch (value.toUpperCase()) {
@@ -52,7 +44,7 @@ abstract class OrderEntity with _$OrderEntity {
       buyerId: dto.buyerId,
       programId: dto.programId,
       coachId: dto.coachId,
-      amount: double.tryParse(dto.amount ?? '') ?? 0.0,
+      amount: dto.amount?.toDouble() ?? 0.0,
       status: OrderStatus.fromString(dto.status),
       paymentKey: dto.paymentKey,
       createdAt: dto.createdAt,

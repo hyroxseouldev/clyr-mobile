@@ -75,31 +75,16 @@ class _LogLeaderBoardWidgetState extends State<LogLeaderBoardWidget> {
     };
   }
 
-  IconData _getRankIcon(int rank) {
-    return switch (rank) {
-      1 => Icons.emoji_events,
-      2 => Icons.military_tech,
-      3 => Icons.workspace_premium,
-      _ => Icons.person,
-    };
-  }
-
   String _formatContent(Map<String, dynamic>? content) {
     if (content == null || content.isEmpty) {
-      return '-';
+      return '{ }';
     }
-    // Display content as key-value pairs, e.g., "weight: 80kg, reps: 10"
+    // Display as { key: value, key: value }
     final entries = content.entries
         .take(3)
-        .map((e) {
-          final value = e.value;
-          if (value is num) {
-            return '${e.key}: ${value.toString()}';
-          }
-          return '${e.key}: ${value.toString()}';
-        })
+        .map((e) => '${e.key}: ${e.value}')
         .join(', ');
-    return entries;
+    return '{ $entries }';
   }
 
   @override
@@ -176,6 +161,7 @@ class _LogLeaderBoardWidgetState extends State<LogLeaderBoardWidget> {
 
     return Container(
       key: key,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: isMyItem
           ? BoxDecoration(
               border: Border.all(
@@ -188,96 +174,44 @@ class _LogLeaderBoardWidgetState extends State<LogLeaderBoardWidget> {
       child: Card(
         elevation: isTop3 ? 2 : 0,
         color: isTop3 ? Theme.of(context).colorScheme.primaryContainer : null,
-        shape: isMyItem
-            ? RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-                side: BorderSide.none,
-              )
-            : null,
-        child: ListTile(
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 8,
-          ),
-          leading: _buildRankBadge(entry.rank),
-          leadingAndTrailingTextStyle: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-          title: Row(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
             children: [
-              if (entry.userProfileImageUrl != null)
-                Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundImage: CachedNetworkImageProvider(
-                      entry.userProfileImageUrl!,
-                    ),
-                    onBackgroundImageError: (_, __) {},
-                    child: entry.userProfileImageUrl == null
-                        ? Text(
-                            entry.userName.isNotEmpty
-                                ? entry.userName[0].toUpperCase()
-                                : '?',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : null,
-                  ),
-                )
-              else
-                Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    child: Text(
-                      entry.userName.isNotEmpty
-                          ? entry.userName[0].toUpperCase()
-                          : '?',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+              // Rank badge
+              _buildRankBadge(entry.rank),
+              const SizedBox(width: 8),
+              // Dot separator
+              Text(
+                '·',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(width: 8),
+              // User name (80%)
               Expanded(
+                flex: 4,
                 child: Text(
                   entry.userName,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: isTop3 ? FontWeight.bold : FontWeight.normal,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-            ],
-          ),
-          subtitle: Row(
-            children: [
-              const Icon(Icons.fitness_center, size: 14),
-              const SizedBox(width: 4),
-              Expanded(
+              const Spacer(flex: 1),
+              // Record label + value (20%)
+              Flexible(
+                flex: 1,
                 child: Text(
-                  _formatContent(entry.content),
+                  '기록 ${_formatContent(entry.content)}',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
           ),
-          trailing: isTop3
-              ? Icon(
-                  _getRankIcon(entry.rank),
-                  color: _getRankColor(entry.rank),
-                  size: 28,
-                )
-              : Text(
-                  '#${entry.rank}',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
         ),
       ),
     );

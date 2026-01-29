@@ -1219,6 +1219,78 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'기타'**
   String get recordTypeOther;
+
+  /// No description provided for @blueprintTitleCoolDown.
+  ///
+  /// In ko, this message translates to:
+  /// **'쿨다운'**
+  String get blueprintTitleCoolDown;
+
+  /// No description provided for @blueprintTitleWarmUp.
+  ///
+  /// In ko, this message translates to:
+  /// **'웜업'**
+  String get blueprintTitleWarmUp;
+
+  /// No description provided for @blueprintTitleMainWorkout.
+  ///
+  /// In ko, this message translates to:
+  /// **'메인 운동'**
+  String get blueprintTitleMainWorkout;
+
+  /// No description provided for @blueprintTitleAerobics.
+  ///
+  /// In ko, this message translates to:
+  /// **'에어로빅'**
+  String get blueprintTitleAerobics;
+
+  /// No description provided for @blueprintTitleAccessory.
+  ///
+  /// In ko, this message translates to:
+  /// **'악세서리'**
+  String get blueprintTitleAccessory;
+
+  /// No description provided for @enrollmentStatusActive.
+  ///
+  /// In ko, this message translates to:
+  /// **'활성'**
+  String get enrollmentStatusActive;
+
+  /// No description provided for @enrollmentStatusInactive.
+  ///
+  /// In ko, this message translates to:
+  /// **'비활성'**
+  String get enrollmentStatusInactive;
+
+  /// No description provided for @enrollmentStatusCancelled.
+  ///
+  /// In ko, this message translates to:
+  /// **'취소됨'**
+  String get enrollmentStatusCancelled;
+
+  /// No description provided for @enrollmentStatusExpired.
+  ///
+  /// In ko, this message translates to:
+  /// **'만료됨'**
+  String get enrollmentStatusExpired;
+
+  /// No description provided for @orderStatusPending.
+  ///
+  /// In ko, this message translates to:
+  /// **'결제 대기'**
+  String get orderStatusPending;
+
+  /// No description provided for @orderStatusCompleted.
+  ///
+  /// In ko, this message translates to:
+  /// **'결제 완료'**
+  String get orderStatusCompleted;
+
+  /// No description provided for @orderStatusCancelled.
+  ///
+  /// In ko, this message translates to:
+  /// **'결제 취소'**
+  String get orderStatusCancelled;
 }
 
 class _AppLocalizationsDelegate

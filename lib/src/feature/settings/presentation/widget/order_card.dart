@@ -1,4 +1,6 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/entity/order_entity.dart';
+import 'package:clyr_mobile/src/feature/settings/infra/entity/order_entity_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -64,6 +66,8 @@ class OrderCard extends StatelessWidget {
   }
 
   Widget _buildStatusChip(BuildContext context, OrderStatus status) {
+    final l10n = AppLocalizations.of(context)!;
+
     Color backgroundColor;
     Color textColor;
 
@@ -89,7 +93,7 @@ class OrderCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Text(
-        status.displayName,
+        status.getLocalizedName(l10n),
         style: TextStyle(
           color: textColor,
           fontSize: 12,

@@ -207,5 +207,20 @@
   "recordTypeSurvey": "Survey",
   "recordTypeChecklist": "Checklist",
   "recordTypePhoto": "Photo",
-  "recordTypeOther": "Other"
+  "recordTypeOther": "Other",
+
+  "blueprintTitleCoolDown": "Cool Down",
+  "blueprintTitleWarmUp": "Warm Up",
+  "blueprintTitleMainWorkout": "Main Workout",
+  "blueprintTitleAerobics": "Aerobics",
+  "blueprintTitleAccessory": "Accessory",
+
+  "enrollmentStatusActive": "Active",
+  "enrollmentStatusInactive": "Inactive",
+  "enrollmentStatusCancelled": "Cancelled",
+  "enrollmentStatusExpired": "Expired",
+
+  "orderStatusPending": "Pending",
+  "orderStatusCompleted": "Completed",
+  "orderStatusCancelled": "Cancelled"
 }

@@ -280,7 +280,7 @@ OrdersDto _$OrdersDtoFromJson(Map<String, dynamic> json) => OrdersDto(
   buyerId: json['buyer_id'] as String,
   programId: json['program_id'] as String,
   coachId: json['coach_id'] as String,
-  amount: json['amount'] as String?,
+  amount: (json['amount'] as num?)?.toInt(),
   status: json['status'] as String?,
   paymentKey: json['payment_key'] as String?,
   createdAt: DateTime.parse(json['created_at'] as String),

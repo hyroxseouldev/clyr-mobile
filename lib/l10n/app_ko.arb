@@ -207,5 +207,20 @@
   "recordTypeSurvey": "설문",
   "recordTypeChecklist": "체크리스트",
   "recordTypePhoto": "사진",
-  "recordTypeOther": "기타"
+  "recordTypeOther": "기타",
+
+  "blueprintTitleCoolDown": "쿨다운",
+  "blueprintTitleWarmUp": "웜업",
+  "blueprintTitleMainWorkout": "메인 운동",
+  "blueprintTitleAerobics": "에어로빅",
+  "blueprintTitleAccessory": "악세서리",
+
+  "enrollmentStatusActive": "활성",
+  "enrollmentStatusInactive": "비활성",
+  "enrollmentStatusCancelled": "취소됨",
+  "enrollmentStatusExpired": "만료됨",
+
+  "orderStatusPending": "결제 대기",
+  "orderStatusCompleted": "결제 완료",
+  "orderStatusCancelled": "결제 취소"
 }

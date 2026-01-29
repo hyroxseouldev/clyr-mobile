@@ -392,7 +392,8 @@ class OrdersDto {
   final String programId;
   @JsonKey(name: 'coach_id')
   final String coachId;
-  final String? amount;
+  @JsonKey(name: 'amount')
+  final int? amount;
   final String? status;
   @JsonKey(name: 'payment_key')
   final String? paymentKey;

@@ -1,4 +1,6 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/entity/enrollment_entity.dart';
+import 'package:clyr_mobile/src/feature/settings/infra/entity/enrollment_entity_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -73,6 +75,8 @@ class EnrollmentCard extends StatelessWidget {
   }
 
   Widget _buildStatusChip(BuildContext context, EnrollmentStatus status) {
+    final l10n = AppLocalizations.of(context)!;
+
     Color backgroundColor;
     Color textColor;
 
@@ -102,7 +106,7 @@ class EnrollmentCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Text(
-        status.displayName,
+        status.getLocalizedName(l10n),
         style: TextStyle(
           color: textColor,
           fontSize: 12,

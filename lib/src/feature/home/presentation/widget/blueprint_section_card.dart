@@ -1,3 +1,5 @@
+import 'package:clyr_mobile/l10n/app_localizations.dart';
+import 'package:clyr_mobile/src/core/enum/blueprint_card_title_localization.dart';
 import 'package:clyr_mobile/src/core/enum/enum.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/feature/home/infra/entity/home_entity.dart';
@@ -40,9 +42,11 @@ class BlueprintSectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     // Convert title to enum display name
     final titleEnum = BlueprintCardTitleEnumX.fromString(item.title);
-    final displayTitle = titleEnum?.displayName ?? item.title;
+    final displayTitle = titleEnum?.getLocalizedName(l10n) ?? item.title;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),

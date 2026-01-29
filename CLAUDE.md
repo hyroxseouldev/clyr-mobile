@@ -182,6 +182,56 @@ class UserProfileDto {
 }
 ```
 
+### Enum Localization Rule
+
+**Always use separate `*_localization.dart` extension for enum localization.**
+
+#### File Structure
+```
+lib/src/core/enum/
+├── enum.dart                          # Enum + basic extensions (JSON, fromString)
+├── record_type_localization.dart      # RecordType localization
+├── blueprint_card_title_localization.dart  # BlueprintCardTitleEnum localization
+└── ...
+
+lib/src/feature/*/infra/entity/
+├── *_entity.dart                      # Enum + basic extensions
+├── *_entity_localization.dart         # Enum localization
+└── ...
+```
+
+#### Pattern
+1. **`enum.dart` or `*_entity.dart`**: Define enum + basic extensions (value, fromString)
+2. **`*_localization.dart`**: Define `getLocalizedName(AppLocalizations)` extension
+3. **Widgets**: Receive localized strings as parameters from View layer
+
+#### Example
+```dart
+// enum.dart - Basic extensions only
+extension RecordTypeX on RecordType {
+  String get value => switch (this) {
+    RecordType.timeBased => 'TIME_BASED',
+    // ...
+  };
+}
+
+// record_type_localization.dart - Localization only
+extension RecordTypeL10n on RecordType {
+  String getLocalizedName(AppLocalizations l10n) => switch (this) {
+    RecordType.timeBased => l10n.recordTypeTimeBased,
+    // ...
+  };
+}
+
+// View - Handle localization
+final displayTitle = titleEnum?.getLocalizedName(l10n) ?? item.title;
+MyWidget(title: displayTitle);  // Pass localized string
+```
+
+#### Naming Convention
+- Basic extension: `{EnumName}X`
+- Localization extension: `{EnumName}L10n` or `{EnumName}Localization`
+
 3. **Infra Layer** (`feature/*/infra/`):
    - **Entity**: Freezed immutable models for UI consumption
    - **Repository**: Uses `core/data` data sources, returns `FutureEither<AppException, Entity>`

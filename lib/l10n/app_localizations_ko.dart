@@ -576,4 +576,40 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get recordTypeOther => '기타';
+
+  @override
+  String get blueprintTitleCoolDown => '쿨다운';
+
+  @override
+  String get blueprintTitleWarmUp => '웜업';
+
+  @override
+  String get blueprintTitleMainWorkout => '메인 운동';
+
+  @override
+  String get blueprintTitleAerobics => '에어로빅';
+
+  @override
+  String get blueprintTitleAccessory => '악세서리';
+
+  @override
+  String get enrollmentStatusActive => '활성';
+
+  @override
+  String get enrollmentStatusInactive => '비활성';
+
+  @override
+  String get enrollmentStatusCancelled => '취소됨';
+
+  @override
+  String get enrollmentStatusExpired => '만료됨';
+
+  @override
+  String get orderStatusPending => '결제 대기';
+
+  @override
+  String get orderStatusCompleted => '결제 완료';
+
+  @override
+  String get orderStatusCancelled => '결제 취소';
 }

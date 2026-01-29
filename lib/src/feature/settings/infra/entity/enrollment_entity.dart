@@ -14,15 +14,6 @@ enum EnrollmentStatus {
   @JsonValue('EXPIRED')
   expired;
 
-  String get displayName {
-    return switch (this) {
-      EnrollmentStatus.active => '활성',
-      EnrollmentStatus.inactive => '비활성',
-      EnrollmentStatus.cancelled => '취소됨',
-      EnrollmentStatus.expired => '만료됨',
-    };
-  }
-
   static EnrollmentStatus fromString(String? value) {
     if (value == null) return EnrollmentStatus.inactive;
     return switch (value.toUpperCase()) {

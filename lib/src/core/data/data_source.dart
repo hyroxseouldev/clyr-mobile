@@ -542,7 +542,7 @@ class SupabaseDataSource implements CoreDataSource {
                   'profile_image_url':
                       record['user_profile']['profile_image_url'],
                 };
-                print('flattendData = $flattendData');
+
                 final recordDto = SectionRecordWithUserProfileDto.fromJson(
                   flattendData,
                 );

@@ -34,17 +34,6 @@ extension RecordTypeX on RecordType {
         RecordType.other => 'OTHER',
       };
 
-  String get displayName => switch (this) {
-        RecordType.timeBased => '시간 기반',
-        RecordType.weightBased => '무게 기반',
-        RecordType.repBased => '횟수 기반',
-        RecordType.distanceBased => '거리 기반',
-        RecordType.survey => '설문',
-        RecordType.checklist => '체크리스트',
-        RecordType.photo => '사진',
-        RecordType.other => '기타',
-      };
-
   static RecordType? fromString(String? value) => switch (value) {
         'TIME_BASED' => RecordType.timeBased,
         'WEIGHT_BASED' => RecordType.weightBased,
@@ -79,14 +68,6 @@ extension BlueprintCardTitleEnumX on BlueprintCardTitleEnum {
         BlueprintCardTitleEnum.mainWorkout => 'main_workout',
         BlueprintCardTitleEnum.aerobics => 'aerobics',
         BlueprintCardTitleEnum.accessory => 'accessory',
-      };
-
-  String get displayName => switch (this) {
-        BlueprintCardTitleEnum.coolDown => '쿨다운',
-        BlueprintCardTitleEnum.warmUp => '웜업',
-        BlueprintCardTitleEnum.mainWorkout => '메인 운동',
-        BlueprintCardTitleEnum.aerobics => '에어로빅',
-        BlueprintCardTitleEnum.accessory => '악세서리',
       };
 
   static BlueprintCardTitleEnum? fromString(String? value) => switch (value) {
