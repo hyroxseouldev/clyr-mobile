@@ -1,18 +1,18 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:clyr_mobile/src/core/data/data_source.dart';
-import 'package:clyr_mobile/src/core/exception/exception.dart';
-import 'package:clyr_mobile/src/core/typedef/typedef.dart';
+import 'package:clyr_mobile/src/core/error/exception.dart';
+import 'package:clyr_mobile/src/core/util/type_defs.dart';
 import 'package:clyr_mobile/src/feature/log/infra/entity/log_entity.dart';
 
 /// Log 데이터 소스 인터페이스
 abstract class LogRepository {
   /// 지정된 날짜의 리더보드 엔트리들을 가져옵니다
-  FutureEither<AppException, List<LeaderboardEntryEntity>> getLeaderboard({
+  FutureEither<List<LeaderboardEntryEntity>> getLeaderboard({
     required DateTime date,
   });
 
   /// 지정된 날짜의 오늘 리더보드를 가져옵니다 (내 기록 포함)
-  FutureEither<AppException, TodayLeaderBoardEntity> getTodayLeaderBoard({
+  FutureEither<TodayLeaderBoardEntity> getTodayLeaderBoard({
     required DateTime date,
     bool isTest = false,
   });
@@ -25,7 +25,7 @@ class LogRepositoryImpl implements LogRepository {
   LogRepositoryImpl({required this.dataSource});
 
   @override
-  FutureEither<AppException, List<LeaderboardEntryEntity>> getLeaderboard({
+  FutureEither<List<LeaderboardEntryEntity>> getLeaderboard({
     required DateTime date,
   }) async {
     try {
@@ -45,13 +45,13 @@ class LogRepositoryImpl implements LogRepository {
       return right(entities);
     } catch (e) {
       return left(
-        LogException(code: 'LEADERBOARD_FETCH_FAILED', message: e.toString()),
+        AppException.log(e.toString()),
       );
     }
   }
 
   @override
-  FutureEither<AppException, TodayLeaderBoardEntity> getTodayLeaderBoard({
+  FutureEither<TodayLeaderBoardEntity> getTodayLeaderBoard({
     required DateTime date,
     bool isTest = false,
   }) async {
@@ -64,7 +64,7 @@ class LogRepositoryImpl implements LogRepository {
       return right(entity);
     } catch (e) {
       return left(
-        LogException(code: 'TODAY_LEADERBOARD_FETCH_FAILED', message: e.toString()),
+        AppException.log(e.toString()),
       );
     }
   }

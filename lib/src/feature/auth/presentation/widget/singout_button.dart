@@ -1,5 +1,5 @@
 import 'package:clyr_mobile/src/feature/auth/presentation/provider/auth_controller.dart';
-import 'package:clyr_mobile/src/shared/async_button.dart';
+import 'package:clyr_mobile/src/shared/widgets/async_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

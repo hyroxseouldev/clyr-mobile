@@ -8,17 +8,17 @@ part of 'home_repository_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// 홈 리포지토리 프로바이더
+/// Riverpod provider for HomeRepository
 
 @ProviderFor(homeRepository)
 final homeRepositoryProvider = HomeRepositoryProvider._();
 
-/// 홈 리포지토리 프로바이더
+/// Riverpod provider for HomeRepository
 
 final class HomeRepositoryProvider
     extends $FunctionalProvider<HomeRepository, HomeRepository, HomeRepository>
     with $Provider<HomeRepository> {
-  /// 홈 리포지토리 프로바이더
+  /// Riverpod provider for HomeRepository
   HomeRepositoryProvider._()
     : super(
         from: null,
@@ -52,4 +52,4 @@ final class HomeRepositoryProvider
   }
 }
 
-String _$homeRepositoryHash() => r'b5c139b45516c9440671560956043568210d74b6';
+String _$homeRepositoryHash() => r'4a09857c247d9401365444f1901157c5f2343e1d';

@@ -6,9 +6,8 @@ import 'package:clyr_mobile/src/feature/log/infra/entity/log_entity.dart';
 import 'package:clyr_mobile/src/feature/log/presentation/provider/today_leaderboard_provider.dart';
 import 'package:clyr_mobile/src/feature/log/presentation/widget/leaderboard_session_box.dart';
 import 'package:clyr_mobile/src/feature/log/presentation/widget/log_leader_board_widget.dart';
-import 'package:clyr_mobile/src/shared/async_widget.dart';
-import 'package:clyr_mobile/src/shared/widgets/date_selection/date_selection_type.dart';
-import 'package:clyr_mobile/src/shared/widgets/date_selection/date_selection_widget.dart';
+import 'package:clyr_mobile/src/shared/widgets/async_widget.dart';
+import 'package:clyr_mobile/src/shared/widgets/date_selector/date_selector_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -51,16 +50,13 @@ class LogView extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // 가로로 스크롤 되는 날짜 선택 위젯
-                        DateSelectionWidget(
-                          showType: DateSelectionType.weekly,
-                          selectedDate: selectedDate,
+                        DateSelectorWidget(
+                          initialDate: selectedDate,
                           onDateSelected: (date) {
                             ref
                                 .read(selectedDateProvider.notifier)
                                 .setSelectedDate(date);
                           },
-                          startDate: startDate,
-                          endDate: endDate,
                         ),
                       ],
                     );

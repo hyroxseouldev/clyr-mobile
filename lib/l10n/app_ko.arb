@@ -5,7 +5,9 @@
 
   "navStats": "Stats",
   "navLog": "Log",
+  "navCommunity": "커뮤니티",
   "navHome": "Home",
+  "navProgram": "프로그램",
   "navRanking": "Ranking",
   "navMy": "MY",
 
@@ -198,6 +200,7 @@
 
   "leaderboard": "리더보드",
   "noLeaderboardEntries": "리더보드 기록이 없습니다",
+  "noWorkoutsRecorded": "이날 기록된 운동이 없습니다",
   "coachQuoteTitle": "{coachName} 코치의 한마디",
 
   "recordTypeTimeBased": "시간 기반",
@@ -222,5 +225,16 @@
 
   "orderStatusPending": "결제 대기",
   "orderStatusCompleted": "결제 완료",
-  "orderStatusCancelled": "결제 취소"
+  "orderStatusCancelled": "결제 취소",
+
+  "errorDefaultAuth": "인증 오류가 발생했습니다",
+  "errorDefaultNetwork": "네트워크 연결이 원활하지 않습니다",
+  "errorDefaultOrder": "주문 처리 오류가 발생했습니다",
+  "errorDefaultWorkout": "운동 데이터 오류가 발생했습니다",
+  "errorDefaultHome": "홈 데이터 로딩 오류가 발생했습니다",
+  "errorDefaultLog": "기록 저장 오류가 발생했습니다",
+  "errorDefaultOnboarding": "온보딩 오류가 발생했습니다",
+  "errorDefaultHealth": "건강 데이터 오류가 발생했습니다",
+  "errorNoData": "데이터가 없습니다",
+  "errorDefaultPermission": "권한 오류가 발생했습니다"
 }

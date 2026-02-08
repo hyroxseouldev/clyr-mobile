@@ -1,6 +1,6 @@
 import 'package:clyr_mobile/src/core/data/auth_data_source.dart';
-import 'package:clyr_mobile/src/core/exception/exception.dart';
-import 'package:clyr_mobile/src/core/typedef/typedef.dart';
+import 'package:clyr_mobile/src/core/error/exception.dart';
+import 'package:clyr_mobile/src/core/util/type_defs.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/entity/user_profile_entity.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,19 +14,19 @@ UserRepository userRepository(Ref ref) {
 }
 
 abstract interface class UserRepository {
-  FutureEither<AuthException, void> login(
+  FutureEither<void> login(
     ({String email, String password}) params,
   );
-  FutureEither<AuthException, void> signup(
+  FutureEither<void> signup(
     ({String email, String password, String fullName}) params,
   );
-  FutureEither<AuthException, void> logout();
+  FutureEither<void> logout();
 
   /// 사용자 프로필 조회
-  FutureEither<AppException, UserProfileEntity> getUserProfile();
+  FutureEither<UserProfileEntity> getUserProfile();
 
   /// 사용자 프로필 업데이트
-  FutureEither<AppException, UserProfileEntity> updateUserProfile(
+  FutureEither<UserProfileEntity> updateUserProfile(
     ({
       String? nickname,
       String? bio,
@@ -39,10 +39,10 @@ abstract interface class UserRepository {
   );
 
   /// 온보딩 완료 여부 확인
-  FutureEither<AppException, bool> checkOnboardingStatus();
+  FutureEither<bool> checkOnboardingStatus();
 
   /// 온보딩 데이터 업데이트
-  FutureEither<AppException, void> completeOnboarding(
+  FutureEither<void> completeOnboarding(
     Map<String, dynamic> data,
   );
 }
@@ -55,7 +55,7 @@ class UserRepositoryImpl implements UserRepository {
   });
 
   @override
-  FutureEither<AuthException, void> login(
+  FutureEither<void> login(
     ({String email, String password}) params,
   ) async {
     try {
@@ -65,12 +65,12 @@ class UserRepositoryImpl implements UserRepository {
       );
       return right(null);
     } catch (e) {
-      return left(AuthException(code: 'unknown', message: e.toString()));
+      return left(AppException.auth(e.toString()));
     }
   }
 
   @override
-  FutureEither<AuthException, void> signup(
+  FutureEither<void> signup(
     ({String email, String password, String fullName}) params,
   ) async {
     try {
@@ -81,22 +81,22 @@ class UserRepositoryImpl implements UserRepository {
       );
       return right(null);
     } catch (e) {
-      return left(AuthException(code: 'unknown', message: e.toString()));
+      return left(AppException.auth(e.toString()));
     }
   }
 
   @override
-  FutureEither<AuthException, void> logout() async {
+  FutureEither<void> logout() async {
     try {
       await authDataSource.logout();
       return right(null);
     } catch (e) {
-      return left(AuthException(code: 'logout-error', message: e.toString()));
+      return left(AppException.auth(e.toString()));
     }
   }
 
   @override
-  FutureEither<AppException, UserProfileEntity> getUserProfile() async {
+  FutureEither<UserProfileEntity> getUserProfile() async {
     try {
       final dto = await authDataSource.getUserProfile();
       return right(dto.toEntity());
@@ -108,16 +108,13 @@ class UserRepositoryImpl implements UserRepository {
         return right(newDto.toEntity());
       }
       return left(
-        AuthException(
-          code: 'not_authenticated',
-          message: 'User not authenticated',
-        ),
+        AppException.auth('User not authenticated'),
       );
     }
   }
 
   @override
-  FutureEither<AppException, UserProfileEntity> updateUserProfile(
+  FutureEither<UserProfileEntity> updateUserProfile(
     ({
       String? nickname,
       String? bio,
@@ -131,10 +128,7 @@ class UserRepositoryImpl implements UserRepository {
     final userId = authDataSource.getCurrentUserId();
     if (userId == null) {
       return left(
-        AuthException(
-          code: 'not_authenticated',
-          message: 'User not authenticated',
-        ),
+        AppException.auth('User not authenticated'),
       );
     }
 
@@ -150,12 +144,12 @@ class UserRepositoryImpl implements UserRepository {
       );
       return right(dto.toEntity());
     } catch (e) {
-      return left(AuthException(code: 'unknown', message: e.toString()));
+      return left(AppException.auth(e.toString()));
     }
   }
 
   @override
-  FutureEither<AppException, bool> checkOnboardingStatus() async {
+  FutureEither<bool> checkOnboardingStatus() async {
     try {
       final dto = await authDataSource.getUserProfile();
       return right(dto.onboardingCompleted ?? false);
@@ -166,17 +160,12 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  FutureEither<AppException, void> completeOnboarding(
+  FutureEither<void> completeOnboarding(
     Map<String, dynamic> data,
   ) async {
     final userId = authDataSource.getCurrentUserId();
     if (userId == null) {
-      return left(
-        OnboardingException(
-          code: 'not_authenticated',
-          message: 'User not authenticated',
-        ),
-      );
+      return left(AppException.onboarding('User not authenticated'));
     }
 
     try {
@@ -187,12 +176,7 @@ class UserRepositoryImpl implements UserRepository {
       );
       return right(null);
     } catch (e) {
-      return left(
-        OnboardingException(
-          code: 'ONBOARDING_COMPLETE_FAILED',
-          message: e.toString(),
-        ),
-      );
+      return left(AppException.onboarding(e.toString()));
     }
   }
 }

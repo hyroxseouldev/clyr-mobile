@@ -6,9 +6,11 @@ import 'package:clyr_mobile/src/feature/auth/presentation/view/signup_view.dart'
 import 'package:clyr_mobile/src/feature/auth/presentation/view/splash_view.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/user_profile_view.dart';
 import 'package:clyr_mobile/src/feature/community/presentation/view/commnunity_view.dart';
-import 'package:clyr_mobile/src/feature/home/presentation/view/home_view.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/view/home_workout_detail_view.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/view/new_home_view.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/section_record_create_view.dart';
 import 'package:clyr_mobile/src/feature/log/presentation/view/log_view.dart';
+import 'package:clyr_mobile/src/feature/program/presentation/view/program_view.dart';
 import 'package:clyr_mobile/src/feature/ranking/presentation/view/ranking_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/app_info_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/membership_view.dart';
@@ -16,7 +18,7 @@ import 'package:clyr_mobile/src/feature/settings/presentation/view/purchase_hist
 import 'package:clyr_mobile/src/feature/settings/presentation/view/terms_of_service_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/settings_view.dart';
 import 'package:clyr_mobile/src/feature/stats/presentation/view/stats_view.dart';
-import 'package:clyr_mobile/src/shared/widgets/main_navigation.dart';
+import 'package:clyr_mobile/src/shared/widgets/default_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -66,12 +68,19 @@ GoRouter router(Ref ref) {
 
       // ✅ ShellRoute: 바텀 네비게이션
       ShellRoute(
-        builder: (context, state, child) => MainNavigation(child: child),
+        builder: (context, state, child) => DefaultLayout(child: child),
         routes: [
           GoRoute(
             path: RoutePaths.home,
-            builder: (context, state) => const HomeView(),
+            name: NewHomeView.routeName,
+            builder: (context, state) => const NewHomeView(),
             routes: [
+              GoRoute(
+                path: 'workout-detail',
+                name: HomeWorkoutDetailView.routeName,
+                builder: (context, state) => const HomeWorkoutDetailView(),
+              ),
+
               GoRoute(
                 path: 'section-record-create/:sectionId/:sectionItemId',
                 name: RoutePaths.homeSectionRecordCreate,
@@ -103,6 +112,10 @@ GoRouter router(Ref ref) {
           GoRoute(
             path: RoutePaths.stats,
             builder: (context, state) => const StatsView(),
+          ),
+          GoRoute(
+            path: RoutePaths.program,
+            builder: (context, state) => const ProgramView(),
           ),
           GoRoute(
             path: RoutePaths.settings,

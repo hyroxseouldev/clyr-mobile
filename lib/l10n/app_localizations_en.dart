@@ -18,7 +18,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navLog => 'Log';
 
   @override
+  String get navCommunity => 'Community';
+
+  @override
   String get navHome => 'Home';
+
+  @override
+  String get navProgram => 'Program';
 
   @override
   String get navRanking => 'Ranking';
@@ -556,6 +562,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noLeaderboardEntries => 'No leaderboard entries';
 
   @override
+  String get noWorkoutsRecorded => 'No workouts recorded for this day';
+
+  @override
   String coachQuoteTitle(Object coachName) {
     return 'Coach $coachName\'s Message';
   }
@@ -619,4 +628,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get orderStatusCancelled => 'Cancelled';
+
+  @override
+  String get errorDefaultAuth => 'Authentication error occurred';
+
+  @override
+  String get errorDefaultNetwork => 'Network connection is unstable';
+
+  @override
+  String get errorDefaultOrder => 'Order processing error occurred';
+
+  @override
+  String get errorDefaultWorkout => 'Workout data error occurred';
+
+  @override
+  String get errorDefaultHome => 'Home data loading error occurred';
+
+  @override
+  String get errorDefaultLog => 'Record saving error occurred';
+
+  @override
+  String get errorDefaultOnboarding => 'Onboarding error occurred';
+
+  @override
+  String get errorDefaultHealth => 'Health data error occurred';
+
+  @override
+  String get errorNoData => 'No data available';
+
+  @override
+  String get errorDefaultPermission => 'Permission error occurred';
 }

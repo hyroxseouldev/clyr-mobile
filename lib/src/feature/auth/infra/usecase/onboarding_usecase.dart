@@ -1,5 +1,4 @@
-import 'package:clyr_mobile/src/core/exception/exception.dart';
-import 'package:clyr_mobile/src/core/typedef/typedef.dart';
+import 'package:clyr_mobile/src/core/util/type_defs.dart';
 import 'package:clyr_mobile/src/core/usecase/usecase.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/repository/user_repository.dart';
 
@@ -10,7 +9,7 @@ class CheckOnboardingUseCase implements Usecase<void, bool> {
   CheckOnboardingUseCase(this._repository);
 
   @override
-  FutureEither<AppException, bool> call(void input) {
+  FutureEither<bool> call(void input) {
     return _repository.checkOnboardingStatus();
   }
 }
@@ -23,7 +22,7 @@ class CompleteOnboardingUseCase
   CompleteOnboardingUseCase(this._repository);
 
   @override
-  FutureEither<AppException, void> call(Map<String, dynamic> data) {
+  FutureEither<void> call(Map<String, dynamic> data) {
     return _repository.completeOnboarding(data);
   }
 }

@@ -1,5 +1,4 @@
-import 'package:clyr_mobile/src/core/exception/exception.dart';
-import 'package:clyr_mobile/src/core/typedef/typedef.dart';
+import 'package:clyr_mobile/src/core/util/type_defs.dart';
 import 'package:clyr_mobile/src/core/usecase/usecase.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/repository/user_repository.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/usecase/user_profile_usecase.dart';
@@ -15,7 +14,7 @@ class LoginUseCase implements Usecase<LoginParams, void> {
   LoginUseCase(this._repository);
 
   @override
-  FutureEither<AuthException, void> call(LoginParams input) {
+  FutureEither<void> call(LoginParams input) {
     return _repository.login((email: input.email, password: input.password));
   }
 }
@@ -25,7 +24,7 @@ class SignupUseCase implements Usecase<SignupParams, void> {
   SignupUseCase(this._repository);
 
   @override
-  FutureEither<AuthException, void> call(SignupParams input) {
+  FutureEither<void> call(SignupParams input) {
     return _repository.signup((
       email: input.email,
       password: input.password,
@@ -39,7 +38,7 @@ class LogoutUseCase implements Usecase<LogoutParams, void> {
   LogoutUseCase(this._repository);
 
   @override
-  FutureEither<AuthException, void> call(LogoutParams input) {
+  FutureEither<void> call(LogoutParams input) {
     return _repository.logout();
   }
 }

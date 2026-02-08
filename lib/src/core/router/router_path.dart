@@ -24,4 +24,5 @@ class RoutePaths {
   static const String membership = '/settings/membership';
   static const String termsOfService = '/settings/terms';
   static const String appInfo = '/settings/app-info';
+  static const String program = '/program';
 }

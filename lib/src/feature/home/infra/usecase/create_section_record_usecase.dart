@@ -1,7 +1,6 @@
 import 'package:clyr_mobile/src/core/usecase/usecase.dart';
-import 'package:clyr_mobile/src/core/exception/exception.dart';
-import 'package:clyr_mobile/src/core/typedef/typedef.dart';
-import 'package:clyr_mobile/src/feature/home/infra/repository/home_repository.dart';
+import 'package:clyr_mobile/src/core/util/type_defs.dart';
+import 'package:clyr_mobile/src/feature/home/data/repository/home_repository.dart';
 
 /// 섹션 완료 기록 생성 UseCase
 class CreateSectionRecordUseCase
@@ -11,7 +10,7 @@ class CreateSectionRecordUseCase
   CreateSectionRecordUseCase(this._repository);
 
   @override
-  FutureEither<AppException, void> call(CreateSectionRecordParams input) {
+  FutureEither<void> call(CreateSectionRecordParams input) {
     return _repository.createSectionRecord(
       sectionId: input.sectionId,
       sectionItemId: input.sectionItemId,

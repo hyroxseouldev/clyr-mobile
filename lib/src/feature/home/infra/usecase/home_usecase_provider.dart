@@ -1,7 +1,8 @@
-import 'package:clyr_mobile/src/feature/home/infra/repository/home_repository_provider.dart';
+import 'package:clyr_mobile/src/feature/home/data/repository/home_repository_provider.dart';
 import 'package:clyr_mobile/src/feature/home/infra/usecase/create_section_record_usecase.dart';
 import 'package:clyr_mobile/src/feature/home/infra/usecase/get_active_program_usecase.dart';
 import 'package:clyr_mobile/src/feature/home/infra/usecase/get_blueprint_sections_usecase.dart';
+import 'package:clyr_mobile/src/feature/home/infra/usecase/get_workouts_by_date_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_usecase_provider.g.dart';
@@ -22,4 +23,12 @@ GetTodaysSessionUseCase getTodaysSessionUseCase(Ref ref) {
 @riverpod
 CreateSectionRecordUseCase createSectionRecordUseCase(Ref ref) {
   return CreateSectionRecordUseCase(ref.watch(homeRepositoryProvider));
+}
+
+/// Riverpod provider for GetWorkoutsByDateUseCase
+@riverpod
+GetWorkoutsByDateUseCase getWorkoutsByDateUseCase(Ref ref) {
+  final homeRepository = ref.watch(homeRepositoryProvider);
+
+  return GetWorkoutsByDateUseCase(homeRepository: homeRepository);
 }

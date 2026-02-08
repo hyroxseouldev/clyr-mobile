@@ -1,14 +1,22 @@
+import 'package:clyr_mobile/flavors.dart';
 import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 /// Main navigation destinations with enhanced enum features
 enum MainNavigationItem {
-  /// Workout log screen
-  log(route: '/log', icon: Icons.description, labelKey: 'navLog'),
-
   /// Home/Dashboard screen (default)
   home(route: '/home', icon: Icons.home, labelKey: 'navHome'),
+
+  /// Community screen
+  community(route: '/community', icon: Icons.people, labelKey: 'navCommunity'),
+
+  /// Program screen
+  program(
+    route: '/program',
+    icon: Icons.fitness_center,
+    labelKey: 'navProgram',
+  ),
 
   /// Settings/Profile screen
   settings(route: '/settings', icon: Icons.person, labelKey: 'navMy');
@@ -32,7 +40,9 @@ enum MainNavigationItem {
     return switch (labelKey) {
       'navStats' => l10n.navStats,
       'navLog' => l10n.navLog,
+      'navCommunity' => l10n.navCommunity,
       'navHome' => l10n.navHome,
+      'navProgram' => l10n.navProgram,
       'navRanking' => l10n.navRanking,
       'navMy' => l10n.navMy,
       _ => labelKey,
@@ -70,12 +80,9 @@ enum MainNavigationItem {
   }
 }
 
-/**
- * 랭킹 , 기록, 홈, 커뮤니티, MY  이렇게 다섯개 메뉴
- */
-class MainNavigation extends StatelessWidget {
-  const MainNavigation({super.key, required this.child});
-
+/// Default layout with main navigation bar
+class DefaultLayout extends StatelessWidget {
+  const DefaultLayout({super.key, required this.child});
   final Widget child;
 
   @override
@@ -96,6 +103,28 @@ class MainNavigation extends StatelessWidget {
         },
         destinations: MainNavigationItem.allDestinations(context),
       ),
+    );
+  }
+}
+
+/// Flavor banner for development
+class FlavorBanner extends StatelessWidget {
+  const FlavorBanner({super.key, required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Banner(
+      location: BannerLocation.topStart,
+      message: F.name,
+      color: Colors.green.withAlpha(150),
+      textStyle: const TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 12.0,
+        letterSpacing: 1.0,
+      ),
+      textDirection: TextDirection.ltr,
+      child: child,
     );
   }
 }

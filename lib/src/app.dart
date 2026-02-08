@@ -1,7 +1,7 @@
 import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/router/router_provider.dart';
 import 'package:clyr_mobile/src/core/theme/theme.dart';
-import 'package:clyr_mobile/src/shared/default_layout.dart';
+import 'package:clyr_mobile/src/shared/widgets/default_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:clyr_mobile/flavors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

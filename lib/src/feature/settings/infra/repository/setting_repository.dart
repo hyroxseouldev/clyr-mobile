@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:clyr_mobile/src/core/data/dto.dart';
-import 'package:clyr_mobile/src/core/exception/exception.dart';
+import 'package:clyr_mobile/src/core/error/exception.dart';
 import 'package:clyr_mobile/src/core/supabase/supabase_provider.dart';
-import 'package:clyr_mobile/src/core/typedef/typedef.dart';
+import 'package:clyr_mobile/src/core/util/type_defs.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/entity/enrollment_entity.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/entity/order_entity.dart';
 import 'package:fpdart/fpdart.dart';
@@ -25,10 +25,10 @@ typedef GetOrdersParams = ({int page, int limit});
 typedef GetEnrollmentsParams = ({int page, int limit});
 
 abstract interface class SettingRepository {
-  FutureEither<AppException, List<OrderEntity>> getOrders(
+  FutureEither<List<OrderEntity>> getOrders(
     GetOrdersParams params,
   );
-  FutureEither<AppException, List<EnrollmentEntity>> getEnrollments(
+  FutureEither<List<EnrollmentEntity>> getEnrollments(
     GetEnrollmentsParams params,
   );
 }
@@ -38,17 +38,12 @@ class SettingRepositoryImpl implements SettingRepository {
   SettingRepositoryImpl({required this.supabase});
 
   @override
-  FutureEither<AppException, List<OrderEntity>> getOrders(
+  FutureEither<List<OrderEntity>> getOrders(
     GetOrdersParams params,
   ) async {
     final userId = supabase.auth.currentUser?.id;
     if (userId == null) {
-      return left(
-        OrderException(
-          code: 'not_authenticated',
-          message: 'User not authenticated',
-        ),
-      );
+      return left(AppException.order('User not authenticated'));
     }
 
     try {
@@ -74,22 +69,17 @@ class SettingRepositoryImpl implements SettingRepository {
       return right(orders);
     } catch (e) {
       log('getOrders: error = $e');
-      return left(OrderException(code: 'unknown', message: e.toString()));
+      return left(AppException.order(e.toString()));
     }
   }
 
   @override
-  FutureEither<AppException, List<EnrollmentEntity>> getEnrollments(
+  FutureEither<List<EnrollmentEntity>> getEnrollments(
     GetEnrollmentsParams params,
   ) async {
     final userId = supabase.auth.currentUser?.id;
     if (userId == null) {
-      return left(
-        OrderException(
-          code: 'not_authenticated',
-          message: 'User not authenticated',
-        ),
-      );
+      return left(AppException.order('User not authenticated'));
     }
 
     try {
@@ -115,7 +105,7 @@ class SettingRepositoryImpl implements SettingRepository {
       return right(enrollments);
     } catch (e) {
       log('getEnrollments: error = $e');
-      return left(OrderException(code: 'unknown', message: e.toString()));
+      return left(AppException.order(e.toString()));
     }
   }
 }

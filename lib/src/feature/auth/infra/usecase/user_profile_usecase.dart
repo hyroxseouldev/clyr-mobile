@@ -1,5 +1,4 @@
-import 'package:clyr_mobile/src/core/exception/exception.dart';
-import 'package:clyr_mobile/src/core/typedef/typedef.dart';
+import 'package:clyr_mobile/src/core/util/type_defs.dart';
 import 'package:clyr_mobile/src/core/usecase/usecase.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/repository/user_repository.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/entity/user_profile_entity.dart';
@@ -11,7 +10,7 @@ class GetUserProfileUseCase implements Usecase<void, UserProfileEntity> {
   GetUserProfileUseCase(this._repository);
 
   @override
-  FutureEither<AppException, UserProfileEntity> call(void input) {
+  FutureEither<UserProfileEntity> call(void input) {
     return _repository.getUserProfile();
   }
 }
@@ -24,7 +23,7 @@ class UpdateUserProfileUseCase
   UpdateUserProfileUseCase(this._repository);
 
   @override
-  FutureEither<AppException, UserProfileEntity> call(UpdateUserProfileParams input) {
+  FutureEither<UserProfileEntity> call(UpdateUserProfileParams input) {
     return _repository.updateUserProfile(input);
   }
 }

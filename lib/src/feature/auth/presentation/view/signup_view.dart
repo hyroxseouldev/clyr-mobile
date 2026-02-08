@@ -1,5 +1,6 @@
 import 'package:clyr_mobile/l10n/app_localizations.dart';
-import 'package:clyr_mobile/src/core/exception/exception.dart';
+import 'package:clyr_mobile/src/core/error/exception.dart';
+import 'package:clyr_mobile/src/core/error/exception_localization.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/provider/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -25,10 +26,10 @@ class SignupView extends HookConsumerWidget {
     ref.listen(authControllerProvider, (previous, next) {
       if (next is AsyncError) {
         final error = next.error;
-        if (error is AuthException) {
+        if (error is AppException) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(error.displayMessage),
+              content: Text(error.getLocalizedMessage(l10n)),
               backgroundColor: Colors.red,
             ),
           );

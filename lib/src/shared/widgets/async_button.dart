@@ -1,4 +1,4 @@
-import 'package:clyr_mobile/src/shared/loader.dart';
+import 'loader.dart';
 import 'package:flutter/material.dart';
 
 class AsyncButton extends StatelessWidget {

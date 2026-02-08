@@ -8,9 +8,8 @@ import 'package:clyr_mobile/src/feature/home/presentation/provider/selected_date
 import 'package:clyr_mobile/src/feature/home/presentation/widget/blueprint_section_card.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/widget/coach_profile_card_widget.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/widget/program_progress_bar_widget.dart';
-import 'package:clyr_mobile/src/shared/async_widget.dart';
-import 'package:clyr_mobile/src/shared/widgets/date_selection/date_selection_type.dart';
-import 'package:clyr_mobile/src/shared/widgets/date_selection/date_selection_widget.dart';
+import 'package:clyr_mobile/src/shared/widgets/async_widget.dart';
+import 'package:clyr_mobile/src/shared/widgets/date_selector/date_selector_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
@@ -84,16 +83,13 @@ class HomeView extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             // 가로로 스크롤 되는 날짜 선택 위젯
-                            DateSelectionWidget(
-                              showType: DateSelectionType.weekly,
-                              selectedDate: selectedDate,
+                            DateSelectorWidget(
+                              initialDate: selectedDate,
                               onDateSelected: (date) {
                                 ref
                                     .read(selectedDateProvider.notifier)
                                     .setSelectedDate(date);
                               },
-                              startDate: startDate,
-                              endDate: endDate,
                             ),
 
                             CoachProfileCard(

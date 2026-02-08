@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '13.0'
+platform :ios, '14.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -39,5 +39,18 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+
+    target.build_configurations.each do |config|
+      # permission_handler 설정: 필요한 권한만 '1'로 설정
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+        '$(inherited)',
+        
+        ## 건강 데이터 권한 활성화 (HealthKit)
+        'PERMISSION_HEALTH=1',
+        
+        ## 그 외 필요한 권한이 있다면 여기에 추가 (없으면 0 또는 제외)
+        # 'PERMISSION_CAMERA=1',
+      ]
+    end
   end
 end

@@ -18,7 +18,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get navLog => 'Log';
 
   @override
+  String get navCommunity => '커뮤니티';
+
+  @override
   String get navHome => 'Home';
+
+  @override
+  String get navProgram => '프로그램';
 
   @override
   String get navRanking => 'Ranking';
@@ -549,6 +555,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get noLeaderboardEntries => '리더보드 기록이 없습니다';
 
   @override
+  String get noWorkoutsRecorded => '이날 기록된 운동이 없습니다';
+
+  @override
   String coachQuoteTitle(Object coachName) {
     return '$coachName 코치의 한마디';
   }
@@ -612,4 +621,34 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get orderStatusCancelled => '결제 취소';
+
+  @override
+  String get errorDefaultAuth => '인증 오류가 발생했습니다';
+
+  @override
+  String get errorDefaultNetwork => '네트워크 연결이 원활하지 않습니다';
+
+  @override
+  String get errorDefaultOrder => '주문 처리 오류가 발생했습니다';
+
+  @override
+  String get errorDefaultWorkout => '운동 데이터 오류가 발생했습니다';
+
+  @override
+  String get errorDefaultHome => '홈 데이터 로딩 오류가 발생했습니다';
+
+  @override
+  String get errorDefaultLog => '기록 저장 오류가 발생했습니다';
+
+  @override
+  String get errorDefaultOnboarding => '온보딩 오류가 발생했습니다';
+
+  @override
+  String get errorDefaultHealth => '건강 데이터 오류가 발생했습니다';
+
+  @override
+  String get errorNoData => '데이터가 없습니다';
+
+  @override
+  String get errorDefaultPermission => '권한 오류가 발생했습니다';
 }

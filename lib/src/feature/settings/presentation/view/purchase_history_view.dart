@@ -3,7 +3,7 @@ import 'package:clyr_mobile/src/core/pagination/paginated_list_view.dart';
 import 'package:clyr_mobile/src/feature/settings/infra/entity/order_entity.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/provider/orders_controller.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/widget/order_card.dart';
-import 'package:clyr_mobile/src/shared/async_widget.dart';
+import 'package:clyr_mobile/src/shared/widgets/async_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

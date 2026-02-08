@@ -6,14 +6,6 @@ class CommunityView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Community',
-          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),
-        ),
-      ),
-      body: const Center(child: Text('Community')),
-    );
+    return Scaffold(body: const Center(child: Text('Community')));
   }
 }

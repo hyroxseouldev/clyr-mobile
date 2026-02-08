@@ -5,7 +5,9 @@
 
   "navStats": "Stats",
   "navLog": "Log",
+  "navCommunity": "Community",
   "navHome": "Home",
+  "navProgram": "Program",
   "navRanking": "Ranking",
   "navMy": "My",
 
@@ -198,6 +200,7 @@
 
   "leaderboard": "Leaderboard",
   "noLeaderboardEntries": "No leaderboard entries",
+  "noWorkoutsRecorded": "No workouts recorded for this day",
   "coachQuoteTitle": "Coach {coachName}'s Message",
 
   "recordTypeTimeBased": "Time Based",
@@ -222,5 +225,16 @@
 
   "orderStatusPending": "Pending",
   "orderStatusCompleted": "Completed",
-  "orderStatusCancelled": "Cancelled"
+  "orderStatusCancelled": "Cancelled",
+
+  "errorDefaultAuth": "Authentication error occurred",
+  "errorDefaultNetwork": "Network connection is unstable",
+  "errorDefaultOrder": "Order processing error occurred",
+  "errorDefaultWorkout": "Workout data error occurred",
+  "errorDefaultHome": "Home data loading error occurred",
+  "errorDefaultLog": "Record saving error occurred",
+  "errorDefaultOnboarding": "Onboarding error occurred",
+  "errorDefaultHealth": "Health data error occurred",
+  "errorNoData": "No data available",
+  "errorDefaultPermission": "Permission error occurred"
 }

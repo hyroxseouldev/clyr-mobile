@@ -2,7 +2,7 @@ import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/storage/storage.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/entity/user_profile_entity.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/provider/user_profile_controller.dart';
-import 'package:clyr_mobile/src/shared/async_widget.dart';
+import 'package:clyr_mobile/src/shared/widgets/async_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

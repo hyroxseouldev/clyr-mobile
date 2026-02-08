@@ -116,11 +116,23 @@ abstract class AppLocalizations {
   /// **'Log'**
   String get navLog;
 
+  /// No description provided for @navCommunity.
+  ///
+  /// In ko, this message translates to:
+  /// **'커뮤니티'**
+  String get navCommunity;
+
   /// No description provided for @navHome.
   ///
   /// In ko, this message translates to:
   /// **'Home'**
   String get navHome;
+
+  /// No description provided for @navProgram.
+  ///
+  /// In ko, this message translates to:
+  /// **'프로그램'**
+  String get navProgram;
 
   /// No description provided for @navRanking.
   ///
@@ -1166,6 +1178,12 @@ abstract class AppLocalizations {
   /// **'리더보드 기록이 없습니다'**
   String get noLeaderboardEntries;
 
+  /// No description provided for @noWorkoutsRecorded.
+  ///
+  /// In ko, this message translates to:
+  /// **'이날 기록된 운동이 없습니다'**
+  String get noWorkoutsRecorded;
+
   /// No description provided for @coachQuoteTitle.
   ///
   /// In ko, this message translates to:
@@ -1291,6 +1309,66 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'결제 취소'**
   String get orderStatusCancelled;
+
+  /// No description provided for @errorDefaultAuth.
+  ///
+  /// In ko, this message translates to:
+  /// **'인증 오류가 발생했습니다'**
+  String get errorDefaultAuth;
+
+  /// No description provided for @errorDefaultNetwork.
+  ///
+  /// In ko, this message translates to:
+  /// **'네트워크 연결이 원활하지 않습니다'**
+  String get errorDefaultNetwork;
+
+  /// No description provided for @errorDefaultOrder.
+  ///
+  /// In ko, this message translates to:
+  /// **'주문 처리 오류가 발생했습니다'**
+  String get errorDefaultOrder;
+
+  /// No description provided for @errorDefaultWorkout.
+  ///
+  /// In ko, this message translates to:
+  /// **'운동 데이터 오류가 발생했습니다'**
+  String get errorDefaultWorkout;
+
+  /// No description provided for @errorDefaultHome.
+  ///
+  /// In ko, this message translates to:
+  /// **'홈 데이터 로딩 오류가 발생했습니다'**
+  String get errorDefaultHome;
+
+  /// No description provided for @errorDefaultLog.
+  ///
+  /// In ko, this message translates to:
+  /// **'기록 저장 오류가 발생했습니다'**
+  String get errorDefaultLog;
+
+  /// No description provided for @errorDefaultOnboarding.
+  ///
+  /// In ko, this message translates to:
+  /// **'온보딩 오류가 발생했습니다'**
+  String get errorDefaultOnboarding;
+
+  /// No description provided for @errorDefaultHealth.
+  ///
+  /// In ko, this message translates to:
+  /// **'건강 데이터 오류가 발생했습니다'**
+  String get errorDefaultHealth;
+
+  /// No description provided for @errorNoData.
+  ///
+  /// In ko, this message translates to:
+  /// **'데이터가 없습니다'**
+  String get errorNoData;
+
+  /// No description provided for @errorDefaultPermission.
+  ///
+  /// In ko, this message translates to:
+  /// **'권한 오류가 발생했습니다'**
+  String get errorDefaultPermission;
 }
 
 class _AppLocalizationsDelegate

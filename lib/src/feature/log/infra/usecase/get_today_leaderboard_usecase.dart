@@ -1,6 +1,5 @@
 import 'package:clyr_mobile/src/core/usecase/usecase.dart';
-import 'package:clyr_mobile/src/core/exception/exception.dart';
-import 'package:clyr_mobile/src/core/typedef/typedef.dart';
+import 'package:clyr_mobile/src/core/util/type_defs.dart';
 import 'package:clyr_mobile/src/feature/log/infra/entity/log_entity.dart';
 import 'package:clyr_mobile/src/feature/log/infra/repository/log_repository.dart';
 
@@ -11,7 +10,7 @@ class GetTodayLeaderBoardUseCase implements Usecase<GetTodayLeaderBoardParams, T
   GetTodayLeaderBoardUseCase(this._repository);
 
   @override
-  FutureEither<AppException, TodayLeaderBoardEntity> call(GetTodayLeaderBoardParams input) {
+  FutureEither<TodayLeaderBoardEntity> call(GetTodayLeaderBoardParams input) {
     return _repository.getTodayLeaderBoard(
       date: input.date,
       isTest: input.isTest,

@@ -84,8 +84,10 @@ fvm dart run custom_lint
 lib/src/
 ├── core/              # Shared utilities, configs, base classes
 │   ├── config/        # Environment configuration (Envied)
-│   ├── exception/     # AppException sealed class hierarchy
+│   ├── error/         # AppException sealed class hierarchy
+│   ├── health/        # Health service (HealthKit integration)
 │   ├── pagination/    # Pagination utilities & widgets
+│   ├── permission/    # Permission service (platform permissions)
 │   ├── router/        # GoRouter configuration
 │   ├── storage/       # Supabase storage service
 │   ├── supabase/      # Supabase client provider
@@ -95,9 +97,10 @@ lib/src/
 │
 ├── feature/           # Feature modules (auth, home, log, etc.)
 │   └── [feature_name]/
-│       ├── infra/     # Domain Layer: Entity, repository, usecase
+│       ├── data/      # Data Layer: Repository implementations
+│       │   └── repository/       # Repository interface + impl with debug logs
+│       ├── infra/     # Domain Layer: Entity, usecase
 │       │   ├── entity/           # Freezed entities
-│       │   ├── repository/       # Repository interface + impl (uses core/data)
 │       │   └── usecase/          # Use case interfaces + providers
 │       └── presentation/  # UI Layer: provider, view, widget
 │           ├── provider/         # Riverpod controllers
@@ -249,7 +252,8 @@ MyWidget(title: displayTitle);  // Pass localized string
 
 6. **Error Handling**:
    - Data Layer: Map external errors (e.g., Supabase `AuthException`) to `AppException`
-   - Presentation Layer: Display errors via `AppExceptionX.displayMessage` extension
+   - Repository Layer: Use `debugPrint()` for error logging in development
+   - Presentation Layer: Display errors via `error.getLocalizedMessage(l10n)` extension
 
 ### File Naming Conventions
 
@@ -274,6 +278,227 @@ Environment variables are managed using `envied` package:
 - Define in `.env.{flavor}` files (e.g., `.env.dev`)
 - Generate with: `fvm dart run build_runner build`
 - Access via: `Env.{variableName}`
+
+---
+
+## Service Layer
+
+Services provide a clean abstraction layer over external APIs and SDKs (HealthKit, Permissions, Storage, etc.).
+
+### Service Layer Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                              REPOSITORY                                 │
+│                   Uses Services through interfaces                        │
+└───────────────────────────────┬─────────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                            SERVICE LAYER                                 │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    │
+│  │  HealthService  │    │ PermissionService│    │ StorageService  │    │
+│  │  (HealthKit)     │    │  (Platform)      │    │  (Supabase)     │    │
+│  └─────────────────┘    └─────────────────┘    └─────────────────┘    │
+│           │                      │                      │              │
+└───────────│──────────────────────│──────────────────────│──────────────┘
+            │                      │                      │
+            ▼                      ▼                      ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        EXTERNAL APIS/SDKs                                │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    │
+│  │    HealthKit    │    │  Permission     │    │   Supabase      │    │
+│  │    (iOS/Android)│    │  (OS APIs)      │    │   (Backend)      │    │
+│  └─────────────────┘    └─────────────────┘    └─────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Service Structure
+
+**Location**: `lib/src/core/`
+
+**Pattern**: Interface + Implementation + Provider
+
+```
+lib/src/core/
+├── health/
+│   ├── health_service.dart              # Abstract interface
+│   ├── health_service_impl.dart         # Concrete implementation
+│   ├── health_service_provider.dart     # Riverpod provider
+│   └── entity/                           # Service-specific entities
+│       └── health_workout_data.dart
+├── permission/
+│   ├── permission_service.dart           # Abstract interface
+│   ├── permission_service_impl.dart      # Concrete implementation
+│   ├── permission_service_provider.dart  # Riverpod provider
+│   └── entity/                           # Service-specific entities
+│       ├── permission_result.dart
+│       └── permission_type.dart
+└── storage/
+    └── storage_service.dart             # Implementation (no interface needed)
+```
+
+### Service Implementation Rules
+
+1. **Interface-Implementation Separation**
+   - Define abstract interface in `{service}_service.dart`
+   - Implement in `{service}_service_impl.dart`
+   - Provide via Riverpod in `{service}_service_provider.dart`
+
+2. **Return Type**
+   - Always use `FutureEither<AppException, T>` for async operations
+   - Map platform-specific errors to `AppException`
+
+3. **Error Handling**
+   - Catch platform exceptions (e.g., HealthKit errors)
+   - Convert to appropriate `AppException` type
+   - Include descriptive error messages
+
+4. **Debug Logging**
+   - Use `debugPrint()` for development logging
+   - Log service operations: entry, success, errors
+
+### Service Example: HealthService
+
+**Interface** (`health_service.dart`):
+```dart
+import 'package:clyr_mobile/src/core/error/exception.dart';
+import 'package:clyr_mobile/src/core/health/entity/health_workout_data.dart';
+import 'package:clyr_mobile/src/core/util/type_defs.dart';
+
+abstract class HealthService {
+  /// Fetch workout data within date range
+  FutureEither<List<HealthWorkoutData>> getWorkouts({
+    required DateTime startDate,
+    required DateTime endDate,
+    int? limit,
+  });
+
+  /// Get latest workout within date range
+  FutureEither<HealthWorkoutData?> getLatestWorkout({
+    required DateTime startDate,
+    required DateTime endDate,
+  });
+}
+```
+
+**Implementation** (`health_service_impl.dart`):
+```dart
+import 'package:flutter/foundation.dart';
+import 'package:clyr_mobile/src/core/error/exception.dart';
+import 'package:clyr_mobile/src/core/health/health_service.dart';
+import 'package:health/health.dart';
+
+class HealthServiceImpl implements HealthService {
+  HealthServiceImpl({Health? healthFactory})
+    : _health = healthFactory ?? Health();
+
+  final Health _health;
+
+  @override
+  FutureEither<List<HealthWorkoutData>> getWorkouts({
+    required DateTime startDate,
+    required DateTime endDate,
+    int? limit,
+  }) async {
+    debugPrint('💪 [HealthService] Fetching workouts: $startDate to $endDate');
+
+    try {
+      final healthData = await _health.getHealthDataFromTypes(
+        startTime: startDate,
+        endTime: endDate,
+        types: [HealthDataType.WORKOUT],
+      );
+
+      if (healthData.isEmpty) {
+        debugPrint('📭 [HealthService] No workouts found');
+        return left(AppException.noData('No workouts found in date range'));
+      }
+
+      final workouts = healthData
+          .map((data) => _convertToWorkoutData(data))
+          .where((workout) => workout != null)
+          .cast<HealthWorkoutData>()
+          .toList();
+
+      debugPrint('✅ [HealthService] Fetched ${workouts.length} workouts');
+      return right(workouts);
+    } catch (e) {
+      debugPrint('❌ [HealthService] Error: $e');
+      return left(AppException.health('Failed to fetch workouts: ${e.toString()}'));
+    }
+  }
+}
+```
+
+**Provider** (`health_service_provider.dart`):
+```dart
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:clyr_mobile/src/core/health/health_service.dart';
+import 'package:clyr_mobile/src/core/health/health_service_impl.dart';
+
+@Riverpod(keepAlive: true)
+HealthService healthService(Ref ref) {
+  return HealthServiceImpl();
+}
+```
+
+### Usage in Repository
+
+```dart
+class HomeRepositoryImpl implements HomeRepository {
+  final CoreDataSource _dataSource;
+  final HealthService _healthService;
+
+  HomeRepositoryImpl({
+    required CoreDataSource dataSource,
+    required HealthService healthService,
+  })  : _dataSource = dataSource,
+        _healthService = healthService;
+
+  @override
+  FutureEither<List<HealthWorkoutData>> getWorkoutsByDate(DateTime date) async {
+    debugPrint('🏠 [HomeRepository] Fetching workouts for: $date');
+
+    final result = await _healthService.getWorkouts(
+      startDate: DateTime(date.year, date.month, date.day),
+      endDate: DateTime(date.year, date.month, date.day, 23, 59, 59),
+    );
+
+    return result.fold(
+      (error) {
+        debugPrint('❌ [HomeRepository] HealthService error: ${error.message}');
+        return left(error);
+      },
+      (workouts) {
+        debugPrint('✅ [HomeRepository] Got ${workouts.length} workouts');
+        return right(workouts);
+      },
+    );
+  }
+}
+```
+
+### Service Debug Log Guidelines
+
+- **HealthService**: `💪` (health/fitness)
+- **PermissionService**: `🔐` (security/permission)
+- **StorageService**: `💾` (storage/file)
+- **Log Format**: `💪 [ServiceName] Action description`
+- **Success**: `✅ [ServiceName] Success message`
+- **Error**: `❌ [ServiceName] Error: ${error}`
+- **Empty**: `📭 [ServiceName] No data found`
+
+### Available Services
+
+| Service | Purpose | External Dependency |
+|---------|---------|---------------------|
+| **HealthService** | HealthKit integration | `health` package |
+| **PermissionService** | Platform permissions | `permission_handler` |
+| **StorageService** | Supabase Storage | `supabase_flutter` |
+| **AuthDataSource** | Supabase Auth | `supabase_flutter` |
+| **CoreDataSource** | Supabase Database | `supabase_flutter` |
 
 See `document/flutter_rule.md` for comprehensive development guidelines in Korean.
 
@@ -307,26 +532,25 @@ This section documents the Clean Architecture pattern implementation for the Hom
 │  │     Entity      │◄───┤    UseCase      │                              │
 │  │  (*_entity)     │    │  (*_usecase)    │                              │
 │  └─────────────────┘    └─────────────────┘                              │
-│           │                      │                                        │
-└───────────│──────────────────────│──────────────────────────────────────┘
-            │                      │
-            ▼                      ▼
+│           │                                                      │
+└───────────│──────────────────────────────────────────────────────────┘
+            │
+            ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                            DATA LAYER                                   │
-│  ┌─────────────────┐    ┌─────────────────┐                              │
-│  │     DTO         │    │  Data Source    │                              │
-│  │  (dto.dart)     │    │ (data_source)   │                              │
-│  └─────────────────┘    └─────────────────┘                              │
-│           ▲                        ▲                                     │
-│           │                        │                                     │
-└───────────│────────────────────────│────────────────────────────────────┘
-            │                        │
-            ▼                        ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                        INFRA LAYER (feature)                           │
 │  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    │
-│  │     Entity      │◄───┤   Repository    │◄───┤    UseCase      │    │
-│  │  (*_entity)     │    │ (*_repository)  │    │  (*_usecase)    │    │
+│  │   Repository    │◄───┤  Data Source    │◄───┤    Services     │    │
+│  │ (*_repository)  │    │ (data_source)   │    │ (health/perm)   │    │
+│  │  (with logs)    │    │                 │    │                 │    │
+│  └─────────────────┘    └─────────────────┘    └─────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                            CORE LAYER                                   │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    │
+│  │     DTO         │    │  Supabase       │    │   HealthKit     │    │
+│  │  (dto.dart)     │    │                 │    │   Permissions   │    │
 │  └─────────────────┘    └─────────────────┘    └─────────────────┘    │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
@@ -342,14 +566,24 @@ Future<ActiveProgramDto> getCurrentActiveProgram() async {
   return ActiveProgramDto.fromJson(response);
 }
 
-// 2. INFRA LAYER: HomeRepository (lib/src/feature/home/infra/repository/home_repository.dart)
+// 2. DATA LAYER: HomeRepository (lib/src/feature/home/data/repository/home_repository.dart)
 FutureEither<AppException, ActiveProgramEntity> getActiveProgram() async {
+  debugPrint('🏠 [HomeRepository] Fetching active program...');
+
   try {
     final dataSource = ref.read(coreDataSourceProvider);
     final dto = await dataSource.getCurrentActiveProgram();
+
+    if (dto == null) {
+      debugPrint('📭 [HomeRepository] No active program found');
+      return right(const ActiveProgramEntity.empty());
+    }
+
+    debugPrint('✅ [HomeRepository] Active program fetched: ${dto.title}');
     return right(ActiveProgramEntity.fromDto(dto));
   } catch (e) {
-    return left(HomeException(code: 'ACTIVE_PROGRAM_FETCH_FAILED', message: e.toString()));
+    debugPrint('❌ [HomeRepository] Error fetching active program: $e');
+    return left(AppException.home(e.toString()));
   }
 }
 
@@ -431,26 +665,26 @@ Future<List<BlueprintSectionItemsDto>> getBlueprintSectionItemsByDate({
   }
 }
 
-// 2. INFRA LAYER: HomeRepository (lib/src/feature/home/infra/repository/home_repository.dart)
+// 2. DATA LAYER: HomeRepository (lib/src/feature/home/data/repository/home_repository.dart)
 FutureEither<AppException, List<BlueprintSectionEntity>> getBlueprintSections({
   required DateTime date,
 }) async {
+  debugPrint('📅 [HomeRepository] Fetching blueprint sections for: $date');
+
   try {
     final dataSource = ref.read(coreDataSourceProvider);
     final dtos = await dataSource.getBlueprintSectionItemsByDate(date: date);
     final entities = dtos.map((dto) => BlueprintSectionEntity.fromDto(dto)).toList();
+
+    debugPrint('✅ [HomeRepository] Fetched ${entities.length} sections');
     return right(entities);
   } catch (e) {
-    return left(
-      HomeException(
-        code: 'BLUEPRINT_SECTIONS_FETCH_FAILED',
-        message: e.toString(),
-      ),
-    );
+    debugPrint('❌ [HomeRepository] Error fetching sections: $e');
+    return left(AppException.home(e.toString()));
   }
 }
 
-// 3. INFRA LAYER: BlueprintSectionEntity (lib/src/feature/home/infra/entity/home_entity.dart)
+// 3. DOMAIN LAYER: BlueprintSectionEntity (lib/src/feature/home/infra/entity/home_entity.dart)
 @freezed
 class BlueprintSectionEntity with _$BlueprintSectionEntity {
   const factory BlueprintSectionEntity({
@@ -591,14 +825,14 @@ AsyncWidget<List<BlueprintSectionEntity>>(
 
 ### Layer Responsibilities
 
-| Layer | Location | Responsibility | Input | Output | Error Handling |
-|-------|----------|---------------|-------|--------|----------------|
-| **Data Source** | `core/data/` | API/DB communication, raw queries | Primitives | DTO | throws Exception |
-| **Repository** | `feature/*/infra/repository/` | DTO → Entity mapping, uses data sources | Primitives | `FutureEither<AppException, Entity>` | Maps to AppException |
-| **UseCase** | `feature/*/infra/usecase/` | Business logic orchestration | Params Record | `FutureEither<AppException, Entity>` | Forwards from Repository |
-| **Provider** | `feature/*/presentation/provider/` | State management, caching | Primitives | `AsyncValue<Entity>` | Throws on left |
-| **View** | `feature/*/presentation/view/` | UI rendering | `AsyncValue<Entity>` | Widget | AsyncWidget handles |
-| **Widget** | `feature/*/presentation/widget/` | Reusable UI components | Entity | Widget | N/A |
+| Layer | Location | Responsibility | Input | Output | Error Handling | Debug Logs |
+|-------|----------|---------------|-------|--------|----------------|-------------|
+| **Data Source** | `core/data/` | API/DB communication, raw queries | Primitives | DTO | throws Exception | No |
+| **Repository** | `feature/*/data/repository/` | DTO → Entity mapping, uses data sources | Primitives | `FutureEither<AppException, Entity>` | Maps to AppException | **Yes (dev mode)** |
+| **UseCase** | `feature/*/infra/usecase/` | Business logic orchestration | Params Record | `FutureEither<AppException, Entity>` | Forwards from Repository | No |
+| **Provider** | `feature/*/presentation/provider/` | State management, caching | Primitives | `AsyncValue<Entity>` | Throws on left | No |
+| **View** | `feature/*/presentation/view/` | UI rendering | `AsyncValue<Entity>` | Widget | AsyncWidget handles | No |
+| **Widget** | `feature/*/presentation/widget/` | Reusable UI components | Entity | Widget | N/A | N/A |
 
 ### Implementation Rules
 
@@ -714,12 +948,13 @@ class CoachProfileCard extends StatelessWidget {
 
 ```
 lib/src/feature/home/
+├── data/
+│   └── repository/
+│       ├── home_repository.dart          # Repository interface + impl (with debug logs)
+│       └── home_repository_provider.dart
 ├── infra/
 │   ├── entity/
 │   │   └── home_entity.dart              # ActiveProgramEntity, BlueprintSectionEntity (Freezed)
-│   ├── repository/
-│   │   ├── home_repository.dart          # Repository interface + impl
-│   │   └── home_repository_provider.dart
 │   └── usecase/
 │       ├── get_active_program_usecase.dart
 │       ├── get_blueprint_sections_usecase.dart
@@ -737,3 +972,43 @@ lib/src/feature/home/
 # Note: DTOs are centralized in lib/src/core/data/dto.dart
 # Note: Data sources are in lib/src/core/data/data_source.dart
 ```
+
+### Repository Debug Logs
+
+**Repositories MUST include debug logs in development mode.**
+
+Use `debugPrint()` for development logging:
+
+```dart
+import 'package:flutter/foundation.dart';
+
+class HomeRepositoryImpl implements HomeRepository {
+  @override
+  FutureEither<ActiveProgramEntity> getActiveProgram() async {
+    debugPrint('🏠 [HomeRepository] Fetching active program...');
+
+    try {
+      final dto = await _dataSource.getCurrentActiveProgram();
+
+      if (dto == null) {
+        debugPrint('📭 [HomeRepository] No active program found');
+        return right(const ActiveProgramEntity.empty());
+      }
+
+      debugPrint('✅ [HomeRepository] Active program fetched: ${dto.title}');
+      return right(ActiveProgramEntity.fromDto(dto));
+    } catch (e) {
+      debugPrint('❌ [HomeRepository] Error fetching active program: $e');
+      return left(AppException.home(e.toString()));
+    }
+  }
+}
+```
+
+**Debug Log Guidelines:**
+- Use emoji prefixes for quick scanning: `🏠` (home), `✅` (success), `❌` (error), `📭` (empty), `🔍` (searching), `⏳` (loading)
+- Include repository name in brackets: `[HomeRepository]`
+- Log method entry: `'🏠 [HomeRepository] Fetching active program...'`
+- Log success with key data: `'✅ [HomeRepository] Fetched ${items.length} items'`
+- Log errors: `'❌ [HomeRepository] Error: $e'`
+- Log empty states: `'📭 [HomeRepository] No data found'`

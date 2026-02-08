@@ -1,7 +1,6 @@
 import 'package:clyr_mobile/src/core/usecase/usecase.dart';
-import 'package:clyr_mobile/src/core/exception/exception.dart';
-import 'package:clyr_mobile/src/core/typedef/typedef.dart';
-import 'package:clyr_mobile/src/feature/home/infra/repository/home_repository.dart';
+import 'package:clyr_mobile/src/core/util/type_defs.dart';
+import 'package:clyr_mobile/src/feature/home/data/repository/home_repository.dart';
 
 /// 오늘의 세션 조회 UseCase
 class GetTodaysSessionUseCase implements Usecase<GetTodaysSessionParams, TodaysSessionData> {
@@ -10,7 +9,7 @@ class GetTodaysSessionUseCase implements Usecase<GetTodaysSessionParams, TodaysS
   GetTodaysSessionUseCase(this._repository);
 
   @override
-  FutureEither<AppException, TodaysSessionData> call(GetTodaysSessionParams input) {
+  FutureEither<TodaysSessionData> call(GetTodaysSessionParams input) {
     return _repository.getTodaysSessionData(date: input.date);
   }
 }

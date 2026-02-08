@@ -1,7 +1,8 @@
 import 'package:clyr_mobile/l10n/app_localizations.dart';
-import 'package:clyr_mobile/src/core/exception/exception.dart';
+import 'package:clyr_mobile/src/core/error/exception.dart';
+import 'package:clyr_mobile/src/core/error/exception_localization.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/provider/auth_controller.dart';
-import 'package:clyr_mobile/src/shared/loader.dart';
+import 'package:clyr_mobile/src/shared/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -29,7 +30,7 @@ class LoginView extends HookConsumerWidget {
         if (error is AppException) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(error.displayMessage),
+              content: Text(error.getLocalizedMessage(l10n)),
               backgroundColor: Colors.red,
             ),
           );

@@ -5,7 +5,7 @@ import 'package:clyr_mobile/src/feature/auth/infra/entity/user_profile_entity.da
 import 'package:clyr_mobile/src/feature/auth/presentation/provider/user_profile_controller.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/widget/singout_button.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/widget/user_avatar_card_widget.dart';
-import 'package:clyr_mobile/src/shared/async_widget.dart';
+import 'package:clyr_mobile/src/shared/widgets/async_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -48,7 +48,6 @@ class SettingView extends HookConsumerWidget {
       ),
     ];
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
         children: [
           // 사용자 프로필 카드
