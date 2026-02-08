@@ -651,4 +651,34 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get errorDefaultPermission => '권한 오류가 발생했습니다';
+
+  @override
+  String get workoutDetailTitle => '운동 상세';
+
+  @override
+  String get workoutType => '운동 종류';
+
+  @override
+  String get duration => '운동 시간';
+
+  @override
+  String get startTime => '시작 시간';
+
+  @override
+  String get endTime => '종료 시간';
+
+  @override
+  String get distance => '이동 거리';
+
+  @override
+  String get calories => '소모 칼로리';
+
+  @override
+  String get metadata => '추가 정보';
+
+  @override
+  String get notAvailable => '정보 없음';
+
+  @override
+  String get workoutNotFound => '운동 정보를 찾을 수 없습니다';
 }

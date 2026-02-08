@@ -1369,6 +1369,66 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'권한 오류가 발생했습니다'**
   String get errorDefaultPermission;
+
+  /// No description provided for @workoutDetailTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'운동 상세'**
+  String get workoutDetailTitle;
+
+  /// No description provided for @workoutType.
+  ///
+  /// In ko, this message translates to:
+  /// **'운동 종류'**
+  String get workoutType;
+
+  /// No description provided for @duration.
+  ///
+  /// In ko, this message translates to:
+  /// **'운동 시간'**
+  String get duration;
+
+  /// No description provided for @startTime.
+  ///
+  /// In ko, this message translates to:
+  /// **'시작 시간'**
+  String get startTime;
+
+  /// No description provided for @endTime.
+  ///
+  /// In ko, this message translates to:
+  /// **'종료 시간'**
+  String get endTime;
+
+  /// No description provided for @distance.
+  ///
+  /// In ko, this message translates to:
+  /// **'이동 거리'**
+  String get distance;
+
+  /// No description provided for @calories.
+  ///
+  /// In ko, this message translates to:
+  /// **'소모 칼로리'**
+  String get calories;
+
+  /// No description provided for @metadata.
+  ///
+  /// In ko, this message translates to:
+  /// **'추가 정보'**
+  String get metadata;
+
+  /// No description provided for @notAvailable.
+  ///
+  /// In ko, this message translates to:
+  /// **'정보 없음'**
+  String get notAvailable;
+
+  /// No description provided for @workoutNotFound.
+  ///
+  /// In ko, this message translates to:
+  /// **'운동 정보를 찾을 수 없습니다'**
+  String get workoutNotFound;
 }
 
 class _AppLocalizationsDelegate

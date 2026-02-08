@@ -658,4 +658,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorDefaultPermission => 'Permission error occurred';
+
+  @override
+  String get workoutDetailTitle => 'Workout Detail';
+
+  @override
+  String get workoutType => 'Workout Type';
+
+  @override
+  String get duration => 'Duration';
+
+  @override
+  String get startTime => 'Start Time';
+
+  @override
+  String get endTime => 'End Time';
+
+  @override
+  String get distance => 'Distance';
+
+  @override
+  String get calories => 'Calories Burned';
+
+  @override
+  String get metadata => 'Additional Info';
+
+  @override
+  String get notAvailable => 'N/A';
+
+  @override
+  String get workoutNotFound => 'Workout not found';
 }

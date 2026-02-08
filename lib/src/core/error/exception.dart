@@ -15,6 +15,7 @@ abstract class AppException with _$AppException {
   const factory AppException.health(String? message) = HealthException;
   const factory AppException.noData(String? message) = NoDataException;
   const factory AppException.permission(String? message) = PermissionException;
+  const factory AppException.database(String? message) = DatabaseException;
 
   const AppException._();
 

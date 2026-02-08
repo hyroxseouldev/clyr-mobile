@@ -9,16 +9,25 @@ part of 'home_repository_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// Riverpod provider for HomeRepository
+///
+/// NOTE: Using TestHomeRepository for simulator testing
+/// To use real HealthKit data, replace TestHomeRepository with HomeRepositoryImpl
 
 @ProviderFor(homeRepository)
 final homeRepositoryProvider = HomeRepositoryProvider._();
 
 /// Riverpod provider for HomeRepository
+///
+/// NOTE: Using TestHomeRepository for simulator testing
+/// To use real HealthKit data, replace TestHomeRepository with HomeRepositoryImpl
 
 final class HomeRepositoryProvider
     extends $FunctionalProvider<HomeRepository, HomeRepository, HomeRepository>
     with $Provider<HomeRepository> {
   /// Riverpod provider for HomeRepository
+  ///
+  /// NOTE: Using TestHomeRepository for simulator testing
+  /// To use real HealthKit data, replace TestHomeRepository with HomeRepositoryImpl
   HomeRepositoryProvider._()
     : super(
         from: null,
@@ -52,4 +61,4 @@ final class HomeRepositoryProvider
   }
 }
 
-String _$homeRepositoryHash() => r'4a09857c247d9401365444f1901157c5f2343e1d';
+String _$homeRepositoryHash() => r'dc49c2378c9fdd9e611ab910cd38f9eec60a9e89';

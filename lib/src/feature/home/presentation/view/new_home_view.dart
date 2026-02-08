@@ -2,11 +2,14 @@ import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/health/entity/health_workout_data.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/selected_date_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/workout_list_provider.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/view/home_workout_detail_view.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/widget/workout_list_card.dart';
 import 'package:clyr_mobile/src/shared/widgets/date_selector/date_selector_widget.dart';
 import 'package:clyr_mobile/src/shared/widgets/empty_state.dart';
 import 'package:clyr_mobile/src/shared/widgets/fire_streak_badge.dart';
+import 'package:clyr_mobile/src/shared/widgets/loader.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class NewHomeView extends ConsumerWidget {
@@ -42,7 +45,9 @@ class NewHomeView extends ConsumerWidget {
                 child: DateSelectorWidget(
                   initialDate: selectedDate,
                   onDateSelected: (date) {
-                    ref.read(selectedDateProvider.notifier).setSelectedDate(date);
+                    ref
+                        .read(selectedDateProvider.notifier)
+                        .setSelectedDate(date);
                   },
                 ),
               ),
@@ -52,7 +57,7 @@ class NewHomeView extends ConsumerWidget {
             workoutListAsync.when(
               loading: () => const SliverFillRemaining(
                 hasScrollBody: false,
-                child: Center(child: CircularProgressIndicator()),
+                child: Center(child: Loader()),
               ),
               error: (error, stackTrace) => SliverFillRemaining(
                 hasScrollBody: false,
@@ -76,7 +81,9 @@ class NewHomeView extends ConsumerWidget {
                         const SizedBox(height: 16),
                         ElevatedButton.icon(
                           onPressed: () async {
-                            await ref.read(workoutListProvider.notifier).refresh();
+                            await ref
+                                .read(workoutListProvider.notifier)
+                                .refresh();
                           },
                           icon: const Icon(Icons.refresh),
                           label: Text(l10n.retry),
@@ -98,22 +105,18 @@ class NewHomeView extends ConsumerWidget {
                 }
 
                 return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final workout = workouts[index];
-                      return WorkoutListCard(
-                        workout: workout,
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(workout.workoutType.displayName),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    childCount: workouts.length,
-                  ),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final workout = workouts[index];
+                    return WorkoutListCard(
+                      workout: workout,
+                      onTap: () {
+                        context.goNamed(
+                          HomeWorkoutDetailView.routeName,
+                          pathParameters: {'workoutId': workout.id},
+                        );
+                      },
+                    );
+                  }, childCount: workouts.length),
                 );
               },
             ),

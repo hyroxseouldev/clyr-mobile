@@ -236,5 +236,15 @@
   "errorDefaultOnboarding": "Onboarding error occurred",
   "errorDefaultHealth": "Health data error occurred",
   "errorNoData": "No data available",
-  "errorDefaultPermission": "Permission error occurred"
+  "errorDefaultPermission": "Permission error occurred",
+  "workoutDetailTitle": "Workout Detail",
+  "workoutType": "Workout Type",
+  "duration": "Duration",
+  "startTime": "Start Time",
+  "endTime": "End Time",
+  "distance": "Distance",
+  "calories": "Calories Burned",
+  "metadata": "Additional Info",
+  "notAvailable": "N/A",
+  "workoutNotFound": "Workout not found"
 }

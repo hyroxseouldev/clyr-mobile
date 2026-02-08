@@ -2,6 +2,7 @@ import 'package:clyr_mobile/src/feature/home/data/repository/home_repository_pro
 import 'package:clyr_mobile/src/feature/home/infra/usecase/create_section_record_usecase.dart';
 import 'package:clyr_mobile/src/feature/home/infra/usecase/get_active_program_usecase.dart';
 import 'package:clyr_mobile/src/feature/home/infra/usecase/get_blueprint_sections_usecase.dart';
+import 'package:clyr_mobile/src/feature/home/infra/usecase/get_workout_by_id_usecase.dart';
 import 'package:clyr_mobile/src/feature/home/infra/usecase/get_workouts_by_date_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -31,4 +32,10 @@ GetWorkoutsByDateUseCase getWorkoutsByDateUseCase(Ref ref) {
   final homeRepository = ref.watch(homeRepositoryProvider);
 
   return GetWorkoutsByDateUseCase(homeRepository: homeRepository);
+}
+
+/// Riverpod provider for GetWorkoutByIdUseCase
+@riverpod
+GetWorkoutByIdUseCase getWorkoutByIdUseCase(Ref ref) {
+  return GetWorkoutByIdUseCase(ref.watch(homeRepositoryProvider));
 }

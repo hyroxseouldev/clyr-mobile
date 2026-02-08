@@ -76,9 +76,12 @@ GoRouter router(Ref ref) {
             builder: (context, state) => const NewHomeView(),
             routes: [
               GoRoute(
-                path: 'workout-detail',
+                path: 'workout-detail/:workoutId',
                 name: HomeWorkoutDetailView.routeName,
-                builder: (context, state) => const HomeWorkoutDetailView(),
+                builder: (context, state) {
+                  final workoutId = state.pathParameters['workoutId']!;
+                  return HomeWorkoutDetailView(workoutId: workoutId);
+                },
               ),
 
               GoRoute(

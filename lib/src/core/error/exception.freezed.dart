@@ -86,7 +86,7 @@ extension AppExceptionPatterns on AppException {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( AuthException value)?  auth,TResult Function( NetworkException value)?  network,TResult Function( OrderException value)?  order,TResult Function( WorkoutException value)?  workout,TResult Function( HomeException value)?  home,TResult Function( LogException value)?  log,TResult Function( OnboardingException value)?  onboarding,TResult Function( HealthException value)?  health,TResult Function( NoDataException value)?  noData,TResult Function( PermissionException value)?  permission,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( AuthException value)?  auth,TResult Function( NetworkException value)?  network,TResult Function( OrderException value)?  order,TResult Function( WorkoutException value)?  workout,TResult Function( HomeException value)?  home,TResult Function( LogException value)?  log,TResult Function( OnboardingException value)?  onboarding,TResult Function( HealthException value)?  health,TResult Function( NoDataException value)?  noData,TResult Function( PermissionException value)?  permission,TResult Function( DatabaseException value)?  database,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case AuthException() when auth != null:
@@ -99,7 +99,8 @@ return log(_that);case OnboardingException() when onboarding != null:
 return onboarding(_that);case HealthException() when health != null:
 return health(_that);case NoDataException() when noData != null:
 return noData(_that);case PermissionException() when permission != null:
-return permission(_that);case _:
+return permission(_that);case DatabaseException() when database != null:
+return database(_that);case _:
   return orElse();
 
 }
@@ -117,7 +118,7 @@ return permission(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( AuthException value)  auth,required TResult Function( NetworkException value)  network,required TResult Function( OrderException value)  order,required TResult Function( WorkoutException value)  workout,required TResult Function( HomeException value)  home,required TResult Function( LogException value)  log,required TResult Function( OnboardingException value)  onboarding,required TResult Function( HealthException value)  health,required TResult Function( NoDataException value)  noData,required TResult Function( PermissionException value)  permission,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( AuthException value)  auth,required TResult Function( NetworkException value)  network,required TResult Function( OrderException value)  order,required TResult Function( WorkoutException value)  workout,required TResult Function( HomeException value)  home,required TResult Function( LogException value)  log,required TResult Function( OnboardingException value)  onboarding,required TResult Function( HealthException value)  health,required TResult Function( NoDataException value)  noData,required TResult Function( PermissionException value)  permission,required TResult Function( DatabaseException value)  database,}){
 final _that = this;
 switch (_that) {
 case AuthException():
@@ -130,7 +131,8 @@ return log(_that);case OnboardingException():
 return onboarding(_that);case HealthException():
 return health(_that);case NoDataException():
 return noData(_that);case PermissionException():
-return permission(_that);case _:
+return permission(_that);case DatabaseException():
+return database(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -147,7 +149,7 @@ return permission(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( AuthException value)?  auth,TResult? Function( NetworkException value)?  network,TResult? Function( OrderException value)?  order,TResult? Function( WorkoutException value)?  workout,TResult? Function( HomeException value)?  home,TResult? Function( LogException value)?  log,TResult? Function( OnboardingException value)?  onboarding,TResult? Function( HealthException value)?  health,TResult? Function( NoDataException value)?  noData,TResult? Function( PermissionException value)?  permission,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( AuthException value)?  auth,TResult? Function( NetworkException value)?  network,TResult? Function( OrderException value)?  order,TResult? Function( WorkoutException value)?  workout,TResult? Function( HomeException value)?  home,TResult? Function( LogException value)?  log,TResult? Function( OnboardingException value)?  onboarding,TResult? Function( HealthException value)?  health,TResult? Function( NoDataException value)?  noData,TResult? Function( PermissionException value)?  permission,TResult? Function( DatabaseException value)?  database,}){
 final _that = this;
 switch (_that) {
 case AuthException() when auth != null:
@@ -160,7 +162,8 @@ return log(_that);case OnboardingException() when onboarding != null:
 return onboarding(_that);case HealthException() when health != null:
 return health(_that);case NoDataException() when noData != null:
 return noData(_that);case PermissionException() when permission != null:
-return permission(_that);case _:
+return permission(_that);case DatabaseException() when database != null:
+return database(_that);case _:
   return null;
 
 }
@@ -177,7 +180,7 @@ return permission(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String? message)?  auth,TResult Function( String? message)?  network,TResult Function( String? message)?  order,TResult Function( String? message)?  workout,TResult Function( String? message)?  home,TResult Function( String? message)?  log,TResult Function( String? message)?  onboarding,TResult Function( String? message)?  health,TResult Function( String? message)?  noData,TResult Function( String? message)?  permission,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String? message)?  auth,TResult Function( String? message)?  network,TResult Function( String? message)?  order,TResult Function( String? message)?  workout,TResult Function( String? message)?  home,TResult Function( String? message)?  log,TResult Function( String? message)?  onboarding,TResult Function( String? message)?  health,TResult Function( String? message)?  noData,TResult Function( String? message)?  permission,TResult Function( String? message)?  database,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case AuthException() when auth != null:
 return auth(_that.message);case NetworkException() when network != null:
@@ -189,7 +192,8 @@ return log(_that.message);case OnboardingException() when onboarding != null:
 return onboarding(_that.message);case HealthException() when health != null:
 return health(_that.message);case NoDataException() when noData != null:
 return noData(_that.message);case PermissionException() when permission != null:
-return permission(_that.message);case _:
+return permission(_that.message);case DatabaseException() when database != null:
+return database(_that.message);case _:
   return orElse();
 
 }
@@ -207,7 +211,7 @@ return permission(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String? message)  auth,required TResult Function( String? message)  network,required TResult Function( String? message)  order,required TResult Function( String? message)  workout,required TResult Function( String? message)  home,required TResult Function( String? message)  log,required TResult Function( String? message)  onboarding,required TResult Function( String? message)  health,required TResult Function( String? message)  noData,required TResult Function( String? message)  permission,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String? message)  auth,required TResult Function( String? message)  network,required TResult Function( String? message)  order,required TResult Function( String? message)  workout,required TResult Function( String? message)  home,required TResult Function( String? message)  log,required TResult Function( String? message)  onboarding,required TResult Function( String? message)  health,required TResult Function( String? message)  noData,required TResult Function( String? message)  permission,required TResult Function( String? message)  database,}) {final _that = this;
 switch (_that) {
 case AuthException():
 return auth(_that.message);case NetworkException():
@@ -219,7 +223,8 @@ return log(_that.message);case OnboardingException():
 return onboarding(_that.message);case HealthException():
 return health(_that.message);case NoDataException():
 return noData(_that.message);case PermissionException():
-return permission(_that.message);case _:
+return permission(_that.message);case DatabaseException():
+return database(_that.message);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -236,7 +241,7 @@ return permission(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String? message)?  auth,TResult? Function( String? message)?  network,TResult? Function( String? message)?  order,TResult? Function( String? message)?  workout,TResult? Function( String? message)?  home,TResult? Function( String? message)?  log,TResult? Function( String? message)?  onboarding,TResult? Function( String? message)?  health,TResult? Function( String? message)?  noData,TResult? Function( String? message)?  permission,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String? message)?  auth,TResult? Function( String? message)?  network,TResult? Function( String? message)?  order,TResult? Function( String? message)?  workout,TResult? Function( String? message)?  home,TResult? Function( String? message)?  log,TResult? Function( String? message)?  onboarding,TResult? Function( String? message)?  health,TResult? Function( String? message)?  noData,TResult? Function( String? message)?  permission,TResult? Function( String? message)?  database,}) {final _that = this;
 switch (_that) {
 case AuthException() when auth != null:
 return auth(_that.message);case NetworkException() when network != null:
@@ -248,7 +253,8 @@ return log(_that.message);case OnboardingException() when onboarding != null:
 return onboarding(_that.message);case HealthException() when health != null:
 return health(_that.message);case NoDataException() when noData != null:
 return noData(_that.message);case PermissionException() when permission != null:
-return permission(_that.message);case _:
+return permission(_that.message);case DatabaseException() when database != null:
+return database(_that.message);case _:
   return null;
 
 }
@@ -908,6 +914,72 @@ class _$PermissionExceptionCopyWithImpl<$Res>
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? message = freezed,}) {
   return _then(PermissionException(
+freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class DatabaseException extends AppException {
+  const DatabaseException(this.message): super._();
+  
+
+@override final  String? message;
+
+/// Create a copy of AppException
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DatabaseExceptionCopyWith<DatabaseException> get copyWith => _$DatabaseExceptionCopyWithImpl<DatabaseException>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DatabaseException&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'AppException.database(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DatabaseExceptionCopyWith<$Res> implements $AppExceptionCopyWith<$Res> {
+  factory $DatabaseExceptionCopyWith(DatabaseException value, $Res Function(DatabaseException) _then) = _$DatabaseExceptionCopyWithImpl;
+@override @useResult
+$Res call({
+ String? message
+});
+
+
+
+
+}
+/// @nodoc
+class _$DatabaseExceptionCopyWithImpl<$Res>
+    implements $DatabaseExceptionCopyWith<$Res> {
+  _$DatabaseExceptionCopyWithImpl(this._self, this._then);
+
+  final DatabaseException _self;
+  final $Res Function(DatabaseException) _then;
+
+/// Create a copy of AppException
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? message = freezed,}) {
+  return _then(DatabaseException(
 freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,
   ));

@@ -37,6 +37,9 @@ abstract class HomeRepository {
 
   /// Get workouts for a specific date from HealthKit
   FutureEither<List<HealthWorkoutData>> getWorkoutsByDate(DateTime date);
+
+  /// Get single workout by ID from HealthKit
+  FutureEither<HealthWorkoutData?> getWorkoutById(String id);
 }
 
 /// 홈 데이터 소스 구현체
@@ -203,5 +206,78 @@ class HomeRepositoryImpl implements HomeRepository {
     debugPrint('🔄 [HomeRepository] Resetting permission cache');
     _permissionsChecked = false;
     _permissionsGranted = false;
+  }
+
+  @override
+  FutureEither<HealthWorkoutData?> getWorkoutById(String id) async {
+    debugPrint('💪 [HomeRepository] Fetching workout by ID: $id');
+
+    try {
+      // Fetch recent workouts (last 30 days) to find the matching ID
+      final endDate = DateTime.now();
+      final startDate = endDate.subtract(const Duration(days: 30));
+
+      debugPrint('🔍 [HomeRepository] Query range: $startDate to $endDate');
+
+      // Check permissions first
+      if (!_permissionsChecked) {
+        debugPrint('🔐 [HomeRepository] Checking health permissions...');
+        final permissionsResult = await _permissionService.areHealthPermissionsGranted();
+
+        final hasPermission = permissionsResult.fold(
+          (error) {
+            debugPrint('❌ [HomeRepository] Permission check failed: ${error.message}');
+            return false;
+          },
+          (granted) {
+            _permissionsChecked = true;
+            _permissionsGranted = granted;
+            debugPrint('✅ [HomeRepository] Permissions granted: $granted');
+            return granted;
+          },
+        );
+
+        if (!hasPermission) {
+          debugPrint('⛔ [HomeRepository] Health permissions not granted');
+          return left(AppException.permission(
+            'Health permissions not granted',
+          ));
+        }
+      }
+
+      // Fetch workouts from HealthService
+      final workoutsResult = await _healthService.getWorkouts(
+        startDate: startDate,
+        endDate: endDate,
+      );
+
+      return workoutsResult.fold(
+        (error) {
+          debugPrint('❌ [HomeRepository] Failed to fetch workouts: ${error.message}');
+          return left(error);
+        },
+        (workouts) {
+          final workout = workouts.cast<HealthWorkoutData?>().firstWhere(
+            (w) => w?.id == id,
+            orElse: () => null,
+          );
+
+          if (workout == null) {
+            debugPrint('📭 [HomeRepository] Workout not found: $id');
+            return right(null);
+          }
+
+          debugPrint('✅ [HomeRepository] Workout found: ${workout.workoutType}');
+          return right(workout);
+        },
+      );
+    } on Exception catch (e) {
+      debugPrint('❌ [HomeRepository] Error fetching workout by ID: $e');
+      return left(
+        AppException.health(
+          'Failed to fetch workout: ${e.toString()}',
+        ),
+      );
+    }
   }
 }
