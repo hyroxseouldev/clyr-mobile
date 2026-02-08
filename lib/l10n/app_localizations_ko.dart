@@ -681,4 +681,37 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get workoutNotFound => '운동 정보를 찾을 수 없습니다';
+
+  @override
+  String get communityTitle => '커뮤니티';
+
+  @override
+  String get communityCreate => '커뮤니티 만들기';
+
+  @override
+  String get communityJoin => '참여하기';
+
+  @override
+  String get communityLeave => '나가기';
+
+  @override
+  String get communityParticipants => '참여자';
+
+  @override
+  String get communityFull => '모집이 마감되었습니다';
+
+  @override
+  String get communityAlreadyMember => '이미 참여 중입니다';
+
+  @override
+  String get communityNotFound => '커뮤니티를 찾을 수 없습니다';
+
+  @override
+  String get communityLocation => '장소';
+
+  @override
+  String get communityEventDate => '일시';
+
+  @override
+  String get communityMaxParticipants => '모집 인원';
 }

@@ -688,4 +688,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get workoutNotFound => 'Workout not found';
+
+  @override
+  String get communityTitle => 'Community';
+
+  @override
+  String get communityCreate => 'Create Community';
+
+  @override
+  String get communityJoin => 'Join';
+
+  @override
+  String get communityLeave => 'Leave';
+
+  @override
+  String get communityParticipants => 'Participants';
+
+  @override
+  String get communityFull => 'This community is full';
+
+  @override
+  String get communityAlreadyMember => 'You\'re already a member';
+
+  @override
+  String get communityNotFound => 'Community not found';
+
+  @override
+  String get communityLocation => 'Location';
+
+  @override
+  String get communityEventDate => 'Date & Time';
+
+  @override
+  String get communityMaxParticipants => 'Max Participants';
 }

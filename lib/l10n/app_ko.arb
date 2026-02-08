@@ -246,5 +246,17 @@
   "calories": "소모 칼로리",
   "metadata": "추가 정보",
   "notAvailable": "정보 없음",
-  "workoutNotFound": "운동 정보를 찾을 수 없습니다"
+  "workoutNotFound": "운동 정보를 찾을 수 없습니다",
+
+  "communityTitle": "커뮤니티",
+  "communityCreate": "커뮤니티 만들기",
+  "communityJoin": "참여하기",
+  "communityLeave": "나가기",
+  "communityParticipants": "참여자",
+  "communityFull": "모집이 마감되었습니다",
+  "communityAlreadyMember": "이미 참여 중입니다",
+  "communityNotFound": "커뮤니티를 찾을 수 없습니다",
+  "communityLocation": "장소",
+  "communityEventDate": "일시",
+  "communityMaxParticipants": "모집 인원"
 }

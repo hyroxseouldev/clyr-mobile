@@ -1429,6 +1429,72 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'운동 정보를 찾을 수 없습니다'**
   String get workoutNotFound;
+
+  /// No description provided for @communityTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'커뮤니티'**
+  String get communityTitle;
+
+  /// No description provided for @communityCreate.
+  ///
+  /// In ko, this message translates to:
+  /// **'커뮤니티 만들기'**
+  String get communityCreate;
+
+  /// No description provided for @communityJoin.
+  ///
+  /// In ko, this message translates to:
+  /// **'참여하기'**
+  String get communityJoin;
+
+  /// No description provided for @communityLeave.
+  ///
+  /// In ko, this message translates to:
+  /// **'나가기'**
+  String get communityLeave;
+
+  /// No description provided for @communityParticipants.
+  ///
+  /// In ko, this message translates to:
+  /// **'참여자'**
+  String get communityParticipants;
+
+  /// No description provided for @communityFull.
+  ///
+  /// In ko, this message translates to:
+  /// **'모집이 마감되었습니다'**
+  String get communityFull;
+
+  /// No description provided for @communityAlreadyMember.
+  ///
+  /// In ko, this message translates to:
+  /// **'이미 참여 중입니다'**
+  String get communityAlreadyMember;
+
+  /// No description provided for @communityNotFound.
+  ///
+  /// In ko, this message translates to:
+  /// **'커뮤니티를 찾을 수 없습니다'**
+  String get communityNotFound;
+
+  /// No description provided for @communityLocation.
+  ///
+  /// In ko, this message translates to:
+  /// **'장소'**
+  String get communityLocation;
+
+  /// No description provided for @communityEventDate.
+  ///
+  /// In ko, this message translates to:
+  /// **'일시'**
+  String get communityEventDate;
+
+  /// No description provided for @communityMaxParticipants.
+  ///
+  /// In ko, this message translates to:
+  /// **'모집 인원'**
+  String get communityMaxParticipants;
 }
 
 class _AppLocalizationsDelegate

@@ -120,6 +120,48 @@ lib/src/
    - **AuthDataSource**: Separate interface for auth-related operations
    - **Purpose**: Single source of truth for all data models, shared across features
 
+3. **Supabase Instance**: Always use `core/supabase/supabase_provider.dart`'s `supabaseClientProvider`
+   ```dart
+   // ✅ Correct: Use core's supabaseClientProvider
+   import 'package:clyr_mobile/src/core/supabase/supabase_provider.dart';
+
+   @Riverpod(keepAlive: true)
+   MyDataSource myDataSource(Ref ref) {
+     final client = ref.watch(supabaseClientProvider);
+     return MyDataSourceImpl(client);
+   }
+
+   // ❌ Wrong: Creating separate Supabase instance
+   @Riverpod(keepAlive: true)
+   SupabaseClient supabaseClient(Ref ref) {
+     return Supabase.instance.client;  // Don't duplicate
+   }
+   ```
+
+4. **Repository Injection**: Inject DataSource from outside, never pass `Ref` to Repository
+   ```dart
+   // ✅ Correct: Inject DataSource directly
+   class MyRepositoryImpl implements MyRepository {
+     final MyDataSource _dataSource;
+     MyRepositoryImpl(this._dataSource);
+   }
+
+   // Provider injects dependency
+   @Riverpod(keepAlive: true)
+   MyRepository myRepository(Ref ref) {
+     final dataSource = ref.watch(myDataSourceProvider);
+     return MyRepositoryImpl(dataSource);
+   }
+
+   // ❌ Wrong: Repository receives Ref and reads providers internally
+   class MyRepositoryImpl implements MyRepository {
+     final Ref _ref;
+     MyRepositoryImpl(this._ref);
+
+     MyDataSource get _dataSource => _ref.read(myDataSourceProvider);
+   }
+   ```
+
 ### DTO JSON Serialization Rule
 
 **Always use `@JsonSerializable` generated factories for all DTOs.**
@@ -846,6 +888,8 @@ AsyncWidget<List<BlueprintSectionEntity>>(
 8. **Nested DTOs**: Use custom `fromJson` with `@JsonKey(includeFromJson: false, includeToJson: false)`
 9. **Freezed Entities**: Use `@freezed` for immutable Entity classes
 10. **Routing Navigation**: Always use `context.goNamed()` with `RoutePaths` constants, never hardcode routes
+11. **Supabase Client**: Always use `supabaseClientProvider` from `core/supabase/supabase_provider.dart`
+12. **Dependency Injection**: Inject dependencies into Repository from Provider, never pass `Ref` to Repository
 
 ### Routing Best Practices
 

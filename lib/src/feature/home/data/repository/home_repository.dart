@@ -128,7 +128,17 @@ class HomeRepositoryImpl implements HomeRepository {
     debugPrint('📅 [HomeRepository] Fetching workouts for date: ${date.toString().split(' ')[0]}');
 
     try {
-      // Step 1: Check permissions (with cache)
+      // Step 1: Validate date - check if future date
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      final queryDate = DateTime(date.year, date.month, date.day);
+
+      if (queryDate.isAfter(today)) {
+        debugPrint('⏭️ [HomeRepository] Future date detected, returning empty list');
+        return right(const <HealthWorkoutData>[]);
+      }
+
+      // Step 2: Check permissions (with cache)
       if (!_permissionsChecked) {
         debugPrint('🔐 [HomeRepository] Checking health permissions...');
         final permissionsResult = await _permissionService.areHealthPermissionsGranted();

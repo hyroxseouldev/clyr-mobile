@@ -100,16 +100,19 @@ class TestHomeRepository implements HomeRepository {
     await Future.delayed(const Duration(milliseconds: 800));
     debugPrint('📅 [TestHomeRepository] Fetching mock workouts for: ${date.toString().split(' ')[0]}');
 
-    // Return different data based on date
-    final dayDiff = DateTime.now().difference(date).inDays;
+    // Validate date - check if future date (same as HomeRepositoryImpl)
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final queryDate = DateTime(date.year, date.month, date.day);
 
-    if (dayDiff < 0) {
+    if (queryDate.isAfter(today)) {
       // Future date - no workouts
-      debugPrint('📭 [TestHomeRepository] Future date - returning empty list');
-      return left(AppException.noData('No workouts found for future date'));
+      debugPrint('⏭️ [TestHomeRepository] Future date detected, returning empty list');
+      return right(const <HealthWorkoutData>[]);
     }
 
     // Get cached mock workouts based on day difference
+    final dayDiff = DateTime.now().difference(date).inDays;
     final mockWorkouts = _getCachedMockWorkouts(dayDiff);
 
     if (mockWorkouts.isEmpty) {

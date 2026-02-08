@@ -1,6 +1,8 @@
+import 'package:fpdart/fpdart.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import 'package:clyr_mobile/src/core/error/exception.dart';
 import 'package:clyr_mobile/src/core/util/type_defs.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Generic CRUD service interface for Supabase operations
 ///
@@ -12,7 +14,7 @@ abstract class SupabaseCrudService {
   /// [table] - The table name to insert into
   /// [data] - The data to insert as a Map
   /// Returns the created record as Map
-  FutureEither<AppException, Map<String, dynamic>> create({
+  FutureEither<Map<String, dynamic>> create({
     required String table,
     required Map<String, dynamic> data,
   });
@@ -22,7 +24,7 @@ abstract class SupabaseCrudService {
   /// [table] - The table name to query
   /// [id] - The primary key value (default column: 'id')
   /// [column] - The column name to filter on (default: 'id')
-  FutureEither<AppException, Map<String, dynamic>?> getById({
+  FutureEither<Map<String, dynamic>?> getById({
     required String table,
     required String id,
     String column = 'id',
@@ -36,7 +38,7 @@ abstract class SupabaseCrudService {
   /// [ascending] - Sort order (default: true)
   /// [limit] - Optional maximum number of records
   /// [offset] - Optional offset for pagination
-  FutureEither<AppException, List<Map<String, dynamic>>> getMany({
+  FutureEither<List<Map<String, dynamic>>> getMany({
     required String table,
     List<SupabaseFilter>? filters,
     String? orderBy,
@@ -51,7 +53,7 @@ abstract class SupabaseCrudService {
   /// [id] - The primary key value
   /// [data] - The data to update
   /// [column] - The column name to filter on (default: 'id')
-  FutureEither<AppException, Map<String, dynamic>> updateById({
+  FutureEither<Map<String, dynamic>> updateById({
     required String table,
     required String id,
     required Map<String, dynamic> data,
@@ -63,7 +65,7 @@ abstract class SupabaseCrudService {
   /// [table] - The table name to update
   /// [data] - The data to update
   /// [filters] - List of filters to match records
-  FutureEither<AppException, List<Map<String, dynamic>>> updateMany({
+  FutureEither<List<Map<String, dynamic>>> updateMany({
     required String table,
     required Map<String, dynamic> data,
     required List<SupabaseFilter> filters,
@@ -74,7 +76,7 @@ abstract class SupabaseCrudService {
   /// [table] - The table name to delete from
   /// [id] - The primary key value
   /// [column] - The column name to filter on (default: 'id')
-  FutureEither<AppException, void> deleteById({
+  FutureEither<void> deleteById({
     required String table,
     required String id,
     String column = 'id',
@@ -84,7 +86,7 @@ abstract class SupabaseCrudService {
   ///
   /// [table] - The table name to delete from
   /// [filters] - List of filters to match records
-  FutureEither<AppException, void> deleteMany({
+  FutureEither<void> deleteMany({
     required String table,
     required List<SupabaseFilter> filters,
   });
@@ -94,7 +96,7 @@ abstract class SupabaseCrudService {
   /// [table] - The table name to count from
   /// [filters] - Optional list of filters
   /// [column] - Column to count (default: '*')
-  FutureEither<AppException, int> count({
+  FutureEither<int> count({
     required String table,
     List<SupabaseFilter>? filters,
     String column = '*',
@@ -104,7 +106,7 @@ abstract class SupabaseCrudService {
   ///
   /// [table] - The table name to check
   /// [filters] - Filters to match the record
-  FutureEither<AppException, bool> exists({
+  FutureEither<bool> exists({
     required String table,
     required List<SupabaseFilter> filters,
   });
@@ -117,7 +119,7 @@ abstract class SupabaseCrudService {
   /// [orderBy] - Optional column to order by
   /// [ascending] - Sort order (default: true)
   /// [limit] - Optional maximum number of records
-  FutureEither<AppException, List<Map<String, dynamic>>> customSelect({
+  FutureEither<List<Map<String, dynamic>>> customSelect({
     required String table,
     required String select,
     List<SupabaseFilter>? filters,
@@ -217,27 +219,19 @@ class SupabaseFilter {
   }
 
   /// Apply this filter to a PostgrestBuilder
-  PostgrestBuilder apply(PostgrestBuilder query) {
-    switch (operator) {
-      case SupabaseFilterOperator.eq:
-        return query.eq(column, value);
-      case SupabaseFilterOperator.neq:
-        return query.neq(column, value);
-      case SupabaseFilterOperator.gt:
-        return query.gt(column, value);
-      case SupabaseFilterOperator.lt:
-        return query.lt(column, value);
-      case SupabaseFilterOperator.gte:
-        return query.gte(column, value);
-      case SupabaseFilterOperator.lte:
-        return query.lte(column, value);
-      case SupabaseFilterOperator.like:
-        return query.like(column, value);
-      case SupabaseFilterOperator.inList:
-        return query.in_(column, value);
-      case SupabaseFilterOperator.isNull:
-        return query.is_(column, null);
-    }
+  PostgrestFilterBuilder<dynamic> apply(PostgrestBuilder<dynamic> query) {
+    final filtered = switch (operator) {
+      SupabaseFilterOperator.eq => query.eq(column, value),
+      SupabaseFilterOperator.neq => query.neq(column, value),
+      SupabaseFilterOperator.gt => query.gt(column, value),
+      SupabaseFilterOperator.lt => query.lt(column, value),
+      SupabaseFilterOperator.gte => query.gte(column, value),
+      SupabaseFilterOperator.lte => query.lte(column, value),
+      SupabaseFilterOperator.like => query.like(column, value),
+      SupabaseFilterOperator.inList => query.in_(column, value),
+      SupabaseFilterOperator.isNull => query.is_(column, null),
+    };
+    return filtered as PostgrestFilterBuilder<dynamic>;
   }
 }
 

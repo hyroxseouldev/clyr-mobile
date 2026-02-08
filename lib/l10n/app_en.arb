@@ -246,5 +246,17 @@
   "calories": "Calories Burned",
   "metadata": "Additional Info",
   "notAvailable": "N/A",
-  "workoutNotFound": "Workout not found"
+  "workoutNotFound": "Workout not found",
+
+  "communityTitle": "Community",
+  "communityCreate": "Create Community",
+  "communityJoin": "Join",
+  "communityLeave": "Leave",
+  "communityParticipants": "Participants",
+  "communityFull": "This community is full",
+  "communityAlreadyMember": "You're already a member",
+  "communityNotFound": "Community not found",
+  "communityLocation": "Location",
+  "communityEventDate": "Date & Time",
+  "communityMaxParticipants": "Max Participants"
 }

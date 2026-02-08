@@ -23,26 +23,10 @@ class GetWorkoutsByDateUseCase {
   /// Execute the use case
   FutureEither<List<HealthWorkoutData>> call(GetWorkoutsByDateParams params) async {
     try {
-      // Validate date (throws ArgumentError if invalid)
       final date = params.date;
       debugPrint('📆 [GetWorkoutsByDateUseCase] Processing date: ${date.toString().split(' ')[0]}');
 
-      // Check if date is in future - return empty list immediately
-      final now = DateTime.now();
-      final today = DateTime(now.year, now.month, now.day);
-      final queryDate = DateTime(date.year, date.month, date.day);
-
-      debugPrint('🔍 [GetWorkoutsByDateUseCase] today=$today, queryDate=$queryDate');
-
-      if (queryDate.isAfter(today)) {
-        // Future date - no workouts possible, return empty list
-        debugPrint('⏭️ [GetWorkoutsByDateUseCase] Future date detected, returning empty list');
-        return right(const <HealthWorkoutData>[]);
-      }
-
-      debugPrint('✅ [GetWorkoutsByDateUseCase] Past date, calling repository');
-
-      // Call repository
+      // Call repository (handles date validation internally)
       final result = await _homeRepository.getWorkoutsByDate(date);
 
       return result.fold(

@@ -16,6 +16,7 @@ abstract class AppException with _$AppException {
   const factory AppException.noData(String? message) = NoDataException;
   const factory AppException.permission(String? message) = PermissionException;
   const factory AppException.database(String? message) = DatabaseException;
+  const factory AppException.community(String? message) = CommunityException;
 
   const AppException._();
 
@@ -30,6 +31,8 @@ abstract class AppException with _$AppException {
     health: (msg) => msg,
     noData: (msg) => msg,
     permission: (msg) => msg,
+    database: (msg) => msg,
+    community: (msg) => msg,
     orElse: () => null,
   );
 }
