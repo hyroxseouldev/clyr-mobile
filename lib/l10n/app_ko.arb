@@ -258,5 +258,11 @@
   "communityNotFound": "커뮤니티를 찾을 수 없습니다",
   "communityLocation": "장소",
   "communityEventDate": "일시",
-  "communityMaxParticipants": "모집 인원"
+  "communityMaxParticipants": "모집 인원",
+  "communityCreatedBy": "작성자",
+  "communityParticipants": "참여자",
+  "communityAvailable": "참여 가능",
+  "communityCreatorOnly": "작성자만 참여 가능",
+  "communityJoined": "참여 중",
+  "communityNotJoined": "미참여"
 }

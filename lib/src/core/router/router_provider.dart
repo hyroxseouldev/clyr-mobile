@@ -5,7 +5,10 @@ import 'package:clyr_mobile/src/feature/auth/presentation/view/onboarding_view.d
 import 'package:clyr_mobile/src/feature/auth/presentation/view/signup_view.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/splash_view.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/view/user_profile_view.dart';
-import 'package:clyr_mobile/src/feature/community/presentation/view/commnunity_view.dart';
+import 'package:clyr_mobile/src/feature/community/presentation/view/community_list_view.dart';
+import 'package:clyr_mobile/src/feature/community/presentation/view/community_detail_view.dart';
+import 'package:clyr_mobile/src/feature/community/presentation/view/community_create_view.dart';
+import 'package:clyr_mobile/src/feature/community/presentation/view/community_edit_view.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/home_workout_detail_view.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/new_home_view.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/section_record_create_view.dart';
@@ -109,8 +112,34 @@ GoRouter router(Ref ref) {
             builder: (context, state) => const LogView(),
           ),
           GoRoute(
-            path: RoutePaths.community,
-            builder: (context, state) => const CommunityView(),
+            path: RoutePaths.communityList,
+            name: CommunityListView.routeName,
+            builder: (context, state) => const CommunityListView(),
+            routes: [
+              GoRoute(
+                path: 'create',
+                name: CommunityCreateView.routeName,
+                builder: (context, state) => const CommunityCreateView(),
+              ),
+              GoRoute(
+                path: ':id',
+                name: CommunityDetailView.routeName,
+                builder: (context, state) {
+                  final communityId = state.pathParameters['id']!;
+                  return CommunityDetailView(communityId: communityId);
+                },
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    name: CommunityEditView.routeName,
+                    builder: (context, state) {
+                      final communityId = state.pathParameters['id']!;
+                      return CommunityEditView(communityId: communityId);
+                    },
+                  ),
+                ],
+              ),
+            ],
           ),
           GoRoute(
             path: RoutePaths.stats,

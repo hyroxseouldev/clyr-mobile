@@ -6,17 +6,18 @@ part of 'community_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-AccountDto _$AccountDtoFromJson(Map<String, dynamic> json) => AccountDto(
-  id: json['id'] as String,
-  fullName: json['full_name'] as String,
-  avatarUrl: json['avatar_url'] as String?,
-);
+UserProfileDto _$UserProfileDtoFromJson(Map<String, dynamic> json) =>
+    UserProfileDto(
+      id: json['id'] as String,
+      nickname: json['nickname'] as String,
+      profileImageUrl: json['profile_image_url'] as String?,
+    );
 
-Map<String, dynamic> _$AccountDtoToJson(AccountDto instance) =>
+Map<String, dynamic> _$UserProfileDtoToJson(UserProfileDto instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'full_name': instance.fullName,
-      'avatar_url': instance.avatarUrl,
+      'nickname': instance.nickname,
+      'profile_image_url': instance.profileImageUrl,
     };
 
 CommunityDto _$CommunityDtoFromJson(Map<String, dynamic> json) => CommunityDto(
@@ -77,9 +78,7 @@ CommunityWithCreatorDto _$CommunityWithCreatorDtoFromJson(
   creatorId: json['creator_id'] as String,
   createdAt: DateTime.parse(json['created_at'] as String),
   updatedAt: DateTime.parse(json['updated_at'] as String),
-  creator: json['accounts'] == null
-      ? null
-      : AccountDto.fromJson(json['accounts'] as Map<String, dynamic>),
+  creator: const NestedUserProfileConverter().fromJson(json['account']),
 );
 
 Map<String, dynamic> _$CommunityWithCreatorDtoToJson(
@@ -95,5 +94,5 @@ Map<String, dynamic> _$CommunityWithCreatorDtoToJson(
   'creator_id': instance.creatorId,
   'created_at': instance.createdAt.toIso8601String(),
   'updated_at': instance.updatedAt.toIso8601String(),
-  'accounts': instance.creator,
+  'account': const NestedUserProfileConverter().toJson(instance.creator),
 };

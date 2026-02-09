@@ -714,4 +714,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get communityMaxParticipants => '모집 인원';
+
+  @override
+  String get communityCreatedBy => '작성자';
+
+  @override
+  String get communityAvailable => '참여 가능';
+
+  @override
+  String get communityCreatorOnly => '작성자만 참여 가능';
+
+  @override
+  String get communityJoined => '참여 중';
+
+  @override
+  String get communityNotJoined => '미참여';
 }

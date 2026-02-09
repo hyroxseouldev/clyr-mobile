@@ -64,11 +64,11 @@ abstract class CreatorProfileEntity with _$CreatorProfileEntity {
     String? avatarUrl,
   }) = _CreatorProfileEntity;
 
-  factory CreatorProfileEntity.fromDto(AccountDto dto) {
+  factory CreatorProfileEntity.fromDto(UserProfileDto dto) {
     return CreatorProfileEntity(
       id: dto.id,
-      fullName: dto.fullName,
-      avatarUrl: dto.avatarUrl,
+      fullName: dto.nickname,
+      avatarUrl: dto.profileImageUrl,
     );
   }
 }

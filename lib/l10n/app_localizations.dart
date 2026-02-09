@@ -1495,6 +1495,36 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'모집 인원'**
   String get communityMaxParticipants;
+
+  /// No description provided for @communityCreatedBy.
+  ///
+  /// In ko, this message translates to:
+  /// **'작성자'**
+  String get communityCreatedBy;
+
+  /// No description provided for @communityAvailable.
+  ///
+  /// In ko, this message translates to:
+  /// **'참여 가능'**
+  String get communityAvailable;
+
+  /// No description provided for @communityCreatorOnly.
+  ///
+  /// In ko, this message translates to:
+  /// **'작성자만 참여 가능'**
+  String get communityCreatorOnly;
+
+  /// No description provided for @communityJoined.
+  ///
+  /// In ko, this message translates to:
+  /// **'참여 중'**
+  String get communityJoined;
+
+  /// No description provided for @communityNotJoined.
+  ///
+  /// In ko, this message translates to:
+  /// **'미참여'**
+  String get communityNotJoined;
 }
 
 class _AppLocalizationsDelegate

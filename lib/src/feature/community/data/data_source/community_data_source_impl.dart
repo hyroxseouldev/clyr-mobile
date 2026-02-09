@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:clyr_mobile/src/feature/community/data/dto/community_dto.dart';
 import 'package:clyr_mobile/src/feature/community/data/data_source/community_data_source.dart';
@@ -22,15 +23,19 @@ class CommunityDataSourceImpl implements CommunityDataSource {
       throw Exception('User not authenticated');
     }
 
-    final response = await _supabase.from('communities').insert({
-      'title': title,
-      'content': content,
-      'image_url': imageUrl,
-      'event_date': eventDate.toIso8601String(),
-      'location': location,
-      'max_participants': maxParticipants,
-      'creator_id': userId,
-    }).select().single();
+    final response = await _supabase
+        .from('communities')
+        .insert({
+          'title': title,
+          'content': content,
+          'image_url': imageUrl,
+          'event_date': eventDate.toIso8601String(),
+          'location': location,
+          'max_participants': maxParticipants,
+          'creator_id': userId,
+        })
+        .select()
+        .single();
 
     return CommunityDto.fromJson(response);
   }
@@ -44,9 +49,8 @@ class CommunityDataSourceImpl implements CommunityDataSource {
     String? location,
   }) async {
     // Start query builder with select first
-    dynamic query = _supabase
-        .from('communities')
-        .select('''
+    // communities → account → user_profile nested join
+    dynamic query = _supabase.from('communities').select('''
           id,
           title,
           content,
@@ -57,10 +61,13 @@ class CommunityDataSourceImpl implements CommunityDataSource {
           creator_id,
           created_at,
           updated_at,
-          accounts (
+          account (
             id,
-            full_name,
-            avatar_url
+            user_profile (
+              id,
+              nickname,
+              profile_image_url
+            )
           )
         ''');
 
@@ -84,9 +91,10 @@ class CommunityDataSourceImpl implements CommunityDataSource {
 
     // Fetch participant counts for all communities
     final communityIds = response.map((e) => e['id'] as String).toList();
+
     final counts = await _getParticipantCounts(communityIds);
 
-    return response.map((json) {
+    return response.map<CommunityWithCreatorDto>((json) {
       final dto = CommunityWithCreatorDto.fromJson(json);
       dto.participantCount = counts[json['id'] as String] ?? 0;
       return dto;
@@ -94,19 +102,38 @@ class CommunityDataSourceImpl implements CommunityDataSource {
   }
 
   /// Batch fetch participant counts for multiple communities
-  Future<Map<String, int>> _getParticipantCounts(List<String> communityIds) async {
+  Future<Map<String, int>> _getParticipantCounts(
+    List<dynamic> communityIds,
+  ) async {
     if (communityIds.isEmpty) return {};
+
+    debugPrint(
+      '💬 [CommunityDataSource] Fetching participant counts for ${communityIds.length} communities',
+    );
 
     final response = await _supabase
         .from('community_participants')
         .select('community_id')
         .inFilter('community_id', communityIds);
 
+    debugPrint('💬 [CommunityDataSource] Raw response: $response');
+    debugPrint(
+      '💬 [CommunityDataSource] Response type: ${response.runtimeType}',
+    );
+
     final counts = <String, int>{};
     for (final row in response) {
-      final id = row['community_id'] as String;
-      counts[id] = (counts[id] ?? 0) + 1;
+      debugPrint(
+        '💬 [CommunityDataSource] Processing row: $row (type: ${row.runtimeType})',
+      );
+      final id = row['community_id']?.toString();
+      debugPrint('💬 [CommunityDataSource] Extracted ID: $id');
+      if (id != null) {
+        counts[id] = (counts[id] ?? 0) + 1;
+      }
     }
+
+    debugPrint('✅ [CommunityDataSource] Participant counts: $counts');
     return counts;
   }
 
@@ -125,10 +152,13 @@ class CommunityDataSourceImpl implements CommunityDataSource {
           creator_id,
           created_at,
           updated_at,
-          accounts (
+          account (
             id,
-            full_name,
-            avatar_url
+            user_profile (
+              id,
+              nickname,
+              profile_image_url
+            )
           )
         ''')
         .eq('id', id)
@@ -177,7 +207,23 @@ class CommunityDataSourceImpl implements CommunityDataSource {
 
   @override
   Future<void> deleteCommunity(String id) async {
-    await _supabase.from('communities').delete().eq('id', id);
+    debugPrint('💬 [CommunityDataSource] Attempting to delete community: $id');
+
+    final userId = _supabase.auth.currentUser?.id;
+    debugPrint('💬 [CommunityDataSource] Current user ID: $userId');
+
+    try {
+      final result = await _supabase
+          .from('communities')
+          .delete()
+          .eq('id', id)
+          .select();
+
+      debugPrint('✅ [CommunityDataSource] Delete result: $result');
+    } catch (e) {
+      debugPrint('❌ [CommunityDataSource] Delete error: $e');
+      rethrow;
+    }
   }
 
   @override

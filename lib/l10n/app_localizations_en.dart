@@ -721,4 +721,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get communityMaxParticipants => 'Max Participants';
+
+  @override
+  String get communityCreatedBy => 'Created by';
+
+  @override
+  String get communityAvailable => 'Available';
+
+  @override
+  String get communityCreatorOnly => 'Creator only';
+
+  @override
+  String get communityJoined => 'Joined';
+
+  @override
+  String get communityNotJoined => 'Not joined';
 }

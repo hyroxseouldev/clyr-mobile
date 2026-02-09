@@ -2,25 +2,62 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'community_dto.g.dart';
 
-/// Minimal account DTO for creator profile
+/// Converter to extract user_profile from nested account structure
+/// Handles: communities → account → user_profile
+class NestedUserProfileConverter implements JsonConverter<UserProfileDto?, dynamic> {
+  const NestedUserProfileConverter();
+
+  @override
+  UserProfileDto? fromJson(dynamic json) {
+    if (json == null) return null;
+    // Handle empty list case
+    if (json is List && json.isEmpty) return null;
+
+    // Handle nested structure: account → user_profile
+    if (json is Map) {
+      final map = Map<String, dynamic>.from(json);
+
+      // Direct user_profile (if querying user_profile directly)
+      if (map.containsKey('nickname')) {
+        return UserProfileDto.fromJson(map);
+      }
+
+      // Nested in account: account → user_profile
+      if (map.containsKey('user_profile')) {
+        final userProfile = map['user_profile'];
+        if (userProfile == null) return null;
+        if (userProfile is List && userProfile.isEmpty) return null;
+        if (userProfile is Map) {
+          return UserProfileDto.fromJson(Map<String, dynamic>.from(userProfile));
+        }
+      }
+    }
+    return null;
+  }
+
+  @override
+  dynamic toJson(UserProfileDto? object) => object?.toJson();
+}
+
+/// Minimal user profile DTO for creator profile
 /// Feature-scoped to avoid dependency on core layer
 @JsonSerializable()
-class AccountDto {
+class UserProfileDto {
   final String id;
-  @JsonKey(name: 'full_name')
-  final String fullName;
-  @JsonKey(name: 'avatar_url')
-  final String? avatarUrl;
+  @JsonKey(name: 'nickname')
+  final String nickname;
+  @JsonKey(name: 'profile_image_url')
+  final String? profileImageUrl;
 
-  AccountDto({
+  UserProfileDto({
     required this.id,
-    required this.fullName,
-    this.avatarUrl,
+    required this.nickname,
+    this.profileImageUrl,
   });
 
-  factory AccountDto.fromJson(Map<String, dynamic> json) =>
-      _$AccountDtoFromJson(json);
-  Map<String, dynamic> toJson() => _$AccountDtoToJson(this);
+  factory UserProfileDto.fromJson(Map<String, dynamic> json) =>
+      _$UserProfileDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$UserProfileDtoToJson(this);
 }
 
 /// Community post data transfer object
@@ -111,9 +148,10 @@ class CommunityWithCreatorDto {
   @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
 
-  /// Nested creator profile from accounts table
-  @JsonKey(name: 'accounts')
-  final AccountDto? creator;
+  /// Nested creator profile from account → user_profiles
+  @NestedUserProfileConverter()
+  @JsonKey(name: 'account')
+  final UserProfileDto? creator;
 
   /// Computed field - not included in JSON serialization
   @JsonKey(includeFromJson: false, includeToJson: false)

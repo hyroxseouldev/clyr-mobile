@@ -258,5 +258,11 @@
   "communityNotFound": "Community not found",
   "communityLocation": "Location",
   "communityEventDate": "Date & Time",
-  "communityMaxParticipants": "Max Participants"
+  "communityMaxParticipants": "Max Participants",
+  "communityCreatedBy": "Created by",
+  "communityParticipants": "Participants",
+  "communityAvailable": "Available",
+  "communityCreatorOnly": "Creator only",
+  "communityJoined": "Joined",
+  "communityNotJoined": "Not joined"
 }

@@ -919,6 +919,150 @@ context.goNamed('/home/session-record-create/${item.id}');
 - **Consistency**: Single source of truth for route paths
 - **IDE Support**: Auto-completion and jump-to-definition
 
+### Presentation Layer Best Practices
+
+#### 1. Navigation - Use View's routeName
+
+**DO** - Use View's static `routeName` constant for navigation:
+```dart
+// ✅ Correct: Use View's routeName constant
+import 'package:clyr_mobile/src/feature/community/presentation/view/community_create_view.dart';
+import 'package:clyr_mobile/src/feature/community/presentation/view/community_detail_view.dart';
+
+context.goNamed(CommunityCreateView.routeName);
+context.goNamed(
+  CommunityDetailView.routeName,
+  pathParameters: {'id': communityId},
+);
+```
+
+**DON'T** - Don't use RoutePaths constants for navigation:
+```dart
+// ❌ Wrong: Using RoutePaths constants
+import 'package:clyr_mobile/src/core/router/router_path.dart';
+
+context.goNamed(RoutePaths.communityCreate);
+context.goNamed(
+  RoutePaths.communityDetail,
+  pathParameters: {'id': communityId},
+);
+```
+
+**Why?**
+- **Single Source**: View's `routeName` is the canonical route identifier
+- **Consistency**: Router configuration links paths to route names
+- **Discoverability**: Importing the View gives immediate access to its routeName
+- **Maintainability**: Route changes only require updating the View file
+
+#### 2. Empty State - Use Shared EmptyState Widget
+
+**DO** - Use `EmptyState` widget from `shared/widgets`:
+```dart
+// ✅ Correct: Use shared EmptyState widget
+import 'package:clyr_mobile/src/shared/widgets/empty_state.dart';
+
+if (communities.isEmpty) {
+  return EmptyState(
+    text: l10n.emptyCommunity,
+    icon: const Icon(Icons.groups_outlined),
+  );
+}
+```
+
+**DON'T** - Don't create custom `_buildEmptyState` methods:
+```dart
+// ❌ Wrong: Custom empty state method
+Widget _buildEmptyState(BuildContext context, AppLocalizations l10n) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.groups_outlined, size: 64),
+        const SizedBox(height: 16),
+        Text(l10n.emptyCommunity),
+      ],
+    ),
+  );
+}
+```
+
+**Why?**
+- **Reusability**: Consistent empty state UI across the app
+- **Maintainability**: Single file to update empty state styling
+- **Less Boilerplate**: No need to write custom empty state code
+- **Consistency**: All empty states look and behave the same
+
+#### 3. Controller Management - Use flutter_hooks
+
+**DO** - Use flutter_hooks for controllers and state:
+```dart
+// ✅ Correct: Use flutter_hooks
+import 'package:flutter_hooks/flutter_hooks.dart';
+
+class _MyForm extends HookConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = useMemoized(() => GlobalKey<FormState>());
+    final titleController = useTextEditingController();
+    final selectedDate = useState<DateTime?>(null);
+    final maxParticipants = useState<int>(30);
+
+    // No dispose needed - hooks handle it automatically
+    return Form(
+      key: formKey,
+      child: TextFormField(
+        controller: titleController,
+        // ...
+      ),
+    );
+  }
+}
+```
+
+**DON'T** - Don't manually manage controllers with dispose:
+```dart
+// ❌ Wrong: Manual controller management
+class _MyForm extends ConsumerStatefulWidget {
+  final _titleController = TextEditingController();
+  DateTime? _selectedDate;
+  int _maxParticipants = 30;
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      child: TextFormField(
+        controller: _titleController,
+        // Need setState for state updates
+        onChanged: (value) {
+          setState(() {
+            _maxParticipants = int.parse(value);
+          });
+        },
+      ),
+    );
+  }
+}
+```
+
+**Why?**
+- **Automatic Cleanup**: Hooks automatically dispose controllers when widget unmounts
+- **Less Boilerplate**: No need to write dispose methods
+- **State Management**: `useState` provides reactive state without setState
+- **Type Safety**: Hooks provide typed state management
+- **Reusability**: Custom hooks can be extracted and reused
+
+**Common Hooks:**
+- `useTextEditingController(text: '')` - Text editing controller with auto-disposal
+- `useState(initialValue)` - Reactive state variable
+- `useMemoized(() => create(), keys)` - Memoized values with dependencies
+- `useEffect(fn, keys)` - Side effects with dependencies
+
 ### Widget Localization Best Practices
 
 **DO** - Pass localized strings as parameters from View layer:

@@ -1,5 +1,4 @@
 import 'package:clyr_mobile/l10n/app_localizations.dart';
-import 'package:clyr_mobile/src/core/health/entity/health_workout_data.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/selected_date_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/workout_list_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/home_workout_detail_view.dart';

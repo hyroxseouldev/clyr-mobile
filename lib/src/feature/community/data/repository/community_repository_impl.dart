@@ -68,7 +68,9 @@ class CommunityRepositoryImpl implements CommunityRepository {
 
       final entities = dtos.map((dto) => CommunityEntity.fromDto(dto)).toList();
 
-      debugPrint('✅ [CommunityRepository] Fetched ${entities.length} communities');
+      debugPrint(
+        '✅ [CommunityRepository] Fetched ${entities.length} communities',
+      );
       return right(entities);
     } catch (e) {
       debugPrint('❌ [CommunityRepository] Error fetching communities: $e');
@@ -100,14 +102,19 @@ class CommunityRepositoryImpl implements CommunityRepository {
   FutureEither<List<CommunityParticipantEntity>> getCommunityParticipants(
     String communityId,
   ) async {
-    debugPrint('💬 [CommunityRepository] Fetching participants for: $communityId');
+    debugPrint(
+      '💬 [CommunityRepository] Fetching participants for: $communityId',
+    );
 
     try {
       final dtos = await _dataSource.getCommunityParticipants(communityId);
-      final entities =
-          dtos.map((dto) => CommunityParticipantEntity.fromDto(dto)).toList();
+      final entities = dtos
+          .map((dto) => CommunityParticipantEntity.fromDto(dto))
+          .toList();
 
-      debugPrint('✅ [CommunityRepository] Fetched ${entities.length} participants');
+      debugPrint(
+        '✅ [CommunityRepository] Fetched ${entities.length} participants',
+      );
       return right(entities);
     } catch (e) {
       debugPrint('❌ [CommunityRepository] Error fetching participants: $e');
@@ -179,10 +186,7 @@ class CommunityRepositoryImpl implements CommunityRepository {
     );
 
     try {
-      await _dataSource.joinCommunity(
-        communityId: communityId,
-        userId: userId,
-      );
+      await _dataSource.joinCommunity(communityId: communityId, userId: userId);
       debugPrint('✅ [CommunityRepository] User joined community successfully');
       return right(null);
     } catch (e) {

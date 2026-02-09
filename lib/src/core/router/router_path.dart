@@ -25,4 +25,8 @@ class RoutePaths {
   static const String termsOfService = '/settings/terms';
   static const String appInfo = '/settings/app-info';
   static const String program = '/program';
+  static const String communityList = '/community';
+  static const String communityDetail = '/community/:id';
+  static const String communityCreate = '/community/create';
+  static const String communityEdit = '/community/:id/edit';
 }
