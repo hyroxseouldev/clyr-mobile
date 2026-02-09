@@ -192,6 +192,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsProfile => 'Profile';
 
   @override
+  String get settingsMyClasses => '내 클래스보기';
+
+  @override
+  String get settingsMenu => '설정';
+
+  @override
+  String get settingsTheme => '테마';
+
+  @override
+  String get settingsThemeLight => '라이트 모드';
+
+  @override
+  String get settingsThemeDark => '다크 모드';
+
+  @override
+  String get settingsThemeSystem => '시스템 설정 따르기';
+
+  @override
   String get settingsPurchaseHistory => 'Purchase History';
 
   @override
@@ -205,6 +223,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logout => 'Logout';
+
+  @override
+  String get logoutConfirm => '정말 로그아웃하시겠습니까?';
+
+  @override
+  String get myClassesComingSoon => '준비 중입니다';
 
   @override
   String get save => 'Save';

@@ -19,7 +19,9 @@ import 'package:clyr_mobile/src/feature/settings/presentation/view/app_info_view
 import 'package:clyr_mobile/src/feature/settings/presentation/view/membership_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/purchase_history_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/terms_of_service_view.dart';
-import 'package:clyr_mobile/src/feature/settings/presentation/view/settings_view.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/view/settings_home_view.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/view/settings_list_view.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/view/my_classes_view.dart';
 import 'package:clyr_mobile/src/feature/stats/presentation/view/stats_view.dart';
 import 'package:clyr_mobile/src/shared/widgets/default_layout.dart';
 import 'package:flutter/material.dart';
@@ -151,27 +153,37 @@ GoRouter router(Ref ref) {
           ),
           GoRoute(
             path: RoutePaths.settings,
-            builder: (context, state) => const SettingView(),
+            builder: (context, state) => const SettingsHomeView(),
             routes: [
               GoRoute(
                 path: 'profile',
                 builder: (context, state) => const UserProfileView(),
               ),
               GoRoute(
-                path: 'purchase-history',
-                builder: (context, state) => const PurchaseHistoryView(),
+                path: 'list',
+                builder: (context, state) => const SettingsListView(),
+                routes: [
+                  GoRoute(
+                    path: 'purchase-history',
+                    builder: (context, state) => const PurchaseHistoryView(),
+                  ),
+                  GoRoute(
+                    path: 'membership',
+                    builder: (context, state) => const MembershipView(),
+                  ),
+                  GoRoute(
+                    path: 'terms',
+                    builder: (context, state) => const TermsOfServiceView(),
+                  ),
+                  GoRoute(
+                    path: 'app-info',
+                    builder: (context, state) => const AppInfoView(),
+                  ),
+                ],
               ),
               GoRoute(
-                path: 'membership',
-                builder: (context, state) => const MembershipView(),
-              ),
-              GoRoute(
-                path: 'terms',
-                builder: (context, state) => const TermsOfServiceView(),
-              ),
-              GoRoute(
-                path: 'app-info',
-                builder: (context, state) => const AppInfoView(),
+                path: 'my-classes',
+                builder: (context, state) => const MyClassesView(),
               ),
             ],
           ),

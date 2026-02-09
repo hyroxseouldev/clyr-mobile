@@ -458,6 +458,42 @@ abstract class AppLocalizations {
   /// **'프로필'**
   String get settingsProfile;
 
+  /// No description provided for @settingsMyClasses.
+  ///
+  /// In ko, this message translates to:
+  /// **'내 클래스보기'**
+  String get settingsMyClasses;
+
+  /// No description provided for @settingsMenu.
+  ///
+  /// In ko, this message translates to:
+  /// **'설정'**
+  String get settingsMenu;
+
+  /// No description provided for @settingsTheme.
+  ///
+  /// In ko, this message translates to:
+  /// **'테마'**
+  String get settingsTheme;
+
+  /// No description provided for @settingsThemeLight.
+  ///
+  /// In ko, this message translates to:
+  /// **'라이트 모드'**
+  String get settingsThemeLight;
+
+  /// No description provided for @settingsThemeDark.
+  ///
+  /// In ko, this message translates to:
+  /// **'다크 모드'**
+  String get settingsThemeDark;
+
+  /// No description provided for @settingsThemeSystem.
+  ///
+  /// In ko, this message translates to:
+  /// **'시스템 설정 따르기'**
+  String get settingsThemeSystem;
+
   /// No description provided for @settingsPurchaseHistory.
   ///
   /// In ko, this message translates to:
@@ -487,6 +523,18 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'로그아웃'**
   String get logout;
+
+  /// No description provided for @logoutConfirm.
+  ///
+  /// In ko, this message translates to:
+  /// **'정말 로그아웃하시겠습니까?'**
+  String get logoutConfirm;
+
+  /// No description provided for @myClassesComingSoon.
+  ///
+  /// In ko, this message translates to:
+  /// **'준비 중입니다'**
+  String get myClassesComingSoon;
 
   /// No description provided for @save.
   ///
