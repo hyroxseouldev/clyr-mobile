@@ -753,4 +753,34 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get communityNotJoined => '미참여';
+
+  @override
+  String get shareWorkout => '운동 공유';
+
+  @override
+  String get shareDownload => '갤러리에 저장';
+
+  @override
+  String get shareToKakao => '카카오톡';
+
+  @override
+  String get shareToInstagram => '인스타그램';
+
+  @override
+  String get shareSimpleDesign => '심플';
+
+  @override
+  String get shareDetailedDesign => '디테일';
+
+  @override
+  String get shareTransparentDesign => '투명 배경';
+
+  @override
+  String get shareDownloadSuccess => '갤러리에 저장되었습니다';
+
+  @override
+  String get shareDownloadError => '저장 실패';
+
+  @override
+  String get shareGenerating => '이미지 생성 중...';
 }

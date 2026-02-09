@@ -760,4 +760,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get communityNotJoined => 'Not joined';
+
+  @override
+  String get shareWorkout => 'Share Workout';
+
+  @override
+  String get shareDownload => 'Save to Gallery';
+
+  @override
+  String get shareToKakao => 'KakaoTalk';
+
+  @override
+  String get shareToInstagram => 'Instagram';
+
+  @override
+  String get shareSimpleDesign => 'Simple';
+
+  @override
+  String get shareDetailedDesign => 'Detailed';
+
+  @override
+  String get shareTransparentDesign => 'Transparent';
+
+  @override
+  String get shareDownloadSuccess => 'Saved to gallery';
+
+  @override
+  String get shareDownloadError => 'Save failed';
+
+  @override
+  String get shareGenerating => 'Generating image...';
 }

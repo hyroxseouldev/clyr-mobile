@@ -272,5 +272,16 @@
   "communityAvailable": "참여 가능",
   "communityCreatorOnly": "작성자만 참여 가능",
   "communityJoined": "참여 중",
-  "communityNotJoined": "미참여"
+  "communityNotJoined": "미참여",
+
+  "shareWorkout": "운동 공유",
+  "shareDownload": "갤러리에 저장",
+  "shareToKakao": "카카오톡",
+  "shareToInstagram": "인스타그램",
+  "shareSimpleDesign": "심플",
+  "shareDetailedDesign": "디테일",
+  "shareTransparentDesign": "투명 배경",
+  "shareDownloadSuccess": "갤러리에 저장되었습니다",
+  "shareDownloadError": "저장 실패",
+  "shareGenerating": "이미지 생성 중..."
 }

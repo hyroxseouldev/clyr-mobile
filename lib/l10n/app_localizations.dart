@@ -1573,6 +1573,66 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'미참여'**
   String get communityNotJoined;
+
+  /// No description provided for @shareWorkout.
+  ///
+  /// In ko, this message translates to:
+  /// **'운동 공유'**
+  String get shareWorkout;
+
+  /// No description provided for @shareDownload.
+  ///
+  /// In ko, this message translates to:
+  /// **'갤러리에 저장'**
+  String get shareDownload;
+
+  /// No description provided for @shareToKakao.
+  ///
+  /// In ko, this message translates to:
+  /// **'카카오톡'**
+  String get shareToKakao;
+
+  /// No description provided for @shareToInstagram.
+  ///
+  /// In ko, this message translates to:
+  /// **'인스타그램'**
+  String get shareToInstagram;
+
+  /// No description provided for @shareSimpleDesign.
+  ///
+  /// In ko, this message translates to:
+  /// **'심플'**
+  String get shareSimpleDesign;
+
+  /// No description provided for @shareDetailedDesign.
+  ///
+  /// In ko, this message translates to:
+  /// **'디테일'**
+  String get shareDetailedDesign;
+
+  /// No description provided for @shareTransparentDesign.
+  ///
+  /// In ko, this message translates to:
+  /// **'투명 배경'**
+  String get shareTransparentDesign;
+
+  /// No description provided for @shareDownloadSuccess.
+  ///
+  /// In ko, this message translates to:
+  /// **'갤러리에 저장되었습니다'**
+  String get shareDownloadSuccess;
+
+  /// No description provided for @shareDownloadError.
+  ///
+  /// In ko, this message translates to:
+  /// **'저장 실패'**
+  String get shareDownloadError;
+
+  /// No description provided for @shareGenerating.
+  ///
+  /// In ko, this message translates to:
+  /// **'이미지 생성 중...'**
+  String get shareGenerating;
 }
 
 class _AppLocalizationsDelegate

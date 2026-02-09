@@ -264,5 +264,16 @@
   "communityAvailable": "Available",
   "communityCreatorOnly": "Creator only",
   "communityJoined": "Joined",
-  "communityNotJoined": "Not joined"
+  "communityNotJoined": "Not joined",
+
+  "shareWorkout": "Share Workout",
+  "shareDownload": "Save to Gallery",
+  "shareToKakao": "KakaoTalk",
+  "shareToInstagram": "Instagram",
+  "shareSimpleDesign": "Simple",
+  "shareDetailedDesign": "Detailed",
+  "shareTransparentDesign": "Transparent",
+  "shareDownloadSuccess": "Saved to gallery",
+  "shareDownloadError": "Save failed",
+  "shareGenerating": "Generating image..."
 }
