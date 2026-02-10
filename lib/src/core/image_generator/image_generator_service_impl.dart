@@ -31,14 +31,14 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
   }
 
   Future<Uint8List> _createTransparentImage(HealthWorkoutData workout) async {
-    const int width = 1080;
-    const int height = 1080;
+    const int width = 400;
+    const int height = 450;
 
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder);
 
-    final startY = height * 0.25;
-    final double verticalSpacing = 100;
+    final startY = height * 0.20;
+    final double verticalSpacing = height * 0.22;
 
     final durationText = _formatDuration(workout.duration);
     final calText = _valueFormat(workout.totalEnergyBurned, 'cal');
@@ -184,7 +184,7 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
       );
       canvas.drawParagraph(
         valueParagraph,
-        Offset((canvasWidth - valueParagraph.width) / 2, y + 40),
+        Offset((canvasWidth - valueParagraph.width) / 2, y + 30),
       );
     }
 
