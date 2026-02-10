@@ -26,7 +26,7 @@ class ProgramGridCard extends StatelessWidget {
           children: [
             // Cover Image
             AspectRatio(
-              aspectRatio: 1.2,
+              aspectRatio: 2.0,
               child: displayImage != null && displayImage.isNotEmpty
                   ? Image.network(
                       displayImage,

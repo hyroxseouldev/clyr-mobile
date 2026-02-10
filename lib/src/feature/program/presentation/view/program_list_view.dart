@@ -83,7 +83,7 @@ class ProgramListView extends HookConsumerWidget {
         crossAxisCount: 2,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        childAspectRatio: 0.9,
+        childAspectRatio: 1,
       ),
       itemCount: programs.length,
       itemBuilder: (context, index) {
