@@ -5,6 +5,7 @@ import 'package:clyr_mobile/src/core/image_generator/image_generator_service.dar
 import 'package:clyr_mobile/src/core/share/entity/share_image_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:image/image.dart' as img;
 
 /// Image generator service implementation
 /// Uses RenderRepaintBoundary to capture widgets as images
@@ -31,55 +32,102 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
   }
 
   Future<Uint8List> _createTransparentImage(HealthWorkoutData workout) async {
+    // Image dimensions
+    const int width = 1080;
+    const int height = 400;
+
+    // Create a transparent image using the image package
+    final image = img.Image(width: width, height: height, numChannels: 4);
+
+    // Fill with transparent pixels (RGBA: 0, 0, 0, 0)
+    img.fill(image, color: img.ColorRgba8(0, 0, 0, 0));
+
+    // Now we need to draw text on this transparent image
+    // Unfortunately, the image package doesn't have great text rendering
+    // So we'll use dart:ui to render text, then composite it
+
+    // 1. Create text using dart:ui
     final textStyle = ui.TextStyle(
       color: const Color(0xFFFFFFFF),
       fontSize: 48,
       fontWeight: FontWeight.bold,
     );
+
     final paragraphStyle = ui.ParagraphStyle(
       textAlign: TextAlign.left,
       textDirection: TextDirection.ltr,
     );
 
+    // Build workout type paragraph
+    final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
+      ..pushStyle(textStyle)
+      ..addText(workout.workoutType.displayName);
+
+    final paragraph = paragraphBuilder.build();
+    paragraph.layout(ui.ParagraphConstraints(width: width.toDouble()));
+
+    // Stats text style
     final statsStyle = ui.TextStyle(
       color: const Color(0xFFFFFFFF).withValues(alpha: 0.9),
       fontSize: 32,
     );
 
-    final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
-      ..pushStyle(textStyle)
-      ..addText(workout.workoutType.displayName)
-      ..pop();
-
-    final paragraph = paragraphBuilder.build();
-    paragraph.layout(const ui.ParagraphConstraints(width: 1080));
-
+    // Build stats paragraph
     final statsBuilder = ui.ParagraphBuilder(paragraphStyle)
       ..pushStyle(statsStyle)
-      ..addText(_formatDuration(workout.duration))
-      ..pop();
+      ..addText(_formatDuration(workout.duration));
 
     final statsParagraph = statsBuilder.build();
-    statsParagraph.layout(const ui.ParagraphConstraints(width: 1080));
+    statsParagraph.layout(ui.ParagraphConstraints(width: width.toDouble()));
 
-    final width = paragraph.width.toInt();
-    final height = (paragraph.height + statsParagraph.height + 20).toInt();
-
+    // 2. Render text to a separate image with transparent background
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder);
 
-    canvas.drawParagraph(paragraph, Offset.zero);
-    canvas.drawParagraph(statsParagraph, Offset(0, paragraph.height + 20));
+    // Draw text on canvas (no background)
+    canvas.drawParagraph(paragraph, const Offset(20, 20));
+    canvas.drawParagraph(
+      statsParagraph,
+      Offset(20, 20 + paragraph.height + 20),
+    );
 
     final picture = recorder.endRecording();
-    final image = await picture.toImage(width, height);
+    final textImage = await picture.toImage(width, height);
 
-    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    // 3. Convert to raw RGBA bytes
+    final byteData = await textImage.toByteData(
+      format: ui.ImageByteFormat.rawRgba,
+    );
     if (byteData == null) {
-      throw Exception('Failed to convert image to bytes');
+      throw Exception('Failed to convert text image to bytes');
     }
 
-    return byteData.buffer.asUint8List();
+    // 4. Copy the RGBA data to our transparent image
+    final pixels = byteData.buffer.asUint8List();
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        final offset = (y * width + x) * 4;
+        final r = pixels[offset];
+        final g = pixels[offset + 1];
+        final b = pixels[offset + 2];
+        final a = pixels[offset + 3];
+
+        // Only set pixel if it has some alpha (i.e., it's text)
+        if (a > 0) {
+          image.setPixelRgba(x, y, r, g, b, a);
+        }
+      }
+    }
+
+    // 5. Encode as PNG with alpha channel
+    final pngBytes = img.encodePng(image);
+
+    debugPrint('🖼️ [ImageGenerator] Transparent PNG created:');
+    debugPrint('   - Size: ${pngBytes.length} bytes');
+    debugPrint('   - Dimensions: ${width}x$height');
+    debugPrint('   - Channels: 4 (RGBA)');
+
+    return Uint8List.fromList(pngBytes);
   }
 
   Future<Uint8List> _createStyledImage(

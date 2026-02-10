@@ -3,6 +3,7 @@ import 'package:clyr_mobile/src/core/share/share_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// Share service implementation
 /// Uses share_plus for sharing and image_gallery_saver for saving images
@@ -10,19 +11,43 @@ class ShareServiceImpl implements ShareService {
   @override
   Future<bool> saveToGallery(Uint8List imageBytes) async {
     try {
-      debugPrint('📥 [ShareService] Saving image to gallery...');
+      debugPrint('📥 [ShareService] Saving PNG image to gallery...');
 
-      final result = await ImageGallerySaver.saveImage(
-        imageBytes,
-        quality: 100,
-        name: 'clyr_workout_${DateTime.now().millisecondsSinceEpoch}',
+      // IMPORTANT: ImageGallerySaver.saveImage() converts to JPEG!
+      // We must save as a file first, then use saveFile()
+
+      // 1. Save PNG to temporary directory
+      final tempDir = await getTemporaryDirectory();
+      final fileName =
+          'clyr_workout_${DateTime.now().millisecondsSinceEpoch}.png';
+      final filePath = '${tempDir.path}/$fileName';
+      final file = File(filePath);
+      await file.writeAsBytes(imageBytes);
+
+      debugPrint('📝 [ShareService] PNG file created at: $filePath');
+
+      // 2. Save the PNG file to gallery (preserves PNG format)
+      final result = await ImageGallerySaver.saveFile(
+        filePath,
+        name: fileName,
+        isReturnPathOfIOS: true,
       );
+
+      // 3. Clean up temp file
+      try {
+        await file.delete();
+      } catch (_) {
+        debugPrint('⚠️ [ShareService] Could not delete temp file');
+      }
 
       final isSuccess = result['isSuccess'] as bool? ?? false;
       if (isSuccess) {
-        debugPrint('✅ [ShareService] Image saved to gallery');
+        debugPrint('✅ [ShareService] PNG image saved to gallery');
+        debugPrint('📍 [ShareService] Path: ${result['filePath']}');
       } else {
-        debugPrint('❌ [ShareService] Failed to save image: ${result['errorMessage'] ?? 'Unknown error'}');
+        debugPrint(
+          '❌ [ShareService] Failed to save image: ${result['errorMessage'] ?? 'Unknown error'}',
+        );
       }
 
       return isSuccess;
@@ -39,17 +64,15 @@ class ShareServiceImpl implements ShareService {
 
       // Save to temporary file for sharing
       final tempDir = Directory.systemTemp;
-      final fileName = 'clyr_workout_${DateTime.now().millisecondsSinceEpoch}.png';
+      final fileName =
+          'clyr_workout_${DateTime.now().millisecondsSinceEpoch}.png';
       final file = File('${tempDir.path}/$fileName');
       await file.writeAsBytes(imageBytes);
 
       final XFile xFile = XFile(file.path);
 
       // Share to specific platform - use system share for now
-      final result = await Share.shareXFiles(
-        [xFile],
-        subject: '나의 운동 기록',
-      );
+      final result = await Share.shareXFiles([xFile], subject: '나의 운동 기록');
 
       // Clean up temp file
       try {
@@ -70,17 +93,15 @@ class ShareServiceImpl implements ShareService {
 
       // Save to temporary file for sharing
       final tempDir = Directory.systemTemp;
-      final fileName = 'clyr_workout_${DateTime.now().millisecondsSinceEpoch}.png';
+      final fileName =
+          'clyr_workout_${DateTime.now().millisecondsSinceEpoch}.png';
       final file = File('${tempDir.path}/$fileName');
       await file.writeAsBytes(imageBytes);
 
       final XFile xFile = XFile(file.path);
 
       // Share with system share sheet
-      final result = await Share.shareXFiles(
-        [xFile],
-        subject: '나의 운동 기록',
-      );
+      final result = await Share.shareXFiles([xFile], subject: '나의 운동 기록');
 
       // Clean up temp file
       try {
