@@ -134,6 +134,30 @@ abstract class AppLocalizations {
   /// **'프로그램'**
   String get navProgram;
 
+  /// No description provided for @programTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'프로그램'**
+  String get programTitle;
+
+  /// No description provided for @emptyProgram.
+  ///
+  /// In ko, this message translates to:
+  /// **'프로그램이 없습니다'**
+  String get emptyProgram;
+
+  /// No description provided for @programNotFound.
+  ///
+  /// In ko, this message translates to:
+  /// **'프로그램을 찾을 수 없습니다'**
+  String get programNotFound;
+
+  /// No description provided for @programCoach.
+  ///
+  /// In ko, this message translates to:
+  /// **'코치'**
+  String get programCoach;
+
   /// No description provided for @navRanking.
   ///
   /// In ko, this message translates to:

@@ -27,6 +27,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navProgram => 'Program';
 
   @override
+  String get programTitle => 'Programs';
+
+  @override
+  String get emptyProgram => 'No programs';
+
+  @override
+  String get programNotFound => 'Program not found';
+
+  @override
+  String get programCoach => 'Coach';
+
+  @override
   String get navRanking => 'Ranking';
 
   @override

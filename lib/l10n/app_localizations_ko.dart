@@ -27,6 +27,18 @@ class AppLocalizationsKo extends AppLocalizations {
   String get navProgram => '프로그램';
 
   @override
+  String get programTitle => '프로그램';
+
+  @override
+  String get emptyProgram => '프로그램이 없습니다';
+
+  @override
+  String get programNotFound => '프로그램을 찾을 수 없습니다';
+
+  @override
+  String get programCoach => '코치';
+
+  @override
   String get navRanking => 'Ranking';
 
   @override

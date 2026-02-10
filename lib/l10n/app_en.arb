@@ -8,6 +8,10 @@
   "navCommunity": "Community",
   "navHome": "Home",
   "navProgram": "Program",
+  "programTitle": "Programs",
+  "emptyProgram": "No programs",
+  "programNotFound": "Program not found",
+  "programCoach": "Coach",
   "navRanking": "Ranking",
   "navMy": "My",
 

@@ -13,7 +13,8 @@ import 'package:clyr_mobile/src/feature/home/presentation/view/home_workout_deta
 import 'package:clyr_mobile/src/feature/home/presentation/view/new_home_view.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/section_record_create_view.dart';
 import 'package:clyr_mobile/src/feature/log/presentation/view/log_view.dart';
-import 'package:clyr_mobile/src/feature/program/presentation/view/program_view.dart';
+import 'package:clyr_mobile/src/feature/program/presentation/view/program_list_view.dart';
+import 'package:clyr_mobile/src/feature/program/presentation/view/program_detail_view.dart';
 import 'package:clyr_mobile/src/feature/ranking/presentation/view/ranking_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/app_info_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/membership_view.dart';
@@ -148,8 +149,19 @@ GoRouter router(Ref ref) {
             builder: (context, state) => const StatsView(),
           ),
           GoRoute(
-            path: RoutePaths.program,
-            builder: (context, state) => const ProgramView(),
+            path: RoutePaths.programList,
+            name: ProgramListView.routeName,
+            builder: (context, state) => const ProgramListView(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                name: ProgramDetailView.routeName,
+                builder: (context, state) {
+                  final programId = state.pathParameters['id']!;
+                  return ProgramDetailView(programId: programId);
+                },
+              ),
+            ],
           ),
           GoRoute(
             path: RoutePaths.settings,

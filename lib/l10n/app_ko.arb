@@ -8,6 +8,10 @@
   "navCommunity": "커뮤니티",
   "navHome": "Home",
   "navProgram": "프로그램",
+  "programTitle": "프로그램",
+  "emptyProgram": "프로그램이 없습니다",
+  "programNotFound": "프로그램을 찾을 수 없습니다",
+  "programCoach": "코치",
   "navRanking": "Ranking",
   "navMy": "MY",
 

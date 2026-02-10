@@ -1,7 +1,8 @@
 class RoutePaths {
   static const String splash = '/';
   static const String home = '/home';
-  static const String homeSectionRecordCreate = '/home/section-record-create/:sectionId/:sectionItemId';
+  static const String homeSectionRecordCreate =
+      '/home/section-record-create/:sectionId/:sectionItemId';
   static const String ranking = '/ranking';
   static const String log = '/log';
   static const String community = '/community';
@@ -28,6 +29,8 @@ class RoutePaths {
   static const String termsOfService = '/settings/list/terms';
   static const String appInfo = '/settings/list/app-info';
   static const String program = '/program';
+  static const String programList = '/program';
+  static const String programDetail = '/program/:id';
   static const String communityList = '/community';
   static const String communityDetail = '/community/:id';
   static const String communityCreate = '/community/create';

@@ -17,6 +17,7 @@ abstract class AppException with _$AppException {
   const factory AppException.permission(String? message) = PermissionException;
   const factory AppException.database(String? message) = DatabaseException;
   const factory AppException.community(String? message) = CommunityException;
+  const factory AppException.program(String? message) = ProgramException;
 
   const AppException._();
 
@@ -33,6 +34,7 @@ abstract class AppException with _$AppException {
     permission: (msg) => msg,
     database: (msg) => msg,
     community: (msg) => msg,
+    program: (msg) => msg,
     orElse: () => null,
   );
 }

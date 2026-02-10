@@ -86,7 +86,7 @@ extension AppExceptionPatterns on AppException {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( AuthException value)?  auth,TResult Function( NetworkException value)?  network,TResult Function( OrderException value)?  order,TResult Function( WorkoutException value)?  workout,TResult Function( HomeException value)?  home,TResult Function( LogException value)?  log,TResult Function( OnboardingException value)?  onboarding,TResult Function( HealthException value)?  health,TResult Function( NoDataException value)?  noData,TResult Function( PermissionException value)?  permission,TResult Function( DatabaseException value)?  database,TResult Function( CommunityException value)?  community,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( AuthException value)?  auth,TResult Function( NetworkException value)?  network,TResult Function( OrderException value)?  order,TResult Function( WorkoutException value)?  workout,TResult Function( HomeException value)?  home,TResult Function( LogException value)?  log,TResult Function( OnboardingException value)?  onboarding,TResult Function( HealthException value)?  health,TResult Function( NoDataException value)?  noData,TResult Function( PermissionException value)?  permission,TResult Function( DatabaseException value)?  database,TResult Function( CommunityException value)?  community,TResult Function( ProgramException value)?  program,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case AuthException() when auth != null:
@@ -101,7 +101,8 @@ return health(_that);case NoDataException() when noData != null:
 return noData(_that);case PermissionException() when permission != null:
 return permission(_that);case DatabaseException() when database != null:
 return database(_that);case CommunityException() when community != null:
-return community(_that);case _:
+return community(_that);case ProgramException() when program != null:
+return program(_that);case _:
   return orElse();
 
 }
@@ -119,7 +120,7 @@ return community(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( AuthException value)  auth,required TResult Function( NetworkException value)  network,required TResult Function( OrderException value)  order,required TResult Function( WorkoutException value)  workout,required TResult Function( HomeException value)  home,required TResult Function( LogException value)  log,required TResult Function( OnboardingException value)  onboarding,required TResult Function( HealthException value)  health,required TResult Function( NoDataException value)  noData,required TResult Function( PermissionException value)  permission,required TResult Function( DatabaseException value)  database,required TResult Function( CommunityException value)  community,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( AuthException value)  auth,required TResult Function( NetworkException value)  network,required TResult Function( OrderException value)  order,required TResult Function( WorkoutException value)  workout,required TResult Function( HomeException value)  home,required TResult Function( LogException value)  log,required TResult Function( OnboardingException value)  onboarding,required TResult Function( HealthException value)  health,required TResult Function( NoDataException value)  noData,required TResult Function( PermissionException value)  permission,required TResult Function( DatabaseException value)  database,required TResult Function( CommunityException value)  community,required TResult Function( ProgramException value)  program,}){
 final _that = this;
 switch (_that) {
 case AuthException():
@@ -134,7 +135,8 @@ return health(_that);case NoDataException():
 return noData(_that);case PermissionException():
 return permission(_that);case DatabaseException():
 return database(_that);case CommunityException():
-return community(_that);case _:
+return community(_that);case ProgramException():
+return program(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -151,7 +153,7 @@ return community(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( AuthException value)?  auth,TResult? Function( NetworkException value)?  network,TResult? Function( OrderException value)?  order,TResult? Function( WorkoutException value)?  workout,TResult? Function( HomeException value)?  home,TResult? Function( LogException value)?  log,TResult? Function( OnboardingException value)?  onboarding,TResult? Function( HealthException value)?  health,TResult? Function( NoDataException value)?  noData,TResult? Function( PermissionException value)?  permission,TResult? Function( DatabaseException value)?  database,TResult? Function( CommunityException value)?  community,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( AuthException value)?  auth,TResult? Function( NetworkException value)?  network,TResult? Function( OrderException value)?  order,TResult? Function( WorkoutException value)?  workout,TResult? Function( HomeException value)?  home,TResult? Function( LogException value)?  log,TResult? Function( OnboardingException value)?  onboarding,TResult? Function( HealthException value)?  health,TResult? Function( NoDataException value)?  noData,TResult? Function( PermissionException value)?  permission,TResult? Function( DatabaseException value)?  database,TResult? Function( CommunityException value)?  community,TResult? Function( ProgramException value)?  program,}){
 final _that = this;
 switch (_that) {
 case AuthException() when auth != null:
@@ -166,7 +168,8 @@ return health(_that);case NoDataException() when noData != null:
 return noData(_that);case PermissionException() when permission != null:
 return permission(_that);case DatabaseException() when database != null:
 return database(_that);case CommunityException() when community != null:
-return community(_that);case _:
+return community(_that);case ProgramException() when program != null:
+return program(_that);case _:
   return null;
 
 }
@@ -183,7 +186,7 @@ return community(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String? message)?  auth,TResult Function( String? message)?  network,TResult Function( String? message)?  order,TResult Function( String? message)?  workout,TResult Function( String? message)?  home,TResult Function( String? message)?  log,TResult Function( String? message)?  onboarding,TResult Function( String? message)?  health,TResult Function( String? message)?  noData,TResult Function( String? message)?  permission,TResult Function( String? message)?  database,TResult Function( String? message)?  community,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String? message)?  auth,TResult Function( String? message)?  network,TResult Function( String? message)?  order,TResult Function( String? message)?  workout,TResult Function( String? message)?  home,TResult Function( String? message)?  log,TResult Function( String? message)?  onboarding,TResult Function( String? message)?  health,TResult Function( String? message)?  noData,TResult Function( String? message)?  permission,TResult Function( String? message)?  database,TResult Function( String? message)?  community,TResult Function( String? message)?  program,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case AuthException() when auth != null:
 return auth(_that.message);case NetworkException() when network != null:
@@ -197,7 +200,8 @@ return health(_that.message);case NoDataException() when noData != null:
 return noData(_that.message);case PermissionException() when permission != null:
 return permission(_that.message);case DatabaseException() when database != null:
 return database(_that.message);case CommunityException() when community != null:
-return community(_that.message);case _:
+return community(_that.message);case ProgramException() when program != null:
+return program(_that.message);case _:
   return orElse();
 
 }
@@ -215,7 +219,7 @@ return community(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String? message)  auth,required TResult Function( String? message)  network,required TResult Function( String? message)  order,required TResult Function( String? message)  workout,required TResult Function( String? message)  home,required TResult Function( String? message)  log,required TResult Function( String? message)  onboarding,required TResult Function( String? message)  health,required TResult Function( String? message)  noData,required TResult Function( String? message)  permission,required TResult Function( String? message)  database,required TResult Function( String? message)  community,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String? message)  auth,required TResult Function( String? message)  network,required TResult Function( String? message)  order,required TResult Function( String? message)  workout,required TResult Function( String? message)  home,required TResult Function( String? message)  log,required TResult Function( String? message)  onboarding,required TResult Function( String? message)  health,required TResult Function( String? message)  noData,required TResult Function( String? message)  permission,required TResult Function( String? message)  database,required TResult Function( String? message)  community,required TResult Function( String? message)  program,}) {final _that = this;
 switch (_that) {
 case AuthException():
 return auth(_that.message);case NetworkException():
@@ -229,7 +233,8 @@ return health(_that.message);case NoDataException():
 return noData(_that.message);case PermissionException():
 return permission(_that.message);case DatabaseException():
 return database(_that.message);case CommunityException():
-return community(_that.message);case _:
+return community(_that.message);case ProgramException():
+return program(_that.message);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -246,7 +251,7 @@ return community(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String? message)?  auth,TResult? Function( String? message)?  network,TResult? Function( String? message)?  order,TResult? Function( String? message)?  workout,TResult? Function( String? message)?  home,TResult? Function( String? message)?  log,TResult? Function( String? message)?  onboarding,TResult? Function( String? message)?  health,TResult? Function( String? message)?  noData,TResult? Function( String? message)?  permission,TResult? Function( String? message)?  database,TResult? Function( String? message)?  community,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String? message)?  auth,TResult? Function( String? message)?  network,TResult? Function( String? message)?  order,TResult? Function( String? message)?  workout,TResult? Function( String? message)?  home,TResult? Function( String? message)?  log,TResult? Function( String? message)?  onboarding,TResult? Function( String? message)?  health,TResult? Function( String? message)?  noData,TResult? Function( String? message)?  permission,TResult? Function( String? message)?  database,TResult? Function( String? message)?  community,TResult? Function( String? message)?  program,}) {final _that = this;
 switch (_that) {
 case AuthException() when auth != null:
 return auth(_that.message);case NetworkException() when network != null:
@@ -260,7 +265,8 @@ return health(_that.message);case NoDataException() when noData != null:
 return noData(_that.message);case PermissionException() when permission != null:
 return permission(_that.message);case DatabaseException() when database != null:
 return database(_that.message);case CommunityException() when community != null:
-return community(_that.message);case _:
+return community(_that.message);case ProgramException() when program != null:
+return program(_that.message);case _:
   return null;
 
 }
@@ -1052,6 +1058,72 @@ class _$CommunityExceptionCopyWithImpl<$Res>
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? message = freezed,}) {
   return _then(CommunityException(
+freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class ProgramException extends AppException {
+  const ProgramException(this.message): super._();
+  
+
+@override final  String? message;
+
+/// Create a copy of AppException
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ProgramExceptionCopyWith<ProgramException> get copyWith => _$ProgramExceptionCopyWithImpl<ProgramException>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProgramException&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'AppException.program(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ProgramExceptionCopyWith<$Res> implements $AppExceptionCopyWith<$Res> {
+  factory $ProgramExceptionCopyWith(ProgramException value, $Res Function(ProgramException) _then) = _$ProgramExceptionCopyWithImpl;
+@override @useResult
+$Res call({
+ String? message
+});
+
+
+
+
+}
+/// @nodoc
+class _$ProgramExceptionCopyWithImpl<$Res>
+    implements $ProgramExceptionCopyWith<$Res> {
+  _$ProgramExceptionCopyWithImpl(this._self, this._then);
+
+  final ProgramException _self;
+  final $Res Function(ProgramException) _then;
+
+/// Create a copy of AppException
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? message = freezed,}) {
+  return _then(ProgramException(
 freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
