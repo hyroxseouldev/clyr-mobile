@@ -8,6 +8,7 @@ class WorkoutDetailWidget extends StatelessWidget {
   final String durationText;
   final String startTimeText;
   final String endTimeText;
+  final String avgHeartRateText;
   final String distanceText;
   final String caloriesText;
   final String metadataText;
@@ -19,6 +20,7 @@ class WorkoutDetailWidget extends StatelessWidget {
     required this.durationText,
     required this.startTimeText,
     required this.endTimeText,
+    required this.avgHeartRateText,
     required this.distanceText,
     required this.caloriesText,
     required this.metadataText,
@@ -67,7 +69,11 @@ class WorkoutDetailWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailCard(BuildContext context, Locale locale, ThemeData theme) {
+  Widget _buildDetailCard(
+    BuildContext context,
+    Locale locale,
+    ThemeData theme,
+  ) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -93,6 +99,17 @@ class WorkoutDetailWidget extends StatelessWidget {
               endTimeText,
               _formatDateTime(workout.endTime, locale),
             ),
+            if (workout.avgHeartRate != null || workout.heartRates != null) ...[
+              const Divider(height: 24),
+              _buildDetailRow(
+                context,
+                Icons.favorite,
+                avgHeartRateText,
+                workout.avgHeartRate != null
+                    ? '${workout.avgHeartRate} BPM'
+                    : '-- BPM',
+              ),
+            ],
             if (workout.totalDistance != null) ...[
               const Divider(height: 24),
               _buildDetailRow(
@@ -124,10 +141,7 @@ class WorkoutDetailWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              metadataText,
-              style: theme.textTheme.titleMedium,
-            ),
+            Text(metadataText, style: theme.textTheme.titleMedium),
             const SizedBox(height: 12),
             ...workout.metadata!.entries.map((entry) {
               return Padding(
@@ -180,10 +194,7 @@ class WorkoutDetailWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                value,
-                style: theme.textTheme.bodyLarge,
-              ),
+              Text(value, style: theme.textTheme.bodyLarge),
             ],
           ),
         ),

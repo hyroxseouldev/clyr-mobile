@@ -246,6 +246,7 @@
   "duration": "Duration",
   "startTime": "Start Time",
   "endTime": "End Time",
+  "avgHeartRate": "Average Heart Rate",
   "distance": "Distance",
   "calories": "Calories Burned",
   "metadata": "Additional Info",

@@ -1472,6 +1472,12 @@ abstract class AppLocalizations {
   /// **'종료 시간'**
   String get endTime;
 
+  /// No description provided for @avgHeartRate.
+  ///
+  /// In ko, this message translates to:
+  /// **'평균 심박수'**
+  String get avgHeartRate;
+
   /// No description provided for @distance.
   ///
   /// In ko, this message translates to:

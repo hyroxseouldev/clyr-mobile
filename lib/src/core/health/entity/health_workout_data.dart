@@ -13,6 +13,7 @@ abstract class HealthWorkoutData with _$HealthWorkoutData {
     required Duration duration,
     int? totalEnergyBurned, // Calories in kcal
     double? totalDistance, // Distance in meters
+    List<int>? heartRates, // Heart rate data points (BPM)
     Map<String, dynamic>? metadata,
   }) = _HealthWorkoutData;
 
@@ -20,6 +21,12 @@ abstract class HealthWorkoutData with _$HealthWorkoutData {
 
   /// Calculate duration from start/end times
   Duration get calculatedDuration => endTime.difference(startTime);
+
+  /// Calculate average heart rate
+  int? get avgHeartRate {
+    if (heartRates == null || heartRates!.isEmpty) return null;
+    return heartRates!.reduce((a, b) => a + b) ~/ heartRates!.length;
+  }
 }
 
 /// Supported workout types

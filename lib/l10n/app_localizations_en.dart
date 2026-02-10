@@ -711,6 +711,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get endTime => 'End Time';
 
   @override
+  String get avgHeartRate => 'Average Heart Rate';
+
+  @override
   String get distance => 'Distance';
 
   @override

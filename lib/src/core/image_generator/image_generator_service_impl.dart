@@ -38,11 +38,11 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
     final canvas = Canvas(recorder);
 
     final startY = height * 0.20;
-    final double verticalSpacing = height * 0.22;
+    final double verticalSpacing = height * 0.20;
 
     final durationText = _formatDuration(workout.duration);
     final calText = _valueFormat(workout.totalEnergyBurned, 'cal');
-    final avgHrText = _valueFormat(null, 'bpm');
+    final avgHrText = _valueFormat(workout.avgHeartRate, 'bpm');
 
     _drawTextOnCanvas(
       canvas,
@@ -151,13 +151,13 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
     final labelStyle = ui.TextStyle(
       color: const Color(0xFFFFFFFF),
       fontSize: 24,
-      fontWeight: FontWeight.w600,
+      fontWeight: FontWeight.bold,
     );
 
     final valueStyle = ui.TextStyle(
       color: const Color(0xFFFFFFFF),
       fontSize: 32,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w900,
     );
 
     final paragraphStyle = ui.ParagraphStyle(

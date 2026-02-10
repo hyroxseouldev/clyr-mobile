@@ -704,6 +704,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get endTime => '종료 시간';
 
   @override
+  String get avgHeartRate => '평균 심박수';
+
+  @override
   String get distance => '이동 거리';
 
   @override

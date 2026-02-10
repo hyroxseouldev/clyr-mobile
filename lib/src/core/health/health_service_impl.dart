@@ -30,9 +30,16 @@ class HealthServiceImpl implements HealthService {
         return left(AppException.noData('No workouts found in date range'));
       }
 
-      // Convert to WorkoutData entities
+      // Fetch heart rate data for the entire date range
+      final heartRateData = await _health.getHealthDataFromTypes(
+        startTime: startDate,
+        endTime: endDate,
+        types: [HealthDataType.HEART_RATE],
+      );
+
+      // Convert to WorkoutData entities with heart rates
       final workouts = healthData
-          .map((data) => _convertToWorkoutData(data))
+          .map((data) => _convertToWorkoutData(data, heartRateData))
           .where((workout) => workout != null)
           .cast<HealthWorkoutData>()
           .toList();
@@ -75,7 +82,10 @@ class HealthServiceImpl implements HealthService {
   }
 
   /// Convert health package data to WorkoutData entity
-  HealthWorkoutData? _convertToWorkoutData(HealthDataPoint data) {
+  HealthWorkoutData? _convertToWorkoutData(
+    HealthDataPoint data,
+    List<HealthDataPoint> allHeartRates,
+  ) {
     try {
       // Get workout summary which contains workout type
       final summary = data.workoutSummary;
@@ -83,6 +93,16 @@ class HealthServiceImpl implements HealthService {
 
       // Convert workout type string to enum
       final workoutType = _parseWorkoutType(summary.workoutType);
+
+      // Filter heart rates within workout time range
+      final workoutHeartRates = allHeartRates
+          .where(
+            (hr) =>
+                hr.dateFrom.isAfter(data.dateFrom) &&
+                hr.dateTo.isBefore(data.dateTo),
+          )
+          .map((hr) => (hr.value as NumericHealthValue).numericValue.toInt())
+          .toList();
 
       return HealthWorkoutData(
         id: data.uuid,
@@ -92,6 +112,7 @@ class HealthServiceImpl implements HealthService {
         duration: data.dateTo.difference(data.dateFrom),
         totalEnergyBurned: summary.totalEnergyBurned.toInt(),
         totalDistance: summary.totalDistance.toDouble(),
+        heartRates: workoutHeartRates,
         metadata: {
           'unit': data.unit.name,
           'sourceId': data.sourceId,

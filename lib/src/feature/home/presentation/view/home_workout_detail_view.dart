@@ -39,6 +39,7 @@ class HomeWorkoutDetailView extends ConsumerWidget {
             durationText: l10n.duration,
             startTimeText: l10n.startTime,
             endTimeText: l10n.endTime,
+            avgHeartRateText: l10n.avgHeartRate,
             distanceText: l10n.distance,
             caloriesText: l10n.calories,
             metadataText: l10n.metadata,
@@ -65,16 +66,20 @@ class HomeWorkoutDetailView extends ConsumerWidget {
     );
   }
 
-  void _showShareBottomSheet(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
+  void _showShareBottomSheet(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+  ) {
     // Workout data is already loaded from workoutState
     // We need to get it from the provider directly
     final workoutAsync = ref.read(workoutDetailProvider(workoutId));
     final workout = workoutAsync.value;
 
     if (workout == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('운동 정보를 불러오는 중입니다...')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('운동 정보를 불러오는 중입니다...')));
       return;
     }
 
