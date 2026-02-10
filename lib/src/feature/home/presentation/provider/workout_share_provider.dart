@@ -13,84 +13,9 @@ class WorkoutShare extends _$WorkoutShare {
   @override
   Future<List<ShareImageEntity>> build(HealthWorkoutData workout) async {
     // Generate all 3 image versions on initialization
-    final result = await ref.read(workoutShareRepositoryProvider).generateShareImages(workout);
-    return result.fold(
-      (error) => throw error,
-      (images) => images,
-    );
-  }
-
-  /// Download image to gallery
-  Future<void> downloadImage(int index) async {
-    final images = state.value;
-    if (images == null || index < 0 || index >= images.length) {
-      return;
-    }
-
-    state = const AsyncValue.loading();
-    final result = await ref.read(workoutShareRepositoryProvider).downloadToGallery(
-      images[index].imageBytes,
-    );
-
-    result.fold(
-      (error) => state = AsyncValue.error(error, StackTrace.current),
-      (_) => state = AsyncValue.data(images),
-    );
-  }
-
-  /// Share to KakaoTalk
-  Future<void> shareToKakao(int index) async {
-    final images = state.value;
-    if (images == null || index < 0 || index >= images.length) {
-      return;
-    }
-
-    state = const AsyncValue.loading();
-    final result = await ref.read(workoutShareRepositoryProvider).shareToSNS(
-      images[index].imageBytes,
-      SharePlatform.kakao,
-    );
-
-    result.fold(
-      (error) => state = AsyncValue.error(error, StackTrace.current),
-      (_) => state = AsyncValue.data(images),
-    );
-  }
-
-  /// Share to Instagram
-  Future<void> shareToInstagram(int index) async {
-    final images = state.value;
-    if (images == null || index < 0 || index >= images.length) {
-      return;
-    }
-
-    state = const AsyncValue.loading();
-    final result = await ref.read(workoutShareRepositoryProvider).shareToSNS(
-      images[index].imageBytes,
-      SharePlatform.instagram,
-    );
-
-    result.fold(
-      (error) => state = AsyncValue.error(error, StackTrace.current),
-      (_) => state = AsyncValue.data(images),
-    );
-  }
-
-  /// Share with system sheet
-  Future<void> shareWithSystem(int index) async {
-    final images = state.value;
-    if (images == null || index < 0 || index >= images.length) {
-      return;
-    }
-
-    state = const AsyncValue.loading();
-    final result = await ref.read(workoutShareRepositoryProvider).shareWithSystem(
-      images[index].imageBytes,
-    );
-
-    result.fold(
-      (error) => state = AsyncValue.error(error, StackTrace.current),
-      (_) => state = AsyncValue.data(images),
-    );
+    final result = await ref
+        .read(workoutShareRepositoryProvider)
+        .generateShareImages(workout);
+    return result.fold((error) => throw error, (images) => images);
   }
 }

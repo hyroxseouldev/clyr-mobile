@@ -24,26 +24,79 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
     HealthWorkoutData workout,
     ShareImageStyle style,
   ) async {
-    // Determine size based on style
-    final width = 1080;
-    final height = style == ShareImageStyle.detailed ? 1920 : 1080;
+    if (style == ShareImageStyle.transparent) {
+      return _createTransparentImage(workout);
+    }
+    return _createStyledImage(workout, style);
+  }
 
-    // Create a picture recorder
+  Future<Uint8List> _createTransparentImage(HealthWorkoutData workout) async {
+    final textStyle = ui.TextStyle(
+      color: const Color(0xFFFFFFFF),
+      fontSize: 48,
+      fontWeight: FontWeight.bold,
+    );
+    final paragraphStyle = ui.ParagraphStyle(
+      textAlign: TextAlign.left,
+      textDirection: TextDirection.ltr,
+    );
+
+    final statsStyle = ui.TextStyle(
+      color: const Color(0xFFFFFFFF).withValues(alpha: 0.9),
+      fontSize: 32,
+    );
+
+    final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
+      ..pushStyle(textStyle)
+      ..addText(workout.workoutType.displayName)
+      ..pop();
+
+    final paragraph = paragraphBuilder.build();
+    paragraph.layout(const ui.ParagraphConstraints(width: 1080));
+
+    final statsBuilder = ui.ParagraphBuilder(paragraphStyle)
+      ..pushStyle(statsStyle)
+      ..addText(_formatDuration(workout.duration))
+      ..pop();
+
+    final statsParagraph = statsBuilder.build();
+    statsParagraph.layout(const ui.ParagraphConstraints(width: 1080));
+
+    final width = paragraph.width.toInt();
+    final height = (paragraph.height + statsParagraph.height + 20).toInt();
+
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder);
 
-    // Draw background based on style
-    if (style == ShareImageStyle.transparent) {
-      // Transparent background - no fill
-    } else if (style == ShareImageStyle.simple) {
-      // Gradient background
+    canvas.drawParagraph(paragraph, Offset.zero);
+    canvas.drawParagraph(statsParagraph, Offset(0, paragraph.height + 20));
+
+    final picture = recorder.endRecording();
+    final image = await picture.toImage(width, height);
+
+    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    if (byteData == null) {
+      throw Exception('Failed to convert image to bytes');
+    }
+
+    return byteData.buffer.asUint8List();
+  }
+
+  Future<Uint8List> _createStyledImage(
+    HealthWorkoutData workout,
+    ShareImageStyle style,
+  ) async {
+    final width = 1080;
+    final height = style == ShareImageStyle.detailed ? 1920 : 1080;
+
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder);
+
+    if (style == ShareImageStyle.simple) {
       final gradient = ui.Gradient.linear(
         const Offset(0, 0),
         Offset(width.toDouble(), height.toDouble()),
-        [
-          const Color(0xFF42A5F5), // Blue
-          const Color(0xFF7E57C2), // Purple
-        ],
+        [const Color(0xFF42A5F5), const Color(0xFF7E57C2)],
       );
       final paint = Paint()..shader = gradient;
       canvas.drawRect(
@@ -51,14 +104,10 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
         paint,
       );
     } else {
-      // Detailed design - dark gradient
       final gradient = ui.Gradient.linear(
         const Offset(0, 0),
         Offset(0, height.toDouble()),
-        [
-          const Color(0xFF1A237E), // Indigo
-          const Color(0xFF1565C0), // Blue
-        ],
+        [const Color(0xFF1A237E), const Color(0xFF1565C0)],
       );
       final paint = Paint()..shader = gradient;
       canvas.drawRect(
@@ -67,7 +116,6 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
       );
     }
 
-    // Draw text content
     final textStyle = ui.TextStyle(
       color: const Color(0xFFFFFFFF),
       fontSize: 48,
@@ -78,7 +126,6 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
       textDirection: TextDirection.ltr,
     );
 
-    // Draw workout type
     final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
       ..pushStyle(textStyle)
       ..addText(workout.workoutType.displayName)
@@ -89,13 +136,9 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
 
     canvas.drawParagraph(
       paragraph,
-      Offset(
-        (width - paragraph.width) / 2,
-        height / 2 - paragraph.height / 2,
-      ),
+      Offset((width - paragraph.width) / 2, height / 2 - paragraph.height / 2),
     );
 
-    // Draw stats below
     final statsStyle = ui.TextStyle(
       color: const Color(0xFFFFFFFF).withValues(alpha: 0.9),
       fontSize: 32,
@@ -110,17 +153,12 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
 
     canvas.drawParagraph(
       statsParagraph,
-      Offset(
-        (width - statsParagraph.width) / 2,
-        height / 2 + 50,
-      ),
+      Offset((width - statsParagraph.width) / 2, height / 2 + 50),
     );
 
-    // Convert to image
     final picture = recorder.endRecording();
     final image = await picture.toImage(width, height);
 
-    // Convert to bytes
     final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     if (byteData == null) {
       throw Exception('Failed to convert image to bytes');

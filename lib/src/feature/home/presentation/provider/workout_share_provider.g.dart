@@ -56,7 +56,7 @@ final class WorkoutShareProvider
   }
 }
 
-String _$workoutShareHash() => r'6d88b5408cc96d126e7cfdfca089edbfa40f522f';
+String _$workoutShareHash() => r'b0c6d23bdd7569bcb9b57ed5085539a215cad297';
 
 /// Workout share provider
 /// Manages state for workout sharing feature

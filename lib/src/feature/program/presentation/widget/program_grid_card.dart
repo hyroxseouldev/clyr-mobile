@@ -26,7 +26,7 @@ class ProgramGridCard extends StatelessWidget {
           children: [
             // Cover Image
             AspectRatio(
-              aspectRatio: 1.3,
+              aspectRatio: 1.2,
               child: displayImage != null && displayImage.isNotEmpty
                   ? Image.network(
                       displayImage,
@@ -44,8 +44,9 @@ class ProgramGridCard extends StatelessWidget {
                     ),
             ),
             Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(8),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(

@@ -1,4 +1,5 @@
 import 'package:clyr_mobile/src/core/health/entity/health_workout_data.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/provider/workout_share_controller.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/workout_share_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/widget/share_action_buttons.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/widget/share_image_carousel.dart';
@@ -41,6 +42,7 @@ class WorkoutShareBottomSheet extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final imageState = ref.watch(workoutShareProvider(workout));
+    final actionLoadingState = ref.watch(workoutShareControllerProvider);
     final selectedIndex = useState(0);
 
     return Container(
@@ -84,13 +86,14 @@ class WorkoutShareBottomSheet extends HookConsumerWidget {
               data: imageState,
               builder: (images) {
                 if (images.isEmpty) {
-                  return const Center(
-                    child: Text('이미지가 없습니다'),
-                  );
+                  return const Center(child: Text('이미지가 없습니다'));
                 }
 
                 return ShareImageCarousel(
-                  images: images.map((e) => e.imageBytes).cast<Uint8List>().toList(),
+                  images: images
+                      .map((e) => e.imageBytes)
+                      .cast<Uint8List>()
+                      .toList(),
                   simpleLabel: simpleLabel,
                   detailedLabel: detailedLabel,
                   transparentLabel: transparentLabel,
@@ -105,20 +108,17 @@ class WorkoutShareBottomSheet extends HookConsumerWidget {
           const SizedBox(height: 16),
 
           // Action buttons
-          AsyncWidget<List>(
-            data: imageState,
-            builder: (images) {
-              return ShareActionButtons(
-                onDownload: () => _handleDownload(context, ref, selectedIndex.value),
-                onShareKakao: () => _handleShareKakao(ref, selectedIndex.value),
-                onShareInstagram: () => _handleShareInstagram(ref, selectedIndex.value),
-                downloadText: downloadText,
-                shareToKakaoText: shareToKakaoText,
-                shareToInstagramText: shareToInstagramText,
-                isDownloading: imageState.isLoading,
-                isSharing: imageState.isLoading,
-              );
-            },
+          ShareActionButtons(
+            onDownload: () =>
+                _handleDownload(context, ref, selectedIndex.value),
+            onShareKakao: () => _handleShareKakao(ref, selectedIndex.value),
+            onShareInstagram: () =>
+                _handleShareInstagram(ref, selectedIndex.value),
+            downloadText: downloadText,
+            shareToKakaoText: shareToKakaoText,
+            shareToInstagramText: shareToInstagramText,
+            isDownloading: actionLoadingState.isLoading,
+            isSharing: actionLoadingState.isLoading,
           ),
         ],
       ),
@@ -130,29 +130,35 @@ class WorkoutShareBottomSheet extends HookConsumerWidget {
     WidgetRef ref,
     int index,
   ) async {
-    await ref.read(workoutShareProvider(workout).notifier).downloadImage(index);
+    await ref
+        .read(workoutShareControllerProvider.notifier)
+        .downloadImage(workout, index);
 
     // Show feedback
     if (context.mounted) {
-      final state = ref.read(workoutShareProvider(workout));
+      final state = ref.read(workoutShareControllerProvider);
       if (state.hasError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(downloadErrorText)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(downloadErrorText)));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(downloadSuccessText)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(downloadSuccessText)));
       }
     }
   }
 
   Future<void> _handleShareKakao(WidgetRef ref, int index) async {
-    await ref.read(workoutShareProvider(workout).notifier).shareToKakao(index);
+    await ref
+        .read(workoutShareControllerProvider.notifier)
+        .shareToKakao(workout, index);
   }
 
   Future<void> _handleShareInstagram(WidgetRef ref, int index) async {
-    await ref.read(workoutShareProvider(workout).notifier).shareToInstagram(index);
+    await ref
+        .read(workoutShareControllerProvider.notifier)
+        .shareToInstagram(workout, index);
   }
 
   /// Show the bottom sheet
