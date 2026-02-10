@@ -5,7 +5,6 @@ import 'package:clyr_mobile/src/core/image_generator/image_generator_service.dar
 import 'package:clyr_mobile/src/core/share/entity/share_image_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:image/image.dart' as img;
 
 /// Image generator service implementation
 /// Uses RenderRepaintBoundary to capture widgets as images
@@ -32,102 +31,168 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
   }
 
   Future<Uint8List> _createTransparentImage(HealthWorkoutData workout) async {
-    // Image dimensions
-    const int width = 300;
-    const int height = 400;
+    const int width = 1080;
+    const int height = 1080;
 
-    // Create a transparent image using the image package
-    final image = img.Image(width: width, height: height, numChannels: 4);
-
-    // Fill with transparent pixels (RGBA: 0, 0, 0, 0)
-    img.fill(image, color: img.ColorRgba8(0, 0, 0, 0));
-
-    // Now we need to draw text on this transparent image
-    // Unfortunately, the image package doesn't have great text rendering
-    // So we'll use dart:ui to render text, then composite it
-
-    // 1. Create text using dart:ui
-    final textStyle = ui.TextStyle(
-      color: const Color(0xFFFFFFFF),
-      fontSize: 48,
-      fontWeight: FontWeight.bold,
-    );
-
-    final paragraphStyle = ui.ParagraphStyle(
-      textAlign: TextAlign.left,
-      textDirection: TextDirection.ltr,
-    );
-
-    // Build workout type paragraph
-    final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
-      ..pushStyle(textStyle)
-      ..addText(workout.workoutType.displayName);
-
-    final paragraph = paragraphBuilder.build();
-    paragraph.layout(ui.ParagraphConstraints(width: width.toDouble()));
-
-    // Stats text style
-    final statsStyle = ui.TextStyle(
-      color: const Color(0xFFFFFFFF).withValues(alpha: 0.9),
-      fontSize: 32,
-    );
-
-    // Build stats paragraph
-    final statsBuilder = ui.ParagraphBuilder(paragraphStyle)
-      ..pushStyle(statsStyle)
-      ..addText(_formatDuration(workout.duration));
-
-    final statsParagraph = statsBuilder.build();
-    statsParagraph.layout(ui.ParagraphConstraints(width: width.toDouble()));
-
-    // 2. Render text to a separate image with transparent background
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder);
 
-    // Draw text on canvas (no background)
-    canvas.drawParagraph(paragraph, const Offset(20, 20));
-    canvas.drawParagraph(
-      statsParagraph,
-      Offset(20, 20 + paragraph.height + 20),
+    final startY = height * 0.25;
+    final double verticalSpacing = 100;
+
+    final durationText = _formatDuration(workout.duration);
+    final calText = _valueFormat(workout.totalEnergyBurned, 'cal');
+    final avgHrText = _valueFormat(null, 'bpm');
+
+    _drawTextOnCanvas(
+      canvas,
+      width.toDouble(),
+      startY,
+      label1: 'Time',
+      value1: durationText,
+    );
+    _drawTextOnCanvas(
+      canvas,
+      width.toDouble(),
+      startY + verticalSpacing,
+      label1: 'Avg hr',
+      value1: avgHrText,
+    );
+    _drawTextOnCanvas(
+      canvas,
+      width.toDouble(),
+      startY + verticalSpacing * 2,
+      label1: 'Cal',
+      value1: calText,
+    );
+    _drawTextOnCanvas(
+      canvas,
+      width.toDouble(),
+      startY + verticalSpacing * 3,
+      value1: 'Clyr.app',
+      isLogo: true,
     );
 
     final picture = recorder.endRecording();
-    final textImage = await picture.toImage(width, height);
+    final image = await picture.toImage(width, height);
 
-    // 3. Convert to raw RGBA bytes
-    final byteData = await textImage.toByteData(
-      format: ui.ImageByteFormat.rawRgba,
-    );
+    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     if (byteData == null) {
-      throw Exception('Failed to convert text image to bytes');
+      throw Exception('Failed to convert image to bytes');
     }
 
-    // 4. Copy the RGBA data to our transparent image
-    final pixels = byteData.buffer.asUint8List();
-    for (int y = 0; y < height; y++) {
-      for (int x = 0; x < width; x++) {
-        final offset = (y * width + x) * 4;
-        final r = pixels[offset];
-        final g = pixels[offset + 1];
-        final b = pixels[offset + 2];
-        final a = pixels[offset + 3];
-
-        // Only set pixel if it has some alpha (i.e., it's text)
-        if (a > 0) {
-          image.setPixelRgba(x, y, r, g, b, a);
-        }
-      }
-    }
-
-    // 5. Encode as PNG with alpha channel
-    final pngBytes = img.encodePng(image);
+    final pngBytes = byteData.buffer.asUint8List();
 
     debugPrint('🖼️ [ImageGenerator] Transparent PNG created:');
     debugPrint('   - Size: ${pngBytes.length} bytes');
     debugPrint('   - Dimensions: ${width}x$height');
-    debugPrint('   - Channels: 4 (RGBA)');
 
-    return Uint8List.fromList(pngBytes);
+    return pngBytes;
+  }
+
+  void _drawTextOnCanvas(
+    Canvas canvas,
+    double canvasWidth,
+    double yPosition, {
+    String? label1,
+    String? value1,
+    String? label2,
+    String? value2,
+    bool isLogo = false,
+  }) {
+    if (isLogo) {
+      final textStyle = ui.TextStyle(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 32,
+        fontWeight: FontWeight.bold,
+      );
+
+      final paragraphStyle = ui.ParagraphStyle(
+        textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr,
+      );
+
+      final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
+        ..pushStyle(textStyle)
+        ..addText(value1 ?? '');
+
+      final paragraph = paragraphBuilder.build();
+      paragraph.layout(ui.ParagraphConstraints(width: canvasWidth));
+
+      canvas.drawParagraph(
+        paragraph,
+        Offset((canvasWidth - paragraph.width) / 2, yPosition),
+      );
+      return;
+    }
+
+    if (label1 != null && value1 != null) {
+      _drawLabelValueRow(
+        canvas,
+        canvasWidth,
+        yPosition,
+        label1,
+        value1,
+        label2,
+        value2,
+      );
+    }
+  }
+
+  void _drawLabelValueRow(
+    Canvas canvas,
+    double canvasWidth,
+    double yPosition,
+    String label1,
+    String value1,
+    String? label2,
+    String? value2,
+  ) {
+    final labelStyle = ui.TextStyle(
+      color: const Color(0xFFFFFFFF),
+      fontSize: 24,
+      fontWeight: FontWeight.w600,
+    );
+
+    final valueStyle = ui.TextStyle(
+      color: const Color(0xFFFFFFFF),
+      fontSize: 32,
+      fontWeight: FontWeight.bold,
+    );
+
+    final paragraphStyle = ui.ParagraphStyle(
+      textAlign: TextAlign.center,
+      textDirection: TextDirection.ltr,
+    );
+
+    void drawLabelValue(String label, String value, double y) {
+      final labelBuilder = ui.ParagraphBuilder(paragraphStyle)
+        ..pushStyle(labelStyle)
+        ..addText(label);
+      final labelParagraph = labelBuilder.build();
+      labelParagraph.layout(ui.ParagraphConstraints(width: canvasWidth));
+
+      final valueBuilder = ui.ParagraphBuilder(paragraphStyle)
+        ..pushStyle(valueStyle)
+        ..addText(value);
+      final valueParagraph = valueBuilder.build();
+      valueParagraph.layout(ui.ParagraphConstraints(width: canvasWidth));
+
+      canvas.drawParagraph(
+        labelParagraph,
+        Offset((canvasWidth - labelParagraph.width) / 2, y),
+      );
+      canvas.drawParagraph(
+        valueParagraph,
+        Offset((canvasWidth - valueParagraph.width) / 2, y + 40),
+      );
+    }
+
+    drawLabelValue(label1, value1, yPosition);
+
+    if (label2 != null && value2 != null) {
+      drawLabelValue(label2, value2, yPosition + 100);
+    }
   }
 
   Future<Uint8List> _createStyledImage(
@@ -213,6 +278,14 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
     }
 
     return byteData.buffer.asUint8List();
+  }
+
+  /// Format value with unit, returns '-- unit' if null
+  String _valueFormat(dynamic value, String unit) {
+    if (value == null) {
+      return '-- $unit';
+    }
+    return '$value $unit';
   }
 
   /// Format duration to readable string
