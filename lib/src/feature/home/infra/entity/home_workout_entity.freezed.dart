@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HomeWorkoutEntity {
 
- String get id; HealthWorkoutType get workoutType; DateTime get startTime; DateTime get endTime; Duration get duration; int? get totalEnergyBurned; double? get totalDistance;
+ String get id; HealthWorkoutType get workoutType; DateTime get startTime; DateTime get endTime; Duration get duration; int get totalEnergyBurned; double get totalDistance;
 /// Create a copy of HomeWorkoutEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $HomeWorkoutEntityCopyWith<$Res>  {
   factory $HomeWorkoutEntityCopyWith(HomeWorkoutEntity value, $Res Function(HomeWorkoutEntity) _then) = _$HomeWorkoutEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, HealthWorkoutType workoutType, DateTime startTime, DateTime endTime, Duration duration, int? totalEnergyBurned, double? totalDistance
+ String id, HealthWorkoutType workoutType, DateTime startTime, DateTime endTime, Duration duration, int totalEnergyBurned, double totalDistance
 });
 
 
@@ -62,16 +62,16 @@ class _$HomeWorkoutEntityCopyWithImpl<$Res>
 
 /// Create a copy of HomeWorkoutEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? workoutType = null,Object? startTime = null,Object? endTime = null,Object? duration = null,Object? totalEnergyBurned = freezed,Object? totalDistance = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? workoutType = null,Object? startTime = null,Object? endTime = null,Object? duration = null,Object? totalEnergyBurned = null,Object? totalDistance = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,workoutType: null == workoutType ? _self.workoutType : workoutType // ignore: cast_nullable_to_non_nullable
 as HealthWorkoutType,startTime: null == startTime ? _self.startTime : startTime // ignore: cast_nullable_to_non_nullable
 as DateTime,endTime: null == endTime ? _self.endTime : endTime // ignore: cast_nullable_to_non_nullable
 as DateTime,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
-as Duration,totalEnergyBurned: freezed == totalEnergyBurned ? _self.totalEnergyBurned : totalEnergyBurned // ignore: cast_nullable_to_non_nullable
-as int?,totalDistance: freezed == totalDistance ? _self.totalDistance : totalDistance // ignore: cast_nullable_to_non_nullable
-as double?,
+as Duration,totalEnergyBurned: null == totalEnergyBurned ? _self.totalEnergyBurned : totalEnergyBurned // ignore: cast_nullable_to_non_nullable
+as int,totalDistance: null == totalDistance ? _self.totalDistance : totalDistance // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 
@@ -156,7 +156,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int? totalEnergyBurned,  double? totalDistance)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int totalEnergyBurned,  double totalDistance)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeWorkoutEntity() when $default != null:
 return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.duration,_that.totalEnergyBurned,_that.totalDistance);case _:
@@ -177,7 +177,7 @@ return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.d
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int? totalEnergyBurned,  double? totalDistance)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int totalEnergyBurned,  double totalDistance)  $default,) {final _that = this;
 switch (_that) {
 case _HomeWorkoutEntity():
 return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.duration,_that.totalEnergyBurned,_that.totalDistance);case _:
@@ -197,7 +197,7 @@ return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.d
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int? totalEnergyBurned,  double? totalDistance)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int totalEnergyBurned,  double totalDistance)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeWorkoutEntity() when $default != null:
 return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.duration,_that.totalEnergyBurned,_that.totalDistance);case _:
@@ -212,7 +212,7 @@ return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.d
 
 
 class _HomeWorkoutEntity extends HomeWorkoutEntity {
-  const _HomeWorkoutEntity({required this.id, required this.workoutType, required this.startTime, required this.endTime, required this.duration, this.totalEnergyBurned, this.totalDistance}): super._();
+  const _HomeWorkoutEntity({required this.id, required this.workoutType, required this.startTime, required this.endTime, required this.duration, required this.totalEnergyBurned, required this.totalDistance}): super._();
   
 
 @override final  String id;
@@ -220,8 +220,8 @@ class _HomeWorkoutEntity extends HomeWorkoutEntity {
 @override final  DateTime startTime;
 @override final  DateTime endTime;
 @override final  Duration duration;
-@override final  int? totalEnergyBurned;
-@override final  double? totalDistance;
+@override final  int totalEnergyBurned;
+@override final  double totalDistance;
 
 /// Create a copy of HomeWorkoutEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -253,7 +253,7 @@ abstract mixin class _$HomeWorkoutEntityCopyWith<$Res> implements $HomeWorkoutEn
   factory _$HomeWorkoutEntityCopyWith(_HomeWorkoutEntity value, $Res Function(_HomeWorkoutEntity) _then) = __$HomeWorkoutEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, HealthWorkoutType workoutType, DateTime startTime, DateTime endTime, Duration duration, int? totalEnergyBurned, double? totalDistance
+ String id, HealthWorkoutType workoutType, DateTime startTime, DateTime endTime, Duration duration, int totalEnergyBurned, double totalDistance
 });
 
 
@@ -270,16 +270,16 @@ class __$HomeWorkoutEntityCopyWithImpl<$Res>
 
 /// Create a copy of HomeWorkoutEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? workoutType = null,Object? startTime = null,Object? endTime = null,Object? duration = null,Object? totalEnergyBurned = freezed,Object? totalDistance = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? workoutType = null,Object? startTime = null,Object? endTime = null,Object? duration = null,Object? totalEnergyBurned = null,Object? totalDistance = null,}) {
   return _then(_HomeWorkoutEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,workoutType: null == workoutType ? _self.workoutType : workoutType // ignore: cast_nullable_to_non_nullable
 as HealthWorkoutType,startTime: null == startTime ? _self.startTime : startTime // ignore: cast_nullable_to_non_nullable
 as DateTime,endTime: null == endTime ? _self.endTime : endTime // ignore: cast_nullable_to_non_nullable
 as DateTime,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
-as Duration,totalEnergyBurned: freezed == totalEnergyBurned ? _self.totalEnergyBurned : totalEnergyBurned // ignore: cast_nullable_to_non_nullable
-as int?,totalDistance: freezed == totalDistance ? _self.totalDistance : totalDistance // ignore: cast_nullable_to_non_nullable
-as double?,
+as Duration,totalEnergyBurned: null == totalEnergyBurned ? _self.totalEnergyBurned : totalEnergyBurned // ignore: cast_nullable_to_non_nullable
+as int,totalDistance: null == totalDistance ? _self.totalDistance : totalDistance // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 

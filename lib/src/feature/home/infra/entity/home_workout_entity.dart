@@ -12,8 +12,8 @@ abstract class HomeWorkoutEntity with _$HomeWorkoutEntity {
     required DateTime startTime,
     required DateTime endTime,
     required Duration duration,
-    int? totalEnergyBurned,
-    double? totalDistance,
+    required int totalEnergyBurned,
+    required double totalDistance,
   }) = _HomeWorkoutEntity;
 
   const HomeWorkoutEntity._();
@@ -39,20 +39,34 @@ abstract class HomeWorkoutEntity with _$HomeWorkoutEntity {
   }
 
   /// Formatted distance in km
-  String? get formattedDistance {
-    if (totalDistance == null) return null;
-    final km = totalDistance! / 1000;
+  String get formattedDistance {
+    if (totalDistance == 0) return '-';
+    final km = totalDistance / 1000;
     return '${km.toStringAsFixed(2)} km';
   }
 
   /// Formatted calories
-  String? get formattedCalories {
-    if (totalEnergyBurned == null) return null;
+  String get formattedCalories {
+    if (totalEnergyBurned == 0) return '-';
     return '$totalEnergyBurned kcal';
   }
 
   /// Display name for workout type (localized)
   String get workoutTypeDisplayName => workoutType.displayName;
+
+  /// Workout name with time period (e.g., "Lunch Hiit", "Morning Run")
+  String get workoutNameWithTime {
+    final hour = startTime.hour;
+
+    final timePeriod = switch (hour) {
+      >= 0 && < 6 => 'Early Morning',
+      >= 6 && < 12 => 'Morning',
+      >= 12 && < 18 => 'Lunch',
+      _ => 'Dinner',
+    };
+
+    return '$timePeriod $workoutTypeDisplayName';
+  }
 }
 
 /// Create HomeWorkoutEntity from WorkoutData
@@ -63,7 +77,7 @@ HomeWorkoutEntity homeWorkoutEntityFromWorkoutData(HealthWorkoutData data) {
     startTime: data.startTime,
     endTime: data.endTime,
     duration: data.duration,
-    totalEnergyBurned: data.totalEnergyBurned,
-    totalDistance: data.totalDistance,
+    totalEnergyBurned: data.totalEnergyBurned ?? 0,
+    totalDistance: data.totalDistance ?? 0.0,
   );
 }
