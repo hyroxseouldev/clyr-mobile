@@ -327,7 +327,7 @@ class PermissionServiceImpl implements PermissionService {
           dataTypes.add(health.HealthDataType.ACTIVE_ENERGY_BURNED);
           break;
         case PermissionType.healthDistance:
-          dataTypes.add(health.HealthDataType.DISTANCE_DELTA);
+          dataTypes.add(health.HealthDataType.DISTANCE_WALKING_RUNNING);
           break;
         case PermissionType.healthHeartRate:
           dataTypes.add(health.HealthDataType.HEART_RATE);
