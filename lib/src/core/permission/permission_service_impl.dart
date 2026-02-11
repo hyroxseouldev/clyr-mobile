@@ -124,6 +124,7 @@ class PermissionServiceImpl implements PermissionService {
       PermissionType.healthEnergy,
       PermissionType.healthDistance,
       PermissionType.healthHeartRate,
+      PermissionType.healthWorkoutRoute,
     ];
 
     return await _requestHealthPermissionsBatch(healthTypes);
@@ -161,7 +162,8 @@ class PermissionServiceImpl implements PermissionService {
         type == PermissionType.healthSteps ||
         type == PermissionType.healthEnergy ||
         type == PermissionType.healthDistance ||
-        type == PermissionType.healthHeartRate;
+        type == PermissionType.healthHeartRate ||
+        type == PermissionType.healthWorkoutRoute;
   }
 
   ph.Permission _getStandardPermission(PermissionType type) {
@@ -331,6 +333,9 @@ class PermissionServiceImpl implements PermissionService {
           break;
         case PermissionType.healthHeartRate:
           dataTypes.add(health.HealthDataType.HEART_RATE);
+          break;
+        case PermissionType.healthWorkoutRoute:
+          dataTypes.add(health.HealthDataType.WORKOUT_ROUTE);
           break;
         default:
           break;

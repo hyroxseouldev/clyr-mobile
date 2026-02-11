@@ -20,11 +20,13 @@ class HealthServiceImpl implements HealthService {
   }) async {
     try {
       // Fetch workout data
-      final healthData = await _health.getHealthDataFromTypes(
-        startTime: startDate,
-        endTime: endDate,
-        types: [HealthDataType.WORKOUT],
-      );
+      final healthData = await _health
+          .getHealthDataFromTypes(
+            startTime: startDate,
+            endTime: endDate,
+            types: [HealthDataType.WORKOUT],
+          )
+          .timeout(const Duration(seconds: 5));
 
       if (healthData.isEmpty) {
         return left(AppException.noData('No workouts found in date range'));

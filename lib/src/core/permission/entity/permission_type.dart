@@ -6,6 +6,7 @@ enum PermissionType {
   healthEnergy,
   healthDistance,
   healthHeartRate,
+  healthWorkoutRoute,
 
   // Storage (for exporting data)
   storage,
@@ -27,6 +28,8 @@ extension PermissionTypeExtension on PermissionType {
         return 'Distance';
       case PermissionType.healthHeartRate:
         return 'Heart Rate';
+      case PermissionType.healthWorkoutRoute:
+        return 'Workout Route';
       case PermissionType.storage:
         return 'Storage';
       case PermissionType.notifications:
