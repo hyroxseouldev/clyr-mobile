@@ -14,10 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HealthWorkoutData {
 
- String get id; HealthWorkoutType get workoutType; DateTime get startTime; DateTime get endTime; Duration get duration; int? get totalEnergyBurned;// Calories in kcal
- double? get totalDistance;// Distance in meters
- List<int>? get heartRates;// Heart rate data points (BPM)
- Map<String, dynamic>? get metadata;
+ String get id; HealthWorkoutType get workoutType; DateTime get startTime; DateTime get endTime; Duration get duration; int get totalEnergyBurned; double get totalDistance; List<int> get heartRates; Map<String, dynamic>? get metadata;
 /// Create a copy of HealthWorkoutData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +45,7 @@ abstract mixin class $HealthWorkoutDataCopyWith<$Res>  {
   factory $HealthWorkoutDataCopyWith(HealthWorkoutData value, $Res Function(HealthWorkoutData) _then) = _$HealthWorkoutDataCopyWithImpl;
 @useResult
 $Res call({
- String id, HealthWorkoutType workoutType, DateTime startTime, DateTime endTime, Duration duration, int? totalEnergyBurned, double? totalDistance, List<int>? heartRates, Map<String, dynamic>? metadata
+ String id, HealthWorkoutType workoutType, DateTime startTime, DateTime endTime, Duration duration, int totalEnergyBurned, double totalDistance, List<int> heartRates, Map<String, dynamic>? metadata
 });
 
 
@@ -65,17 +62,17 @@ class _$HealthWorkoutDataCopyWithImpl<$Res>
 
 /// Create a copy of HealthWorkoutData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? workoutType = null,Object? startTime = null,Object? endTime = null,Object? duration = null,Object? totalEnergyBurned = freezed,Object? totalDistance = freezed,Object? heartRates = freezed,Object? metadata = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? workoutType = null,Object? startTime = null,Object? endTime = null,Object? duration = null,Object? totalEnergyBurned = null,Object? totalDistance = null,Object? heartRates = null,Object? metadata = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,workoutType: null == workoutType ? _self.workoutType : workoutType // ignore: cast_nullable_to_non_nullable
 as HealthWorkoutType,startTime: null == startTime ? _self.startTime : startTime // ignore: cast_nullable_to_non_nullable
 as DateTime,endTime: null == endTime ? _self.endTime : endTime // ignore: cast_nullable_to_non_nullable
 as DateTime,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
-as Duration,totalEnergyBurned: freezed == totalEnergyBurned ? _self.totalEnergyBurned : totalEnergyBurned // ignore: cast_nullable_to_non_nullable
-as int?,totalDistance: freezed == totalDistance ? _self.totalDistance : totalDistance // ignore: cast_nullable_to_non_nullable
-as double?,heartRates: freezed == heartRates ? _self.heartRates : heartRates // ignore: cast_nullable_to_non_nullable
-as List<int>?,metadata: freezed == metadata ? _self.metadata : metadata // ignore: cast_nullable_to_non_nullable
+as Duration,totalEnergyBurned: null == totalEnergyBurned ? _self.totalEnergyBurned : totalEnergyBurned // ignore: cast_nullable_to_non_nullable
+as int,totalDistance: null == totalDistance ? _self.totalDistance : totalDistance // ignore: cast_nullable_to_non_nullable
+as double,heartRates: null == heartRates ? _self.heartRates : heartRates // ignore: cast_nullable_to_non_nullable
+as List<int>,metadata: freezed == metadata ? _self.metadata : metadata // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>?,
   ));
 }
@@ -161,7 +158,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int? totalEnergyBurned,  double? totalDistance,  List<int>? heartRates,  Map<String, dynamic>? metadata)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int totalEnergyBurned,  double totalDistance,  List<int> heartRates,  Map<String, dynamic>? metadata)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HealthWorkoutData() when $default != null:
 return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.duration,_that.totalEnergyBurned,_that.totalDistance,_that.heartRates,_that.metadata);case _:
@@ -182,7 +179,7 @@ return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.d
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int? totalEnergyBurned,  double? totalDistance,  List<int>? heartRates,  Map<String, dynamic>? metadata)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int totalEnergyBurned,  double totalDistance,  List<int> heartRates,  Map<String, dynamic>? metadata)  $default,) {final _that = this;
 switch (_that) {
 case _HealthWorkoutData():
 return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.duration,_that.totalEnergyBurned,_that.totalDistance,_that.heartRates,_that.metadata);case _:
@@ -202,7 +199,7 @@ return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.d
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int? totalEnergyBurned,  double? totalDistance,  List<int>? heartRates,  Map<String, dynamic>? metadata)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int totalEnergyBurned,  double totalDistance,  List<int> heartRates,  Map<String, dynamic>? metadata)?  $default,) {final _that = this;
 switch (_that) {
 case _HealthWorkoutData() when $default != null:
 return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.duration,_that.totalEnergyBurned,_that.totalDistance,_that.heartRates,_that.metadata);case _:
@@ -217,7 +214,7 @@ return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.d
 
 
 class _HealthWorkoutData extends HealthWorkoutData {
-  const _HealthWorkoutData({required this.id, required this.workoutType, required this.startTime, required this.endTime, required this.duration, this.totalEnergyBurned, this.totalDistance, final  List<int>? heartRates, final  Map<String, dynamic>? metadata}): _heartRates = heartRates,_metadata = metadata,super._();
+  const _HealthWorkoutData({required this.id, required this.workoutType, required this.startTime, required this.endTime, required this.duration, required this.totalEnergyBurned, required this.totalDistance, final  List<int> heartRates = const [], final  Map<String, dynamic>? metadata}): _heartRates = heartRates,_metadata = metadata,super._();
   
 
 @override final  String id;
@@ -225,23 +222,16 @@ class _HealthWorkoutData extends HealthWorkoutData {
 @override final  DateTime startTime;
 @override final  DateTime endTime;
 @override final  Duration duration;
-@override final  int? totalEnergyBurned;
-// Calories in kcal
-@override final  double? totalDistance;
-// Distance in meters
- final  List<int>? _heartRates;
-// Distance in meters
-@override List<int>? get heartRates {
-  final value = _heartRates;
-  if (value == null) return null;
+@override final  int totalEnergyBurned;
+@override final  double totalDistance;
+ final  List<int> _heartRates;
+@override@JsonKey() List<int> get heartRates {
   if (_heartRates is EqualUnmodifiableListView) return _heartRates;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(value);
+  return EqualUnmodifiableListView(_heartRates);
 }
 
-// Heart rate data points (BPM)
  final  Map<String, dynamic>? _metadata;
-// Heart rate data points (BPM)
 @override Map<String, dynamic>? get metadata {
   final value = _metadata;
   if (value == null) return null;
@@ -281,7 +271,7 @@ abstract mixin class _$HealthWorkoutDataCopyWith<$Res> implements $HealthWorkout
   factory _$HealthWorkoutDataCopyWith(_HealthWorkoutData value, $Res Function(_HealthWorkoutData) _then) = __$HealthWorkoutDataCopyWithImpl;
 @override @useResult
 $Res call({
- String id, HealthWorkoutType workoutType, DateTime startTime, DateTime endTime, Duration duration, int? totalEnergyBurned, double? totalDistance, List<int>? heartRates, Map<String, dynamic>? metadata
+ String id, HealthWorkoutType workoutType, DateTime startTime, DateTime endTime, Duration duration, int totalEnergyBurned, double totalDistance, List<int> heartRates, Map<String, dynamic>? metadata
 });
 
 
@@ -298,17 +288,17 @@ class __$HealthWorkoutDataCopyWithImpl<$Res>
 
 /// Create a copy of HealthWorkoutData
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? workoutType = null,Object? startTime = null,Object? endTime = null,Object? duration = null,Object? totalEnergyBurned = freezed,Object? totalDistance = freezed,Object? heartRates = freezed,Object? metadata = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? workoutType = null,Object? startTime = null,Object? endTime = null,Object? duration = null,Object? totalEnergyBurned = null,Object? totalDistance = null,Object? heartRates = null,Object? metadata = freezed,}) {
   return _then(_HealthWorkoutData(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,workoutType: null == workoutType ? _self.workoutType : workoutType // ignore: cast_nullable_to_non_nullable
 as HealthWorkoutType,startTime: null == startTime ? _self.startTime : startTime // ignore: cast_nullable_to_non_nullable
 as DateTime,endTime: null == endTime ? _self.endTime : endTime // ignore: cast_nullable_to_non_nullable
 as DateTime,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
-as Duration,totalEnergyBurned: freezed == totalEnergyBurned ? _self.totalEnergyBurned : totalEnergyBurned // ignore: cast_nullable_to_non_nullable
-as int?,totalDistance: freezed == totalDistance ? _self.totalDistance : totalDistance // ignore: cast_nullable_to_non_nullable
-as double?,heartRates: freezed == heartRates ? _self._heartRates : heartRates // ignore: cast_nullable_to_non_nullable
-as List<int>?,metadata: freezed == metadata ? _self._metadata : metadata // ignore: cast_nullable_to_non_nullable
+as Duration,totalEnergyBurned: null == totalEnergyBurned ? _self.totalEnergyBurned : totalEnergyBurned // ignore: cast_nullable_to_non_nullable
+as int,totalDistance: null == totalDistance ? _self.totalDistance : totalDistance // ignore: cast_nullable_to_non_nullable
+as double,heartRates: null == heartRates ? _self._heartRates : heartRates // ignore: cast_nullable_to_non_nullable
+as List<int>,metadata: freezed == metadata ? _self._metadata : metadata // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>?,
   ));
 }

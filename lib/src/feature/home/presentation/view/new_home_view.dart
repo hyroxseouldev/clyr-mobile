@@ -2,6 +2,7 @@ import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/selected_date_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/workout_list_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/home_workout_detail_view.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/widget/home_workout_feed_card_widget.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/widget/workout_list_card.dart';
 import 'package:clyr_mobile/src/shared/widgets/date_selector/date_selector_widget.dart';
 import 'package:clyr_mobile/src/shared/widgets/empty_state.dart';
@@ -106,8 +107,8 @@ class NewHomeView extends ConsumerWidget {
                 return SliverList(
                   delegate: SliverChildBuilderDelegate((context, index) {
                     final workout = workouts[index];
-                    return WorkoutListCard(
-                      workout: workout,
+                    return HomeWorkoutFeedCardWidget.fromEntity(
+                      workout,
                       onTap: () {
                         context.goNamed(
                           HomeWorkoutDetailView.routeName,

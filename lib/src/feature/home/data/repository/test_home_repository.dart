@@ -13,7 +13,10 @@ class TestHomeRepository implements HomeRepository {
 
   /// Get or generate cached mock workouts for a specific day difference
   List<HealthWorkoutData> _getCachedMockWorkouts(int dayDiff) {
-    return _mockWorkoutsCache.putIfAbsent(dayDiff, () => _generateMockWorkouts(dayDiff));
+    return _mockWorkoutsCache.putIfAbsent(
+      dayDiff,
+      () => _generateMockWorkouts(dayDiff),
+    );
   }
 
   /// Mock today's session data
@@ -98,7 +101,9 @@ class TestHomeRepository implements HomeRepository {
   @override
   FutureEither<List<HealthWorkoutData>> getWorkoutsByDate(DateTime date) async {
     await Future.delayed(const Duration(milliseconds: 800));
-    debugPrint('📅 [TestHomeRepository] Fetching mock workouts for: ${date.toString().split(' ')[0]}');
+    debugPrint(
+      '📅 [TestHomeRepository] Fetching mock workouts for: ${date.toString().split(' ')[0]}',
+    );
 
     // Validate date - check if future date (same as HomeRepositoryImpl)
     final now = DateTime.now();
@@ -107,7 +112,9 @@ class TestHomeRepository implements HomeRepository {
 
     if (queryDate.isAfter(today)) {
       // Future date - no workouts
-      debugPrint('⏭️ [TestHomeRepository] Future date detected, returning empty list');
+      debugPrint(
+        '⏭️ [TestHomeRepository] Future date detected, returning empty list',
+      );
       return right(const <HealthWorkoutData>[]);
     }
 
@@ -120,9 +127,13 @@ class TestHomeRepository implements HomeRepository {
       return left(AppException.noData('No workouts found for this date'));
     }
 
-    debugPrint('✅ [TestHomeRepository] Returning ${mockWorkouts.length} mock workouts');
+    debugPrint(
+      '✅ [TestHomeRepository] Returning ${mockWorkouts.length} mock workouts',
+    );
     for (final workout in mockWorkouts) {
-      debugPrint('   - ${workout.workoutType.displayName}: ${workout.duration}');
+      debugPrint(
+        '   - ${workout.workoutType.displayName}: ${workout.duration}',
+      );
     }
 
     return right(mockWorkouts);
@@ -153,11 +164,15 @@ class TestHomeRepository implements HomeRepository {
           HealthWorkoutData(
             id: 'mock-${today.millisecondsSinceEpoch}-1',
             workoutType: HealthWorkoutType.fitness,
-            startTime: baseDate.subtract(const Duration(days: 1)).add(const Duration(hours: 18)),
-            endTime: baseDate.subtract(const Duration(days: 1)).add(const Duration(hours: 19, minutes: 15)),
+            startTime: baseDate
+                .subtract(const Duration(days: 1))
+                .add(const Duration(hours: 18)),
+            endTime: baseDate
+                .subtract(const Duration(days: 1))
+                .add(const Duration(hours: 19, minutes: 15)),
             duration: const Duration(minutes: 75),
             totalEnergyBurned: 420,
-            totalDistance: null,
+            totalDistance: 0,
           ),
         ];
 
@@ -166,8 +181,12 @@ class TestHomeRepository implements HomeRepository {
           HealthWorkoutData(
             id: 'mock-${today.millisecondsSinceEpoch}-1',
             workoutType: HealthWorkoutType.cycling,
-            startTime: baseDate.subtract(const Duration(days: 2)).add(const Duration(hours: 6)),
-            endTime: baseDate.subtract(const Duration(days: 2)).add(const Duration(hours: 7, minutes: 30)),
+            startTime: baseDate
+                .subtract(const Duration(days: 2))
+                .add(const Duration(hours: 6)),
+            endTime: baseDate
+                .subtract(const Duration(days: 2))
+                .add(const Duration(hours: 7, minutes: 30)),
             duration: const Duration(minutes: 90),
             totalEnergyBurned: 550,
             totalDistance: 25000.0,
@@ -182,8 +201,12 @@ class TestHomeRepository implements HomeRepository {
           HealthWorkoutData(
             id: 'mock-${today.millisecondsSinceEpoch}-1',
             workoutType: HealthWorkoutType.walking,
-            startTime: baseDate.subtract(const Duration(days: 4)).add(const Duration(hours: 12)),
-            endTime: baseDate.subtract(const Duration(days: 4)).add(const Duration(hours: 12, minutes: 45)),
+            startTime: baseDate
+                .subtract(const Duration(days: 4))
+                .add(const Duration(hours: 12)),
+            endTime: baseDate
+                .subtract(const Duration(days: 4))
+                .add(const Duration(hours: 12, minutes: 45)),
             duration: const Duration(minutes: 45),
             totalEnergyBurned: 180,
             totalDistance: 3500.0,
@@ -195,11 +218,15 @@ class TestHomeRepository implements HomeRepository {
           HealthWorkoutData(
             id: 'mock-${today.millisecondsSinceEpoch}-1',
             workoutType: HealthWorkoutType.fitness,
-            startTime: baseDate.subtract(const Duration(days: 5)).add(const Duration(hours: 19)),
-            endTime: baseDate.subtract(const Duration(days: 5)).add(const Duration(hours: 19, minutes: 35)),
+            startTime: baseDate
+                .subtract(const Duration(days: 5))
+                .add(const Duration(hours: 19)),
+            endTime: baseDate
+                .subtract(const Duration(days: 5))
+                .add(const Duration(hours: 19, minutes: 35)),
             duration: const Duration(minutes: 35),
             totalEnergyBurned: 380,
-            totalDistance: null,
+            totalDistance: 0,
           ),
         ];
 
@@ -209,8 +236,12 @@ class TestHomeRepository implements HomeRepository {
             HealthWorkoutData(
               id: 'mock-${today.millisecondsSinceEpoch}-1',
               workoutType: HealthWorkoutType.swimming,
-              startTime: baseDate.subtract(Duration(days: dayDiff)).add(const Duration(hours: 8)),
-              endTime: baseDate.subtract(Duration(days: dayDiff)).add(const Duration(hours: 9)),
+              startTime: baseDate
+                  .subtract(Duration(days: dayDiff))
+                  .add(const Duration(hours: 8)),
+              endTime: baseDate
+                  .subtract(Duration(days: dayDiff))
+                  .add(const Duration(hours: 9)),
               duration: const Duration(minutes: 60),
               totalEnergyBurned: 450,
               totalDistance: 1500.0,
@@ -219,8 +250,12 @@ class TestHomeRepository implements HomeRepository {
             HealthWorkoutData(
               id: 'mock-${today.millisecondsSinceEpoch}-1',
               workoutType: HealthWorkoutType.hiking,
-              startTime: baseDate.subtract(Duration(days: dayDiff)).add(const Duration(hours: 7)),
-              endTime: baseDate.subtract(Duration(days: dayDiff)).add(const Duration(hours: 10, minutes: 30)),
+              startTime: baseDate
+                  .subtract(Duration(days: dayDiff))
+                  .add(const Duration(hours: 7)),
+              endTime: baseDate
+                  .subtract(Duration(days: dayDiff))
+                  .add(const Duration(hours: 10, minutes: 30)),
               duration: const Duration(minutes: 210),
               totalEnergyBurned: 780,
               totalDistance: 8500.0,
@@ -243,13 +278,17 @@ class TestHomeRepository implements HomeRepository {
       );
 
       if (workout != null) {
-        debugPrint('✅ [TestHomeRepository] Workout found: ${workout.workoutType} (${workout.id})');
+        debugPrint(
+          '✅ [TestHomeRepository] Workout found: ${workout.workoutType} (${workout.id})',
+        );
         return right(workout);
       }
     }
 
     debugPrint('📭 [TestHomeRepository] Workout not found: $id');
-    debugPrint('   Searched ${_mockWorkoutsCache.length} cached days with ${_mockWorkoutsCache.values.fold(0, (sum, list) => sum + list.length)} total workouts');
+    debugPrint(
+      '   Searched ${_mockWorkoutsCache.length} cached days with ${_mockWorkoutsCache.values.fold(0, (sum, list) => sum + list.length)} total workouts',
+    );
     return right(null);
   }
 }

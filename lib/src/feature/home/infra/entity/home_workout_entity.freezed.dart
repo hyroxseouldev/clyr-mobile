@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HomeWorkoutEntity {
 
- String get id; HealthWorkoutType get workoutType; DateTime get startTime; DateTime get endTime; Duration get duration; int get totalEnergyBurned; double get totalDistance;
+ String get id; HealthWorkoutType get workoutType; DateTime get startTime; DateTime get endTime; Duration get duration; int get totalEnergyBurned; double get totalDistance; List<int>? get heartRates;
 /// Create a copy of HomeWorkoutEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $HomeWorkoutEntityCopyWith<HomeWorkoutEntity> get copyWith => _$HomeWorkoutEntit
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeWorkoutEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.workoutType, workoutType) || other.workoutType == workoutType)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.totalEnergyBurned, totalEnergyBurned) || other.totalEnergyBurned == totalEnergyBurned)&&(identical(other.totalDistance, totalDistance) || other.totalDistance == totalDistance));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeWorkoutEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.workoutType, workoutType) || other.workoutType == workoutType)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.totalEnergyBurned, totalEnergyBurned) || other.totalEnergyBurned == totalEnergyBurned)&&(identical(other.totalDistance, totalDistance) || other.totalDistance == totalDistance)&&const DeepCollectionEquality().equals(other.heartRates, heartRates));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,workoutType,startTime,endTime,duration,totalEnergyBurned,totalDistance);
+int get hashCode => Object.hash(runtimeType,id,workoutType,startTime,endTime,duration,totalEnergyBurned,totalDistance,const DeepCollectionEquality().hash(heartRates));
 
 @override
 String toString() {
-  return 'HomeWorkoutEntity(id: $id, workoutType: $workoutType, startTime: $startTime, endTime: $endTime, duration: $duration, totalEnergyBurned: $totalEnergyBurned, totalDistance: $totalDistance)';
+  return 'HomeWorkoutEntity(id: $id, workoutType: $workoutType, startTime: $startTime, endTime: $endTime, duration: $duration, totalEnergyBurned: $totalEnergyBurned, totalDistance: $totalDistance, heartRates: $heartRates)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $HomeWorkoutEntityCopyWith<$Res>  {
   factory $HomeWorkoutEntityCopyWith(HomeWorkoutEntity value, $Res Function(HomeWorkoutEntity) _then) = _$HomeWorkoutEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, HealthWorkoutType workoutType, DateTime startTime, DateTime endTime, Duration duration, int totalEnergyBurned, double totalDistance
+ String id, HealthWorkoutType workoutType, DateTime startTime, DateTime endTime, Duration duration, int totalEnergyBurned, double totalDistance, List<int>? heartRates
 });
 
 
@@ -62,7 +62,7 @@ class _$HomeWorkoutEntityCopyWithImpl<$Res>
 
 /// Create a copy of HomeWorkoutEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? workoutType = null,Object? startTime = null,Object? endTime = null,Object? duration = null,Object? totalEnergyBurned = null,Object? totalDistance = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? workoutType = null,Object? startTime = null,Object? endTime = null,Object? duration = null,Object? totalEnergyBurned = null,Object? totalDistance = null,Object? heartRates = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,workoutType: null == workoutType ? _self.workoutType : workoutType // ignore: cast_nullable_to_non_nullable
@@ -71,7 +71,8 @@ as DateTime,endTime: null == endTime ? _self.endTime : endTime // ignore: cast_n
 as DateTime,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
 as Duration,totalEnergyBurned: null == totalEnergyBurned ? _self.totalEnergyBurned : totalEnergyBurned // ignore: cast_nullable_to_non_nullable
 as int,totalDistance: null == totalDistance ? _self.totalDistance : totalDistance // ignore: cast_nullable_to_non_nullable
-as double,
+as double,heartRates: freezed == heartRates ? _self.heartRates : heartRates // ignore: cast_nullable_to_non_nullable
+as List<int>?,
   ));
 }
 
@@ -156,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int totalEnergyBurned,  double totalDistance)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int totalEnergyBurned,  double totalDistance,  List<int>? heartRates)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeWorkoutEntity() when $default != null:
-return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.duration,_that.totalEnergyBurned,_that.totalDistance);case _:
+return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.duration,_that.totalEnergyBurned,_that.totalDistance,_that.heartRates);case _:
   return orElse();
 
 }
@@ -177,10 +178,10 @@ return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.d
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int totalEnergyBurned,  double totalDistance)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int totalEnergyBurned,  double totalDistance,  List<int>? heartRates)  $default,) {final _that = this;
 switch (_that) {
 case _HomeWorkoutEntity():
-return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.duration,_that.totalEnergyBurned,_that.totalDistance);case _:
+return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.duration,_that.totalEnergyBurned,_that.totalDistance,_that.heartRates);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +198,10 @@ return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.d
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int totalEnergyBurned,  double totalDistance)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  HealthWorkoutType workoutType,  DateTime startTime,  DateTime endTime,  Duration duration,  int totalEnergyBurned,  double totalDistance,  List<int>? heartRates)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeWorkoutEntity() when $default != null:
-return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.duration,_that.totalEnergyBurned,_that.totalDistance);case _:
+return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.duration,_that.totalEnergyBurned,_that.totalDistance,_that.heartRates);case _:
   return null;
 
 }
@@ -212,7 +213,7 @@ return $default(_that.id,_that.workoutType,_that.startTime,_that.endTime,_that.d
 
 
 class _HomeWorkoutEntity extends HomeWorkoutEntity {
-  const _HomeWorkoutEntity({required this.id, required this.workoutType, required this.startTime, required this.endTime, required this.duration, required this.totalEnergyBurned, required this.totalDistance}): super._();
+  const _HomeWorkoutEntity({required this.id, required this.workoutType, required this.startTime, required this.endTime, required this.duration, required this.totalEnergyBurned, required this.totalDistance, final  List<int>? heartRates}): _heartRates = heartRates,super._();
   
 
 @override final  String id;
@@ -222,6 +223,15 @@ class _HomeWorkoutEntity extends HomeWorkoutEntity {
 @override final  Duration duration;
 @override final  int totalEnergyBurned;
 @override final  double totalDistance;
+ final  List<int>? _heartRates;
+@override List<int>? get heartRates {
+  final value = _heartRates;
+  if (value == null) return null;
+  if (_heartRates is EqualUnmodifiableListView) return _heartRates;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
 
 /// Create a copy of HomeWorkoutEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -233,16 +243,16 @@ _$HomeWorkoutEntityCopyWith<_HomeWorkoutEntity> get copyWith => __$HomeWorkoutEn
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeWorkoutEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.workoutType, workoutType) || other.workoutType == workoutType)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.totalEnergyBurned, totalEnergyBurned) || other.totalEnergyBurned == totalEnergyBurned)&&(identical(other.totalDistance, totalDistance) || other.totalDistance == totalDistance));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeWorkoutEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.workoutType, workoutType) || other.workoutType == workoutType)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.totalEnergyBurned, totalEnergyBurned) || other.totalEnergyBurned == totalEnergyBurned)&&(identical(other.totalDistance, totalDistance) || other.totalDistance == totalDistance)&&const DeepCollectionEquality().equals(other._heartRates, _heartRates));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,workoutType,startTime,endTime,duration,totalEnergyBurned,totalDistance);
+int get hashCode => Object.hash(runtimeType,id,workoutType,startTime,endTime,duration,totalEnergyBurned,totalDistance,const DeepCollectionEquality().hash(_heartRates));
 
 @override
 String toString() {
-  return 'HomeWorkoutEntity(id: $id, workoutType: $workoutType, startTime: $startTime, endTime: $endTime, duration: $duration, totalEnergyBurned: $totalEnergyBurned, totalDistance: $totalDistance)';
+  return 'HomeWorkoutEntity(id: $id, workoutType: $workoutType, startTime: $startTime, endTime: $endTime, duration: $duration, totalEnergyBurned: $totalEnergyBurned, totalDistance: $totalDistance, heartRates: $heartRates)';
 }
 
 
@@ -253,7 +263,7 @@ abstract mixin class _$HomeWorkoutEntityCopyWith<$Res> implements $HomeWorkoutEn
   factory _$HomeWorkoutEntityCopyWith(_HomeWorkoutEntity value, $Res Function(_HomeWorkoutEntity) _then) = __$HomeWorkoutEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, HealthWorkoutType workoutType, DateTime startTime, DateTime endTime, Duration duration, int totalEnergyBurned, double totalDistance
+ String id, HealthWorkoutType workoutType, DateTime startTime, DateTime endTime, Duration duration, int totalEnergyBurned, double totalDistance, List<int>? heartRates
 });
 
 
@@ -270,7 +280,7 @@ class __$HomeWorkoutEntityCopyWithImpl<$Res>
 
 /// Create a copy of HomeWorkoutEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? workoutType = null,Object? startTime = null,Object? endTime = null,Object? duration = null,Object? totalEnergyBurned = null,Object? totalDistance = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? workoutType = null,Object? startTime = null,Object? endTime = null,Object? duration = null,Object? totalEnergyBurned = null,Object? totalDistance = null,Object? heartRates = freezed,}) {
   return _then(_HomeWorkoutEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,workoutType: null == workoutType ? _self.workoutType : workoutType // ignore: cast_nullable_to_non_nullable
@@ -279,7 +289,8 @@ as DateTime,endTime: null == endTime ? _self.endTime : endTime // ignore: cast_n
 as DateTime,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
 as Duration,totalEnergyBurned: null == totalEnergyBurned ? _self.totalEnergyBurned : totalEnergyBurned // ignore: cast_nullable_to_non_nullable
 as int,totalDistance: null == totalDistance ? _self.totalDistance : totalDistance // ignore: cast_nullable_to_non_nullable
-as double,
+as double,heartRates: freezed == heartRates ? _self._heartRates : heartRates // ignore: cast_nullable_to_non_nullable
+as List<int>?,
   ));
 }
 

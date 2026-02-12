@@ -14,6 +14,7 @@ abstract class HomeWorkoutEntity with _$HomeWorkoutEntity {
     required Duration duration,
     required int totalEnergyBurned,
     required double totalDistance,
+    List<int>? heartRates,
   }) = _HomeWorkoutEntity;
 
   const HomeWorkoutEntity._();
@@ -67,6 +68,23 @@ abstract class HomeWorkoutEntity with _$HomeWorkoutEntity {
 
     return '$timePeriod $workoutTypeDisplayName';
   }
+
+  /// Formatted pace (min'km) for running/walking/cycling activities
+  /// Returns null if distance is not available or zero
+  String? get formattedPace {
+    if (totalDistance == 0) return null;
+    final paceInSecondsPerKm = duration.inSeconds / (totalDistance / 1000);
+    final paceMinutes = paceInSecondsPerKm ~/ 60;
+    final paceSeconds = (paceInSecondsPerKm % 60).toInt();
+    return "${paceMinutes}'${paceSeconds.toString().padLeft(2, '0')}\"";
+  }
+
+  /// Average heart rate in bpm
+  /// Returns null if heart rates data is not available
+  int? get avgHeartRate {
+    if (heartRates == null || heartRates!.isEmpty) return null;
+    return heartRates!.reduce((a, b) => a + b) ~/ heartRates!.length;
+  }
 }
 
 /// Create HomeWorkoutEntity from WorkoutData
@@ -79,5 +97,6 @@ HomeWorkoutEntity homeWorkoutEntityFromWorkoutData(HealthWorkoutData data) {
     duration: data.duration,
     totalEnergyBurned: data.totalEnergyBurned ?? 0,
     totalDistance: data.totalDistance ?? 0.0,
+    heartRates: data.heartRates,
   );
 }
