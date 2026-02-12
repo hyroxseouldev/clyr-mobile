@@ -27,7 +27,7 @@ class HealthDetailWidget extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -35,9 +35,9 @@ class HealthDetailWidget extends StatelessWidget {
           const SizedBox(height: 12),
           _buildWorkoutName(theme),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 36),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 44.0),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: _buildStatsGrid(theme),
           ),
           _buildShareButton(theme),
@@ -75,7 +75,7 @@ class HealthDetailWidget extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       mainAxisSpacing: 16,
       crossAxisSpacing: 16,
-      childAspectRatio: 2,
+      childAspectRatio: 3,
       children: [
         _buildStatItem(theme, label: 'Time', value: workout.formattedDuration),
         _buildStatItem(
@@ -124,7 +124,7 @@ class HealthDetailWidget extends StatelessWidget {
 
   Widget _buildShareButton(ThemeData theme) {
     return Align(
-      alignment: Alignment.centerRight,
+      alignment: Alignment.topRight,
       child: WorkoutShareButton(workout: workout),
     );
   }
