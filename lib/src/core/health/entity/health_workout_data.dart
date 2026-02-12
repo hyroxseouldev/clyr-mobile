@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'health_workout_data.freezed.dart';
@@ -99,6 +100,65 @@ abstract class HealthWorkoutData with _$HealthWorkoutData {
     };
 
     return '$timePeriod ${workoutType.displayName}';
+  }
+
+  /// Icon data for the workout type
+  IconData get workoutIcon => switch (workoutType) {
+    HealthWorkoutType.running => Icons.directions_run,
+    HealthWorkoutType.walking => Icons.directions_walk,
+    HealthWorkoutType.cycling => Icons.directions_bike,
+    HealthWorkoutType.swimming => Icons.pool,
+    HealthWorkoutType.hiking => Icons.terrain,
+    HealthWorkoutType.fitness => Icons.fitness_center,
+    HealthWorkoutType.other => Icons.sports_gymnastics,
+  };
+
+  /// Formatted workout date with time
+  /// If today: "{today} at {time}" (e.g., "Today at 2:30 PM")
+  /// If not today: "{weekday}, {day}, {year}, at {time}" (e.g., "Mon, 12, 2026, at 2:30 PM")
+  String formattedWorkoutDate(String locale, String today) {
+    final now = DateTime.now();
+    final isToday =
+        now.year == startTime.year &&
+        now.month == startTime.month &&
+        now.day == startTime.day;
+
+    final timeFormat = 'jm'; // AM/PM format
+    final weekdayFormat = 'E'; // Short weekday (Mon, Tue, etc.)
+    final dayFormat = 'd'; // Day of month
+    final yearFormat = 'y'; // Year
+
+    final timeStr = _formatDateWithLocale(startTime, timeFormat, locale);
+    final weekdayStr = _formatDateWithLocale(startTime, weekdayFormat, locale);
+    final dayStr = _formatDateWithLocale(startTime, dayFormat, locale);
+    final yearStr = _formatDateWithLocale(startTime, yearFormat, locale);
+
+    if (isToday) {
+      return '$today at $timeStr';
+    } else {
+      return '$weekdayStr, $dayStr, $yearStr, at $timeStr';
+    }
+  }
+
+  String _formatDateWithLocale(DateTime date, String pattern, String locale) {
+    final weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+    switch (pattern) {
+      case 'E':
+        return weekdays[date.weekday - 1];
+      case 'd':
+        return date.day.toString();
+      case 'y':
+        return date.year.toString();
+      case 'jm':
+        final hour = date.hour;
+        final minute = date.minute.toString().padLeft(2, '0');
+        final ampm = hour >= 12 ? 'PM' : 'AM';
+        final displayHour = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
+        return '$displayHour:$minute $ampm';
+      default:
+        return date.toString();
+    }
   }
 }
 
