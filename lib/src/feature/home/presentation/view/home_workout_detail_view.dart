@@ -6,6 +6,7 @@ import 'package:clyr_mobile/src/feature/home/presentation/provider/workout_detai
 import 'package:clyr_mobile/src/feature/home/presentation/widget/workout_detail_widget.dart';
 import 'package:clyr_mobile/src/shared/widgets/async_widget.dart';
 import 'package:clyr_mobile/src/shared/widgets/health_detail_widget.dart';
+import 'package:clyr_mobile/src/shared/widgets/not_found_widget.dart';
 
 class HomeWorkoutDetailView extends ConsumerWidget {
   const HomeWorkoutDetailView({super.key, required this.workoutId});
@@ -17,19 +18,16 @@ class HomeWorkoutDetailView extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final workoutState = ref.watch(workoutDetailProvider(workoutId));
 
-    return AsyncWidget<HealthWorkoutData?>(
-      data: workoutState,
-      builder: (workout) {
-        if (workout == null) {
-          return Scaffold(
-            appBar: AppBar(),
-            body: _buildNotFound(context, l10n),
-          );
-        }
+    return Scaffold(
+      appBar: AppBar(),
+      body: AsyncWidget<HealthWorkoutData?>(
+        data: workoutState,
+        builder: (workout) {
+          if (workout == null) {
+            return NotFoundWidget(message: l10n.workoutNotFound);
+          }
 
-        return Scaffold(
-          appBar: AppBar(),
-          body: SingleChildScrollView(
+          return SingleChildScrollView(
             child: Column(
               children: [
                 HealthDetailWidget(
@@ -53,24 +51,8 @@ class HomeWorkoutDetailView extends ConsumerWidget {
                 ),
               ],
             ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildNotFound(BuildContext context, AppLocalizations l10n) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.error_outline, size: 64),
-          const SizedBox(height: 16),
-          Text(
-            l10n.workoutNotFound,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-        ],
+          );
+        },
       ),
     );
   }

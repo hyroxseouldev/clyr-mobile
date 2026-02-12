@@ -34,9 +34,12 @@ class HealthDetailWidget extends StatelessWidget {
           _buildHeader(theme, l10n),
           const SizedBox(height: 12),
           _buildWorkoutName(theme),
-          const SizedBox(height: 12),
-          _buildStatsGrid(theme),
-          const SizedBox(height: 12),
+
+          const SizedBox(height: 24),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 44.0),
+            child: _buildStatsGrid(theme),
+          ),
           _buildShareButton(theme),
         ],
       ),
@@ -60,7 +63,7 @@ class HealthDetailWidget extends StatelessWidget {
 
   Widget _buildWorkoutName(ThemeData theme) {
     return Text(
-      workout.workoutType.displayName,
+      workout.workoutNameWithTime,
       style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
     );
   }
@@ -72,25 +75,22 @@ class HealthDetailWidget extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       mainAxisSpacing: 16,
       crossAxisSpacing: 16,
+      childAspectRatio: 2,
       children: [
+        _buildStatItem(theme, label: 'Time', value: workout.formattedDuration),
         _buildStatItem(
           theme,
-          label: timeText,
-          value: workout.formattedDuration,
-        ),
-        _buildStatItem(
-          theme,
-          label: avgHeartRateText,
+          label: 'Avg Heart Rate',
           value: workout.formattedAvgHeartRate,
         ),
         _buildStatItem(
           theme,
-          label: caloriesText,
+          label: 'Calories',
           value: workout.formattedCalories,
         ),
         _buildStatItem(
           theme,
-          label: maxHeartRateText,
+          label: 'Max Heart Rate',
           value: '${workout.maxHeartRate} bpm',
         ),
       ],

@@ -82,27 +82,38 @@ enum MainNavigationItem {
 
 /// Default layout with main navigation bar
 class DefaultLayout extends StatelessWidget {
-  const DefaultLayout({super.key, required this.child});
+  const DefaultLayout({
+    super.key,
+    required this.child,
+    this.showBottomNavigation = true,
+  });
   final Widget child;
+  final bool showBottomNavigation;
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: child,
+      bottomNavigationBar: showBottomNavigation
+          ? _buildNavigationBar(context)
+          : null,
+    );
+  }
+
+  Widget _buildNavigationBar(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
     final currentItem =
         MainNavigationItem.fromPath(location) ?? MainNavigationItem.home;
 
-    return Scaffold(
-      body: child,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: currentItem.navIndex,
-        onDestinationSelected: (index) {
-          final item = MainNavigationItem.fromIndex(index);
-          if (item != null) {
-            context.go(item.route);
-          }
-        },
-        destinations: MainNavigationItem.allDestinations(context),
-      ),
+    return NavigationBar(
+      selectedIndex: currentItem.navIndex,
+      onDestinationSelected: (index) {
+        final item = MainNavigationItem.fromIndex(index);
+        if (item != null) {
+          context.go(item.route);
+        }
+      },
+      destinations: MainNavigationItem.allDestinations(context),
     );
   }
 }

@@ -1200,3 +1200,28 @@ class HomeRepositoryImpl implements HomeRepository {
 - Log success with key data: `'✅ [HomeRepository] Fetched ${items.length} items'`
 - Log errors: `'❌ [HomeRepository] Error: $e'`
 - Log empty states: `'📭 [HomeRepository] No data found'`
+
+---
+
+## Shared Widgets
+
+This section lists reusable widgets in `lib/src/shared/widgets/` that can be used across the app.
+
+### Available Widgets
+
+| Widget | Description | Purpose |
+|---------|-------------|---------|
+| **EmptyState** | Empty state with icon + text | Display when no data is available |
+| **AsyncWidget** | AsyncValue loading/data/error handling | Wrap async state with consistent UI |
+| **Loader** | Circular progress indicator | Display loading state |
+| **AsyncButton** | Button with loading state | Button that shows loading spinner |
+| **WorkoutShareButton** | Share button for workout data | Show workout share bottom sheet |
+| **CircleIconButton** | Circular icon button | Customizable round icon button |
+| **HealthDetailWidget** | Workout summary card | Display workout details in 2-column grid |
+| **NotFoundWidget** | Not found state with icon | Display when data is not found |
+
+### Best Practices
+
+1. **Localization**: Pass localized strings as parameters from View layer
+2. **Reuseability**: Widgets should work independently in any context
+3. **Consistency**: Follow shared widget patterns for consistency

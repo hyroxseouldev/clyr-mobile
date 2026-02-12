@@ -81,7 +81,8 @@ GoRouter router(Ref ref) {
       ),
       // ✅ ShellRoute: 바텀 네비게이션
       ShellRoute(
-        builder: (context, state, child) => DefaultLayout(child: child),
+        builder: (context, state, child) =>
+            DefaultLayout(child: child, showBottomNavigation: false),
         routes: [
           GoRoute(
             path: RoutePaths.home,
