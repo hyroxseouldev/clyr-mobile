@@ -282,5 +282,6 @@
   "shareTransparentDesign": "Transparent",
   "shareDownloadSuccess": "Saved to gallery",
   "shareDownloadError": "Save failed",
-  "shareGenerating": "Generating image..."
+  "shareGenerating": "Generating image...",
+  "shareNoImages": "Cannot generate images."
 }

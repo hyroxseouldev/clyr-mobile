@@ -290,5 +290,6 @@
   "shareTransparentDesign": "투명 배경",
   "shareDownloadSuccess": "갤러리에 저장되었습니다",
   "shareDownloadError": "저장 실패",
-  "shareGenerating": "이미지 생성 중..."
+  "shareGenerating": "이미지 생성 중...",
+  "shareNoImages": "이미지를 생성할 수 없습니다."
 }

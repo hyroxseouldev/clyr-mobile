@@ -59,7 +59,7 @@ class WorkoutShareRepository {
 
   /// Download image to device gallery
   FutureEither<void> downloadToGallery(Uint8List imageBytes) async {
-    debugPrint('📥 [WorkoutShareRepository] Downloading to gallery...');
+    debugPrint('📥 [WorkoutShareRepository] downloadToGallery called');
 
     final success = await _shareService.saveToGallery(imageBytes);
 

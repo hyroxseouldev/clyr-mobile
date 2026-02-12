@@ -11,7 +11,7 @@ class ShareServiceImpl implements ShareService {
   @override
   Future<bool> saveToGallery(Uint8List imageBytes) async {
     try {
-      debugPrint('📥 [ShareService] Saving PNG image to gallery...');
+      debugPrint('📥 [ShareService] saveToGallery called');
 
       // IMPORTANT: ImageGallerySaver.saveImage() converts to JPEG!
       // We must save as a file first, then use saveFile()
@@ -23,8 +23,6 @@ class ShareServiceImpl implements ShareService {
       final filePath = '${tempDir.path}/$fileName';
       final file = File(filePath);
       await file.writeAsBytes(imageBytes);
-
-      debugPrint('📝 [ShareService] PNG file created at: $filePath');
 
       // 2. Save the PNG file to gallery (preserves PNG format)
       final result = await ImageGallerySaver.saveFile(

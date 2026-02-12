@@ -1675,6 +1675,12 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'이미지 생성 중...'**
   String get shareGenerating;
+
+  /// No description provided for @shareNoImages.
+  ///
+  /// In ko, this message translates to:
+  /// **'이미지를 생성할 수 없습니다.'**
+  String get shareNoImages;
 }
 
 class _AppLocalizationsDelegate

@@ -811,4 +811,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareGenerating => 'Generating image...';
+
+  @override
+  String get shareNoImages => 'Cannot generate images.';
 }

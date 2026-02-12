@@ -33,12 +33,6 @@ class WorkoutShareButton extends StatelessWidget {
       context,
       workout: workout,
       styles: [ShareImageStyle.transparent],
-      closeText: l10n.cancel,
-      downloadText: l10n.shareDownload,
-      shareToKakaoText: l10n.shareToKakao,
-      shareToInstagramText: l10n.shareToInstagram,
-      downloadSuccessText: l10n.shareDownloadSuccess,
-      downloadErrorText: l10n.shareDownloadError,
     );
   }
 }

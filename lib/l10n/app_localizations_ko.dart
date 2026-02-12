@@ -804,4 +804,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get shareGenerating => '이미지 생성 중...';
+
+  @override
+  String get shareNoImages => '이미지를 생성할 수 없습니다.';
 }

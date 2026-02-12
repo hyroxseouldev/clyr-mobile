@@ -48,7 +48,7 @@ final class WorkoutShareControllerProvider
 }
 
 String _$workoutShareControllerHash() =>
-    r'5630f4351e1bb0acbf0c17fbfef3ea2cff51fbe7';
+    r'93e7ddcdff770b17154a8098ddf845636f89d2a1';
 
 /// Workout share controller
 /// Manages action states (download, share) for workout sharing
