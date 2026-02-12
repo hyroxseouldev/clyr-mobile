@@ -16,32 +16,40 @@ class WorkoutShareRepository {
   WorkoutShareRepository({
     required ImageGeneratorService imageGenerator,
     required ShareService shareService,
-  })  : _imageGenerator = imageGenerator,
-        _shareService = shareService;
+  }) : _imageGenerator = imageGenerator,
+       _shareService = shareService;
 
-  /// Generate all 3 share image versions
+  /// Generate share image versions for specified styles
+  /// If styles is null, generates all styles (default: ShareImageStyle.values)
   FutureEither<List<ShareImageEntity>> generateShareImages(
-    HealthWorkoutData workout,
-  ) async {
+    HealthWorkoutData workout, {
+    List<ShareImageStyle>? styles,
+  }) async {
     debugPrint('📊 [WorkoutShareRepository] Generating share images...');
+
+    final targetStyles = styles ?? ShareImageStyle.values;
+    debugPrint(
+      '📊 [WorkoutShareRepository] Styles to generate: ${targetStyles.length}',
+    );
 
     try {
       final images = <ShareImageEntity>[];
 
-      // Generate all 3 styles
-      for (final style in ShareImageStyle.values) {
-        debugPrint('📊 [WorkoutShareRepository] Generating ${style.name} image...');
+      // Generate specified styles
+      for (final style in targetStyles) {
+        debugPrint(
+          '📊 [WorkoutShareRepository] Generating ${style.name} image...',
+        );
         final imageBytes = await _imageGenerator.generateShareImage(
           workout: workout,
           style: style,
         );
-        images.add(ShareImageEntity(
-          imageBytes: imageBytes,
-          style: style,
-        ));
+        images.add(ShareImageEntity(imageBytes: imageBytes, style: style));
       }
 
-      debugPrint('✅ [WorkoutShareRepository] Generated ${images.length} images');
+      debugPrint(
+        '✅ [WorkoutShareRepository] Generated ${images.length} images',
+      );
       return right(images);
     } catch (e) {
       debugPrint('❌ [WorkoutShareRepository] Error generating images: $e');
@@ -50,9 +58,7 @@ class WorkoutShareRepository {
   }
 
   /// Download image to device gallery
-  FutureEither<void> downloadToGallery(
-    Uint8List imageBytes,
-  ) async {
+  FutureEither<void> downloadToGallery(Uint8List imageBytes) async {
     debugPrint('📥 [WorkoutShareRepository] Downloading to gallery...');
 
     final success = await _shareService.saveToGallery(imageBytes);
@@ -85,9 +91,7 @@ class WorkoutShareRepository {
   }
 
   /// Share image with system sheet
-  FutureEither<void> shareWithSystem(
-    Uint8List imageBytes,
-  ) async {
+  FutureEither<void> shareWithSystem(Uint8List imageBytes) async {
     debugPrint('📤 [WorkoutShareRepository] Sharing with system sheet...');
 
     final success = await _shareService.shareWithSystem(imageBytes);

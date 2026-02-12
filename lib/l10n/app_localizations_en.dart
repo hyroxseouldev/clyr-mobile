@@ -732,6 +732,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutLoading => 'Loading workout information...';
 
   @override
+  String get maxHeartRate => 'Max Heart Rate';
+
+  @override
   String get communityTitle => 'Community';
 
   @override

@@ -725,6 +725,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get workoutLoading => '운동 정보를 불러오는 중입니다...';
 
   @override
+  String get maxHeartRate => '최대 심박수';
+
+  @override
   String get communityTitle => '커뮤니티';
 
   @override

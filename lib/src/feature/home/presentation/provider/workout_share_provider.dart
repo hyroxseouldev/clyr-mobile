@@ -10,11 +10,14 @@ part 'workout_share_provider.g.dart';
 @riverpod
 class WorkoutShare extends _$WorkoutShare {
   @override
-  Future<List<ShareImageEntity>> build(HealthWorkoutData workout) async {
-    // Generate all 3 image versions on initialization
+  Future<List<ShareImageEntity>> build(
+    HealthWorkoutData workout, {
+    List<ShareImageStyle>? styles,
+  }) async {
+    // Generate specified image versions on initialization
     final result = await ref
         .read(workoutShareRepositoryProvider)
-        .generateShareImages(workout);
+        .generateShareImages(workout, styles: styles);
     return result.fold((error) => throw error, (images) => images);
   }
 }

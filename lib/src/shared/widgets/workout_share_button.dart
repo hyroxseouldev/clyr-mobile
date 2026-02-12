@@ -1,3 +1,4 @@
+import 'package:clyr_mobile/src/core/share/entity/share_image_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/health/entity/health_workout_data.dart';
@@ -31,13 +32,11 @@ class WorkoutShareButton extends StatelessWidget {
     WorkoutShareBottomSheet.show(
       context,
       workout: workout,
+      styles: [ShareImageStyle.transparent],
       closeText: l10n.cancel,
       downloadText: l10n.shareDownload,
       shareToKakaoText: l10n.shareToKakao,
       shareToInstagramText: l10n.shareToInstagram,
-      simpleLabel: l10n.shareSimpleDesign,
-      detailedLabel: l10n.shareDetailedDesign,
-      transparentLabel: l10n.shareTransparentDesign,
       downloadSuccessText: l10n.shareDownloadSuccess,
       downloadErrorText: l10n.shareDownloadError,
     );

@@ -261,6 +261,7 @@
   "notAvailable": "정보 없음",
   "workoutNotFound": "운동 정보를 찾을 수 없습니다",
   "workoutLoading": "운동 정보를 불러오는 중입니다...",
+  "maxHeartRate": "최대 심박수",
 
   "communityTitle": "커뮤니티",
   "communityCreate": "커뮤니티 만들기",

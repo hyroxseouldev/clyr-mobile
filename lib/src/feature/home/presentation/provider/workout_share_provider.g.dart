@@ -22,7 +22,8 @@ final class WorkoutShareProvider
   /// Manages state for workout sharing feature
   WorkoutShareProvider._({
     required WorkoutShareFamily super.from,
-    required HealthWorkoutData super.argument,
+    required (HealthWorkoutData, {List<ShareImageStyle>? styles})
+    super.argument,
   }) : super(
          retry: null,
          name: r'workoutShareProvider',
@@ -38,7 +39,7 @@ final class WorkoutShareProvider
   String toString() {
     return r'workoutShareProvider'
         ''
-        '($argument)';
+        '$argument';
   }
 
   @$internal
@@ -56,7 +57,7 @@ final class WorkoutShareProvider
   }
 }
 
-String _$workoutShareHash() => r'b0c6d23bdd7569bcb9b57ed5085539a215cad297';
+String _$workoutShareHash() => r'adcf12da0790c92e69cfa60f5cf5a119cbb55f34';
 
 /// Workout share provider
 /// Manages state for workout sharing feature
@@ -68,7 +69,7 @@ final class WorkoutShareFamily extends $Family
           AsyncValue<List<ShareImageEntity>>,
           List<ShareImageEntity>,
           FutureOr<List<ShareImageEntity>>,
-          HealthWorkoutData
+          (HealthWorkoutData, {List<ShareImageStyle>? styles})
         > {
   WorkoutShareFamily._()
     : super(
@@ -82,8 +83,10 @@ final class WorkoutShareFamily extends $Family
   /// Workout share provider
   /// Manages state for workout sharing feature
 
-  WorkoutShareProvider call(HealthWorkoutData workout) =>
-      WorkoutShareProvider._(argument: workout, from: this);
+  WorkoutShareProvider call(
+    HealthWorkoutData workout, {
+    List<ShareImageStyle>? styles,
+  }) => WorkoutShareProvider._(argument: (workout, styles: styles), from: this);
 
   @override
   String toString() => r'workoutShareProvider';
@@ -93,10 +96,15 @@ final class WorkoutShareFamily extends $Family
 /// Manages state for workout sharing feature
 
 abstract class _$WorkoutShare extends $AsyncNotifier<List<ShareImageEntity>> {
-  late final _$args = ref.$arg as HealthWorkoutData;
-  HealthWorkoutData get workout => _$args;
+  late final _$args =
+      ref.$arg as (HealthWorkoutData, {List<ShareImageStyle>? styles});
+  HealthWorkoutData get workout => _$args.$1;
+  List<ShareImageStyle>? get styles => _$args.styles;
 
-  FutureOr<List<ShareImageEntity>> build(HealthWorkoutData workout);
+  FutureOr<List<ShareImageEntity>> build(
+    HealthWorkoutData workout, {
+    List<ShareImageStyle>? styles,
+  });
   @$mustCallSuper
   @override
   void runBuild() {
@@ -114,6 +122,6 @@ abstract class _$WorkoutShare extends $AsyncNotifier<List<ShareImageEntity>> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, () => build(_$args));
+    element.handleCreate(ref, () => build(_$args.$1, styles: _$args.styles));
   }
 }

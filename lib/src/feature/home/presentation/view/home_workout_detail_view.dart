@@ -5,7 +5,7 @@ import 'package:clyr_mobile/src/core/health/entity/health_workout_data.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/workout_detail_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/widget/workout_detail_widget.dart';
 import 'package:clyr_mobile/src/shared/widgets/async_widget.dart';
-import 'package:clyr_mobile/src/shared/widgets/workout_share_button.dart';
+import 'package:clyr_mobile/src/shared/widgets/health_detail_widget.dart';
 
 class HomeWorkoutDetailView extends ConsumerWidget {
   const HomeWorkoutDetailView({super.key, required this.workoutId});
@@ -17,29 +17,45 @@ class HomeWorkoutDetailView extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final workoutState = ref.watch(workoutDetailProvider(workoutId));
 
-    return Scaffold(
-      appBar: AppBar(),
-      body: AsyncWidget<HealthWorkoutData?>(
-        data: workoutState,
-        builder: (workout) {
-          if (workout == null) {
-            return _buildNotFound(context, l10n);
-          }
-
-          return WorkoutDetailWidget(
-            workout: workout,
-            workoutTypeText: l10n.workoutType,
-            durationText: l10n.duration,
-            startTimeText: l10n.startTime,
-            endTimeText: l10n.endTime,
-            avgHeartRateText: l10n.avgHeartRate,
-            distanceText: l10n.distance,
-            caloriesText: l10n.calories,
-            metadataText: l10n.metadata,
-            notAvailableText: l10n.notAvailable,
+    return AsyncWidget<HealthWorkoutData?>(
+      data: workoutState,
+      builder: (workout) {
+        if (workout == null) {
+          return Scaffold(
+            appBar: AppBar(),
+            body: _buildNotFound(context, l10n),
           );
-        },
-      ),
+        }
+
+        return Scaffold(
+          appBar: AppBar(),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                HealthDetailWidget(
+                  workout: workout,
+                  timeText: l10n.duration,
+                  avgHeartRateText: l10n.avgHeartRate,
+                  caloriesText: l10n.calories,
+                  maxHeartRateText: l10n.maxHeartRate,
+                ),
+                WorkoutDetailWidget(
+                  workout: workout,
+                  workoutTypeText: l10n.workoutType,
+                  durationText: l10n.duration,
+                  startTimeText: l10n.startTime,
+                  endTimeText: l10n.endTime,
+                  avgHeartRateText: l10n.avgHeartRate,
+                  distanceText: l10n.distance,
+                  caloriesText: l10n.calories,
+                  metadataText: l10n.metadata,
+                  notAvailableText: l10n.notAvailable,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

@@ -253,6 +253,7 @@
   "notAvailable": "N/A",
   "workoutNotFound": "Workout not found",
   "workoutLoading": "Loading workout information...",
+  "maxHeartRate": "Max Heart Rate",
 
   "communityTitle": "Community",
   "communityCreate": "Create Community",

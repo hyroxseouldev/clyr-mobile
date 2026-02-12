@@ -11,8 +11,8 @@ class CheckerboardPattern extends StatelessWidget {
     super.key,
     required this.child,
     this.squareSize = 10,
-    this.lightColor = const Color(0xFFE0E0E0),
-    this.darkColor = const Color(0xFFFFFFFF),
+    this.lightColor = const Color(0xFF606060),
+    this.darkColor = const Color(0xFF000000),
   });
 
   @override
@@ -49,12 +49,7 @@ class _CheckerboardPainter extends CustomPainter {
         final paint = Paint()
           ..color = (x + y) % 2 == 0 ? lightColor : darkColor;
         canvas.drawRect(
-          Rect.fromLTWH(
-            x * squareSize,
-            y * squareSize,
-            squareSize,
-            squareSize,
-          ),
+          Rect.fromLTWH(x * squareSize, y * squareSize, squareSize, squareSize),
           paint,
         );
       }

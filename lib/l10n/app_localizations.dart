@@ -1514,6 +1514,12 @@ abstract class AppLocalizations {
   /// **'운동 정보를 불러오는 중입니다...'**
   String get workoutLoading;
 
+  /// No description provided for @maxHeartRate.
+  ///
+  /// In ko, this message translates to:
+  /// **'최대 심박수'**
+  String get maxHeartRate;
+
   /// No description provided for @communityTitle.
   ///
   /// In ko, this message translates to:

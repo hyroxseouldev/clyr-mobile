@@ -11,12 +11,16 @@ part 'generate_share_images_usecase.g.dart';
 /// Parameters for generating share images
 class GenerateShareImagesParams {
   final HealthWorkoutData workout;
+  final List<ShareImageStyle> styles;
 
-  const GenerateShareImagesParams({required this.workout});
+  const GenerateShareImagesParams({
+    required this.workout,
+    this.styles = ShareImageStyle.values,
+  });
 }
 
 /// Generate share images use case
-/// Generates all 3 image versions for sharing
+/// Generates specified image versions for sharing
 class GenerateShareImagesUseCase
     implements Usecase<GenerateShareImagesParams, List<ShareImageEntity>> {
   final WorkoutShareRepository _repository;
@@ -27,16 +31,15 @@ class GenerateShareImagesUseCase
   FutureEither<List<ShareImageEntity>> call(
     GenerateShareImagesParams input,
   ) async {
-    return await _repository.generateShareImages(input.workout);
+    return await _repository.generateShareImages(
+      input.workout,
+      styles: input.styles,
+    );
   }
 }
 
 /// Generate share images use case provider
 @riverpod
-GenerateShareImagesUseCase generateShareImagesUseCase(
-  Ref ref,
-) {
-  return GenerateShareImagesUseCase(
-    ref.watch(workoutShareRepositoryProvider),
-  );
+GenerateShareImagesUseCase generateShareImagesUseCase(Ref ref) {
+  return GenerateShareImagesUseCase(ref.watch(workoutShareRepositoryProvider));
 }

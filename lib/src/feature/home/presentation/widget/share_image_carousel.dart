@@ -1,23 +1,20 @@
 import 'dart:typed_data';
+import 'package:clyr_mobile/src/core/share/entity/share_image_entity.dart';
 import 'package:clyr_mobile/src/shared/widgets/checkerboard_pattern.dart';
 import 'package:flutter/material.dart';
 
 /// Share image carousel widget
-/// Displays 3 shareable images in a horizontal scroll view
+/// Displays shareable images in a horizontal scroll view
 class ShareImageCarousel extends StatelessWidget {
   final List<Uint8List> images;
-  final String simpleLabel;
-  final String detailedLabel;
-  final String transparentLabel;
+  final List<ShareImageStyle> styles;
   final int selectedIndex;
   final ValueChanged<int>? onSelectedIndexChanged;
 
   const ShareImageCarousel({
     super.key,
     required this.images,
-    required this.simpleLabel,
-    required this.detailedLabel,
-    required this.transparentLabel,
+    required this.styles,
     this.selectedIndex = 0,
     this.onSelectedIndexChanged,
   });
@@ -25,32 +22,37 @@ class ShareImageCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (images.isEmpty) {
-      return const SizedBox(
-        height: 400,
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
+      return SizedBox(
+        height: MediaQuery.of(context).size.height * 0.388,
+        child: const Center(child: CircularProgressIndicator()),
       );
     }
 
-    return SizedBox(
-      height: 400,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          children: List.generate(
-            images.length,
-            (index) => _buildImageItem(context, index),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxHeight = MediaQuery.of(context).size.height * 0.388;
+        final carouselHeight = maxHeight;
+
+        return SizedBox(
+          height: carouselHeight,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: List.generate(
+                images.length,
+                (index) => _buildImageItem(context, index),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   Widget _buildImageItem(BuildContext context, int index) {
     final isSelected = index == selectedIndex;
-    final labels = [simpleLabel, detailedLabel, transparentLabel];
+    final style = styles[index];
 
     return GestureDetector(
       onTap: () => onSelectedIndexChanged?.call(index),
@@ -66,43 +68,20 @@ class ShareImageCarousel extends StatelessWidget {
             width: isSelected ? 3 : 0,
           ),
         ),
-        child: Column(
-          children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: _buildImageContainer(images[index], index),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              labels[index],
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected
-                    ? Theme.of(context).colorScheme.primary
-                    : Colors.grey,
-              ),
-            ),
-          ],
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: _buildImageContainer(images[index], style),
         ),
       ),
     );
   }
 
-  Widget _buildImageContainer(Uint8List imageBytes, int index) {
-    final imageWidget = Image.memory(
-      imageBytes,
-      fit: BoxFit.contain,
-    );
+  Widget _buildImageContainer(Uint8List imageBytes, ShareImageStyle style) {
+    final imageWidget = Image.memory(imageBytes, fit: BoxFit.contain);
 
-    // Apply checkerboard background only for transparent image (index 2)
-    if (index == 2) {
-      return CheckerboardPattern(
-        squareSize: 15,
-        child: imageWidget,
-      );
+    // Apply checkerboard background for transparent style
+    if (style == ShareImageStyle.transparent) {
+      return CheckerboardPattern(squareSize: 15, child: imageWidget);
     }
 
     return imageWidget;

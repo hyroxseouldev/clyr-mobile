@@ -102,7 +102,7 @@ abstract class HealthWorkoutData with _$HealthWorkoutData {
       >= 0 && < 6 => 'Early Morning',
       >= 6 && < 12 => 'Morning',
       >= 12 && < 18 => 'Lunch',
-      _ => 'Dinner',
+      _ => 'Evening',
     };
 
     return '$timePeriod ${workoutType.displayName}';
