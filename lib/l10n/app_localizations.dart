@@ -1508,6 +1508,12 @@ abstract class AppLocalizations {
   /// **'운동 정보를 찾을 수 없습니다'**
   String get workoutNotFound;
 
+  /// No description provided for @workoutLoading.
+  ///
+  /// In ko, this message translates to:
+  /// **'운동 정보를 불러오는 중입니다...'**
+  String get workoutLoading;
+
   /// No description provided for @communityTitle.
   ///
   /// In ko, this message translates to:

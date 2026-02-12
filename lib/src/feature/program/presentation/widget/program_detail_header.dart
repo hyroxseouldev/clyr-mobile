@@ -20,7 +20,7 @@ class ProgramDetailHeader extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.network(
-              displayImage!,
+              displayImage,
               width: double.infinity,
               height: 200,
               fit: BoxFit.cover,

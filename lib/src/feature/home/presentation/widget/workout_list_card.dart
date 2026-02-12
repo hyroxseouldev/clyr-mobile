@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 
 /// Card widget for displaying workout information
 class WorkoutListCard extends StatelessWidget {
-  const WorkoutListCard({
-    super.key,
-    required this.workout,
-    this.onTap,
-  });
+  const WorkoutListCard({super.key, required this.workout, this.onTap});
 
   final HealthWorkoutData workout;
   final VoidCallback? onTap;
@@ -74,7 +70,9 @@ class WorkoutListCard extends StatelessWidget {
                     Text(
                       _formatDate(workout.startTime),
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
                       ),
                     ),
                   ],
@@ -91,13 +89,12 @@ class WorkoutListCard extends StatelessWidget {
                       color: theme.colorScheme.primary,
                     ),
                   ),
-                  if (workout.totalEnergyBurned != null)
-                    Text(
-                      '${workout.totalEnergyBurned} kcal',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                      ),
+                  Text(
+                    '${workout.totalEnergyBurned} kcal',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
+                  ),
                 ],
               ),
             ],

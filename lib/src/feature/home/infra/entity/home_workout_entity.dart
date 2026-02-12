@@ -95,8 +95,8 @@ HomeWorkoutEntity homeWorkoutEntityFromWorkoutData(HealthWorkoutData data) {
     startTime: data.startTime,
     endTime: data.endTime,
     duration: data.duration,
-    totalEnergyBurned: data.totalEnergyBurned ?? 0,
-    totalDistance: data.totalDistance ?? 0.0,
+    totalEnergyBurned: data.totalEnergyBurned,
+    totalDistance: data.totalDistance,
     heartRates: data.heartRates,
   );
 }

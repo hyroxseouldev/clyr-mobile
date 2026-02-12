@@ -729,6 +729,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutNotFound => 'Workout not found';
 
   @override
+  String get workoutLoading => 'Loading workout information...';
+
+  @override
   String get communityTitle => 'Community';
 
   @override

@@ -4,8 +4,8 @@ import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/health/entity/health_workout_data.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/workout_detail_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/widget/workout_detail_widget.dart';
-import 'package:clyr_mobile/src/feature/home/presentation/widget/workout_share_bottom_sheet.dart';
 import 'package:clyr_mobile/src/shared/widgets/async_widget.dart';
+import 'package:clyr_mobile/src/shared/widgets/workout_share_button.dart';
 
 class HomeWorkoutDetailView extends ConsumerWidget {
   const HomeWorkoutDetailView({super.key, required this.workoutId});
@@ -18,14 +18,7 @@ class HomeWorkoutDetailView extends ConsumerWidget {
     final workoutState = ref.watch(workoutDetailProvider(workoutId));
 
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () => _showShareBottomSheet(context, ref, l10n),
-            icon: const Icon(Icons.share),
-          ),
-        ],
-      ),
+      appBar: AppBar(),
       body: AsyncWidget<HealthWorkoutData?>(
         data: workoutState,
         builder: (workout) {
@@ -63,38 +56,6 @@ class HomeWorkoutDetailView extends ConsumerWidget {
           ),
         ],
       ),
-    );
-  }
-
-  void _showShareBottomSheet(
-    BuildContext context,
-    WidgetRef ref,
-    AppLocalizations l10n,
-  ) {
-    // Workout data is already loaded from workoutState
-    // We need to get it from the provider directly
-    final workoutAsync = ref.read(workoutDetailProvider(workoutId));
-    final workout = workoutAsync.value;
-
-    if (workout == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('운동 정보를 불러오는 중입니다...')));
-      return;
-    }
-
-    WorkoutShareBottomSheet.show(
-      context,
-      workout: workout,
-      closeText: l10n.cancel,
-      downloadText: l10n.shareDownload,
-      shareToKakaoText: l10n.shareToKakao,
-      shareToInstagramText: l10n.shareToInstagram,
-      simpleLabel: l10n.shareSimpleDesign,
-      detailedLabel: l10n.shareDetailedDesign,
-      transparentLabel: l10n.shareTransparentDesign,
-      downloadSuccessText: l10n.shareDownloadSuccess,
-      downloadErrorText: l10n.shareDownloadError,
     );
   }
 }

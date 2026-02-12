@@ -71,7 +71,14 @@ GoRouter router(Ref ref) {
         path: RoutePaths.onboarding,
         builder: (context, state) => const OnboardingView(),
       ),
-
+      GoRoute(
+        path: '/workout-detail/:workoutId',
+        name: HomeWorkoutDetailView.routeName,
+        builder: (context, state) {
+          final workoutId = state.pathParameters['workoutId']!;
+          return HomeWorkoutDetailView(workoutId: workoutId);
+        },
+      ),
       // ✅ ShellRoute: 바텀 네비게이션
       ShellRoute(
         builder: (context, state, child) => DefaultLayout(child: child),
@@ -81,15 +88,6 @@ GoRouter router(Ref ref) {
             name: NewHomeView.routeName,
             builder: (context, state) => const NewHomeView(),
             routes: [
-              GoRoute(
-                path: 'workout-detail/:workoutId',
-                name: HomeWorkoutDetailView.routeName,
-                builder: (context, state) {
-                  final workoutId = state.pathParameters['workoutId']!;
-                  return HomeWorkoutDetailView(workoutId: workoutId);
-                },
-              ),
-
               GoRoute(
                 path: 'section-record-create/:sectionId/:sectionItemId',
                 name: RoutePaths.homeSectionRecordCreate,

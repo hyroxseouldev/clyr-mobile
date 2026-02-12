@@ -1,5 +1,6 @@
 import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/health/entity/health_workout_data.dart';
+import 'package:clyr_mobile/src/shared/widgets/workout_share_button.dart';
 import 'package:flutter/material.dart';
 
 /// Home workout feed card widget
@@ -59,14 +60,7 @@ class HomeWorkoutFeedCardWidget extends StatelessWidget {
               Row(
                 children: [
                   const Spacer(),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.ios_share),
-                    visualDensity: VisualDensity.compact,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
+                  WorkoutShareButton(workout: workout),
                 ],
               ),
             ],
@@ -114,8 +108,6 @@ class HomeWorkoutFeedCardWidget extends StatelessWidget {
   }
 
   Widget _buildFitnessLayout(ThemeData theme) {
-    final avgHr = workout.avgHeartRate;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -134,7 +126,11 @@ class HomeWorkoutFeedCardWidget extends StatelessWidget {
               value: workout.formattedDuration,
             ),
             const SizedBox(width: 24),
-            _buildStatItem(theme, label: 'Avg HR', value: '$avgHr bpm'),
+            _buildStatItem(
+              theme,
+              label: 'Avg HR',
+              value: workout.formattedAvgHeartRate,
+            ),
             const SizedBox(width: 24),
             _buildStatItem(
               theme,

@@ -99,33 +99,31 @@ class WorkoutDetailWidget extends StatelessWidget {
               endTimeText,
               _formatDateTime(workout.endTime, locale),
             ),
-            if (workout.avgHeartRate != null || workout.heartRates != null) ...[
+            ...[
               const Divider(height: 24),
               _buildDetailRow(
                 context,
                 Icons.favorite,
                 avgHeartRateText,
-                workout.avgHeartRate != null
-                    ? '${workout.avgHeartRate} BPM'
-                    : '-- BPM',
+                '${workout.avgHeartRate} BPM',
               ),
             ],
-            if (workout.totalDistance != null) ...[
+            ...[
               const Divider(height: 24),
               _buildDetailRow(
                 context,
                 Icons.straighten,
                 distanceText,
-                _formatDistance(workout.totalDistance!, locale),
+                _formatDistance(workout.totalDistance, locale),
               ),
             ],
-            if (workout.totalEnergyBurned != null) ...[
+            ...[
               const Divider(height: 24),
               _buildDetailRow(
                 context,
                 Icons.local_fire_department,
                 caloriesText,
-                _formatCalories(workout.totalEnergyBurned!, locale),
+                _formatCalories(workout.totalEnergyBurned, locale),
               ),
             ],
           ],

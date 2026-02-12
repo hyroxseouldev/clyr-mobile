@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:clyr_mobile/src/core/error/exception.dart';
 import 'package:clyr_mobile/src/core/health/entity/health_workout_data.dart';
 import 'package:clyr_mobile/src/core/health/health_service.dart';
@@ -96,15 +97,35 @@ class HealthServiceImpl implements HealthService {
       // Convert workout type string to enum
       final workoutType = _parseWorkoutType(summary.workoutType);
 
-      // Filter heart rates within workout time range
+      // Filter heart rates within workout time range (inclusive)
+      debugPrint(
+        '💪 [HealthService] Total HR samples in date range: ${allHeartRates.length}',
+      );
+      debugPrint(
+        '💪 [HealthService] Workout range: ${data.dateFrom} ~ ${data.dateTo}',
+      );
+
       final workoutHeartRates = allHeartRates
           .where(
             (hr) =>
-                hr.dateFrom.isAfter(data.dateFrom) &&
-                hr.dateTo.isBefore(data.dateTo),
+                !hr.dateFrom.isBefore(data.dateFrom) &&
+                !hr.dateTo.isAfter(data.dateTo),
           )
           .map((hr) => (hr.value as NumericHealthValue).numericValue.toInt())
           .toList();
+
+      debugPrint(
+        '💪 [HealthService] Matched heart rates: ${workoutHeartRates.length}',
+      );
+      if (workoutHeartRates.isNotEmpty) {
+        final minHr = workoutHeartRates.reduce((a, b) => a < b ? a : b);
+        final maxHr = workoutHeartRates.reduce((a, b) => a > b ? a : b);
+        debugPrint('💪 [HealthService] HR range: $minHr - $maxHr bpm');
+      } else {
+        debugPrint(
+          '💪 [HealthService] ⚠️ No heart rate data found for this workout',
+        );
+      }
 
       return HealthWorkoutData(
         id: data.uuid,
@@ -119,6 +140,7 @@ class HealthServiceImpl implements HealthService {
           'unit': data.unit.name,
           'sourceId': data.sourceId,
           'totalSteps': summary.totalSteps.toInt(),
+          'workoutType': summary.workoutType,
         },
       );
     } catch (e) {

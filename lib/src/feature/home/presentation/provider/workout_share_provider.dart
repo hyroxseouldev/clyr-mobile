@@ -1,6 +1,5 @@
 import 'package:clyr_mobile/src/core/health/entity/health_workout_data.dart';
 import 'package:clyr_mobile/src/core/share/entity/share_image_entity.dart';
-import 'package:clyr_mobile/src/core/share/share_service.dart';
 import 'package:clyr_mobile/src/feature/home/data/repository/workout_share_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

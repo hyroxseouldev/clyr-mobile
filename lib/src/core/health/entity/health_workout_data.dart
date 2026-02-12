@@ -25,6 +25,7 @@ abstract class HealthWorkoutData with _$HealthWorkoutData {
 
   /// Calculate average heart rate
   int get avgHeartRate {
+    debugPrint('💪 [HealthWorkoutData] Heart rates: ${heartRates.join(", ")}');
     if (heartRates.isEmpty) return 0;
     return heartRates.reduce((a, b) => a + b) ~/ heartRates.length;
   }
@@ -60,6 +61,11 @@ abstract class HealthWorkoutData with _$HealthWorkoutData {
   String get formattedCalories {
     if (totalEnergyBurned == 0) return '-';
     return '$totalEnergyBurned kcal';
+  }
+
+  String get formattedAvgHeartRate {
+    if (heartRates.isEmpty) return '-';
+    return '$avgHeartRate bpm';
   }
 
   /// Formatted pace (min'km) for running/walking/cycling activities
@@ -189,7 +195,7 @@ extension WorkoutTypeExtension on HealthWorkoutType {
       case HealthWorkoutType.fitness:
         return 'Fitness';
       case HealthWorkoutType.other:
-        return 'Other';
+        return 'Workout';
     }
   }
 }

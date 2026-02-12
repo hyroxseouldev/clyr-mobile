@@ -252,6 +252,7 @@
   "metadata": "Additional Info",
   "notAvailable": "N/A",
   "workoutNotFound": "Workout not found",
+  "workoutLoading": "Loading workout information...",
 
   "communityTitle": "Community",
   "communityCreate": "Create Community",

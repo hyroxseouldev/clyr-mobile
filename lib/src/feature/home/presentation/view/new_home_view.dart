@@ -3,10 +3,8 @@ import 'package:clyr_mobile/src/feature/home/presentation/provider/selected_date
 import 'package:clyr_mobile/src/feature/home/presentation/provider/workout_list_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/home_workout_detail_view.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/widget/home_workout_feed_card_widget.dart';
-import 'package:clyr_mobile/src/feature/home/presentation/widget/workout_list_card.dart';
 import 'package:clyr_mobile/src/shared/widgets/date_selector/date_selector_widget.dart';
 import 'package:clyr_mobile/src/shared/widgets/empty_state.dart';
-import 'package:clyr_mobile/src/shared/widgets/fire_streak_badge.dart';
 import 'package:clyr_mobile/src/shared/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -24,12 +22,11 @@ class NewHomeView extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8, top: 8, bottom: 8),
-          child: FireStreakBadge(count: 4),
-        ),
         actions: [
-          IconButton(icon: const Icon(Icons.notifications), onPressed: () {}),
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined),
+            onPressed: () {},
+          ),
         ],
       ),
       body: RefreshIndicator(
@@ -110,7 +107,7 @@ class NewHomeView extends ConsumerWidget {
                     return HomeWorkoutFeedCardWidget.fromEntity(
                       workout,
                       onTap: () {
-                        context.goNamed(
+                        context.pushNamed(
                           HomeWorkoutDetailView.routeName,
                           pathParameters: {'workoutId': workout.id},
                         );

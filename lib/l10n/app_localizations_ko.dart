@@ -722,6 +722,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get workoutNotFound => '운동 정보를 찾을 수 없습니다';
 
   @override
+  String get workoutLoading => '운동 정보를 불러오는 중입니다...';
+
+  @override
   String get communityTitle => '커뮤니티';
 
   @override
