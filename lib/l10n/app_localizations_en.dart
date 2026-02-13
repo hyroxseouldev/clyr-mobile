@@ -66,6 +66,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginButton => 'Sign In';
 
   @override
+  String get orContinueWith => 'or continue with';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get continueWithApple => 'Continue with Apple';
+
+  @override
   String get noAccount => 'Don\'t have an account? Sign up';
 
   @override

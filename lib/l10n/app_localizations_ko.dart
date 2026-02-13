@@ -66,6 +66,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get loginButton => '로그인';
 
   @override
+  String get orContinueWith => '또는 소셜 계정으로 계속';
+
+  @override
+  String get continueWithGoogle => 'Google로 계속하기';
+
+  @override
+  String get continueWithApple => 'Apple로 계속하기';
+
+  @override
   String get noAccount => '계정이 없으신가요? 회원가입';
 
   @override

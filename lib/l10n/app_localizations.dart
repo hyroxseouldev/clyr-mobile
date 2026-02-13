@@ -212,6 +212,24 @@ abstract class AppLocalizations {
   /// **'로그인'**
   String get loginButton;
 
+  /// No description provided for @orContinueWith.
+  ///
+  /// In ko, this message translates to:
+  /// **'또는 소셜 계정으로 계속'**
+  String get orContinueWith;
+
+  /// No description provided for @continueWithGoogle.
+  ///
+  /// In ko, this message translates to:
+  /// **'Google로 계속하기'**
+  String get continueWithGoogle;
+
+  /// No description provided for @continueWithApple.
+  ///
+  /// In ko, this message translates to:
+  /// **'Apple로 계속하기'**
+  String get continueWithApple;
+
   /// No description provided for @noAccount.
   ///
   /// In ko, this message translates to:
