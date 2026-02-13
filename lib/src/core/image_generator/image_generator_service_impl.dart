@@ -31,18 +31,29 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
   }
 
   Future<Uint8List> _createTransparentImage(HealthWorkoutData workout) async {
-    const int width = 400;
-    const int height = 450;
+    const double baseWidth = 400;
+    const double baseHeight = 450;
+    const double scale = 1.0;
+
+    final int width = (baseWidth * scale).toInt();
+    final int height = (baseHeight * scale).toInt();
 
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder);
 
-    final startY = height * 0.20;
-    final double verticalSpacing = height * 0.20;
-
     final durationText = _formatDuration(workout.duration);
     final calText = _valueFormat(workout.totalEnergyBurned, 'cal');
     final avgHrText = _valueFormat(workout.avgHeartRate, 'bpm');
+
+    final double itemHeight = _calculateItemHeight(width.toDouble(), scale);
+    final double logoHeight = _calculateLogoHeight(width.toDouble(), scale);
+    final double itemSpacing = 10 * scale;
+    final double logoSpacing = 40 * scale;
+
+    final double totalContentHeight =
+        (itemHeight * 3) + (itemSpacing * 2) + logoSpacing + logoHeight;
+
+    final double startY = (height - totalContentHeight) / 2;
 
     _drawTextOnCanvas(
       canvas,
@@ -54,21 +65,21 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
     _drawTextOnCanvas(
       canvas,
       width.toDouble(),
-      startY + verticalSpacing,
+      startY + itemHeight + itemSpacing,
       label1: 'Avg hr',
       value1: avgHrText,
     );
     _drawTextOnCanvas(
       canvas,
       width.toDouble(),
-      startY + verticalSpacing * 2,
+      startY + (itemHeight + itemSpacing) * 2.0,
       label1: 'Cal',
       value1: calText,
     );
     _drawTextOnCanvas(
       canvas,
       width.toDouble(),
-      startY + verticalSpacing * 3,
+      startY + (itemHeight + itemSpacing) * 2.0 + itemHeight + logoSpacing,
       value1: 'Clyr.app',
       isLogo: true,
     );
@@ -88,6 +99,63 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
     debugPrint('   - Dimensions: ${width}x$height');
 
     return pngBytes;
+  }
+
+  double _calculateItemHeight(double canvasWidth, double scale) {
+    final paragraphStyle = ui.ParagraphStyle(
+      textAlign: TextAlign.center,
+      textDirection: TextDirection.ltr,
+    );
+
+    final labelStyle = ui.TextStyle(
+      color: const Color(0xFFFFFFFF),
+      fontSize: 24 * scale,
+      fontWeight: FontWeight.bold,
+    );
+
+    final valueStyle = ui.TextStyle(
+      color: const Color(0xFFFFFFFF),
+      fontSize: 32 * scale,
+      fontWeight: FontWeight.w900,
+    );
+
+    final labelBuilder = ui.ParagraphBuilder(paragraphStyle)
+      ..pushStyle(labelStyle)
+      ..addText('Time');
+    final labelParagraph = labelBuilder.build();
+    labelParagraph.layout(ui.ParagraphConstraints(width: canvasWidth));
+
+    final valueBuilder = ui.ParagraphBuilder(paragraphStyle)
+      ..pushStyle(valueStyle)
+      ..addText('00:00:00');
+    final valueParagraph = valueBuilder.build();
+    valueParagraph.layout(ui.ParagraphConstraints(width: canvasWidth));
+
+    final double labelValueGap = 30 * scale;
+
+    return labelParagraph.height + labelValueGap + valueParagraph.height;
+  }
+
+  double _calculateLogoHeight(double canvasWidth, double scale) {
+    final paragraphStyle = ui.ParagraphStyle(
+      textAlign: TextAlign.center,
+      textDirection: TextDirection.ltr,
+    );
+
+    final textStyle = ui.TextStyle(
+      color: const Color(0xFFFFFFFF),
+      fontSize: 32 * scale,
+      fontWeight: FontWeight.bold,
+    );
+
+    final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
+      ..pushStyle(textStyle)
+      ..addText('Clyr.app');
+
+    final paragraph = paragraphBuilder.build();
+    paragraph.layout(ui.ParagraphConstraints(width: canvasWidth));
+
+    return paragraph.height;
   }
 
   void _drawTextOnCanvas(

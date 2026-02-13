@@ -51,7 +51,7 @@ GoRouter router(Ref ref) {
   return GoRouter(
     navigatorKey: _routerKey,
     refreshListenable: authNotifier, // Notifier가 변할 때마다 redirect 실행
-    initialLocation: RoutePaths.splash,
+    initialLocation: RoutePaths.login,
     debugLogDiagnostics: true,
     routes: [
       // ✅ ShellRoute 밖: 로그인/스플래시 (공통 레이아웃 미적용)
@@ -79,6 +79,7 @@ GoRouter router(Ref ref) {
           return HomeWorkoutDetailView(workoutId: workoutId);
         },
       ),
+
       // ✅ ShellRoute: 바텀 네비게이션
       ShellRoute(
         builder: (context, state, child) =>
@@ -164,6 +165,7 @@ GoRouter router(Ref ref) {
           ),
           GoRoute(
             path: RoutePaths.settings,
+            name: SettingsHomeView.routeName,
             builder: (context, state) => const SettingsHomeView(),
             routes: [
               GoRoute(
@@ -172,6 +174,7 @@ GoRouter router(Ref ref) {
               ),
               GoRoute(
                 path: 'list',
+                name: SettingsListView.routeName,
                 builder: (context, state) => const SettingsListView(),
                 routes: [
                   GoRoute(
@@ -216,9 +219,7 @@ GoRouter router(Ref ref) {
 
       // [3] 미인증 유저 처리
       if (!isLoggedIn) {
-        if (location != RoutePaths.login &&
-            location != RoutePaths.splash &&
-            location != RoutePaths.signup) {
+        if (location != RoutePaths.login && location != RoutePaths.signup) {
           return RoutePaths.login;
         }
         return null;

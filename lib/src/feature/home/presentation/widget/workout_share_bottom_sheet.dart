@@ -27,19 +27,33 @@ class WorkoutShareBottomSheet extends HookConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final imageState = ref.watch(workoutShareProvider(workout, styles: styles));
     final selectedIndex = useState(0);
+    final feedback = useState<_DownloadFeedback?>(null);
+    final feedbackVersion = useState(0);
 
     // Listen to controller state for feedback
     ref.listen(workoutShareControllerProvider, (previous, next) {
       if (!next.isLoading && previous?.isLoading == true) {
+        feedbackVersion.value++;
+        final currentVersion = feedbackVersion.value;
+
         if (next.hasError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(l10n.shareDownloadError)));
+          feedback.value = _DownloadFeedback(
+            message: l10n.shareDownloadError,
+            isError: true,
+          );
         } else if (previous != null) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(l10n.shareDownloadSuccess)));
+          feedback.value = _DownloadFeedback(
+            message: l10n.shareDownloadSuccess,
+            isError: false,
+          );
         }
+
+        Future<void>.delayed(const Duration(milliseconds: 2500), () {
+          if (!context.mounted || feedbackVersion.value != currentVersion) {
+            return;
+          }
+          feedback.value = null;
+        });
       }
     });
 
@@ -103,23 +117,91 @@ class WorkoutShareBottomSheet extends HookConsumerWidget {
                     const SizedBox(height: 8),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 32),
-                      child: Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
+                          Row(
                             children: [
-                              IconButton.filledTonal(
-                                onPressed: () => _handleDownload(
-                                  context,
-                                  ref,
-                                  images[selectedIndex.value],
-                                ),
-                                icon: Icon(Icons.save_alt),
-                              ),
-                              Text(
-                                'Save',
-                                style: Theme.of(context).textTheme.bodySmall,
+                              Column(
+                                children: [
+                                  IconButton.filledTonal(
+                                    onPressed: () => _handleDownload(
+                                      context,
+                                      ref,
+                                      images[selectedIndex.value],
+                                    ),
+                                    icon: const Icon(Icons.save_alt),
+                                  ),
+                                  Text(
+                                    'Save',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodySmall,
+                                  ),
+                                ],
                               ),
                             ],
+                          ),
+                          const Spacer(),
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 180),
+                            child: feedback.value == null
+                                ? const SizedBox.shrink()
+                                : Container(
+                                    key: ValueKey<String>(
+                                      feedback.value!.message,
+                                    ),
+                                    margin: const EdgeInsets.only(top: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 10,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: feedback.value!.isError
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.errorContainer
+                                          : Theme.of(
+                                              context,
+                                            ).colorScheme.secondaryContainer,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          feedback.value!.isError
+                                              ? Icons.error_outline
+                                              : Icons.check_circle_outline,
+                                          size: 18,
+                                          color: feedback.value!.isError
+                                              ? Theme.of(
+                                                  context,
+                                                ).colorScheme.onErrorContainer
+                                              : Theme.of(context)
+                                                    .colorScheme
+                                                    .onSecondaryContainer,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            feedback.value!.message,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.copyWith(
+                                                  color: feedback.value!.isError
+                                                      ? Theme.of(context)
+                                                            .colorScheme
+                                                            .onErrorContainer
+                                                      : Theme.of(context)
+                                                            .colorScheme
+                                                            .onSecondaryContainer,
+                                                ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                           ),
                         ],
                       ),
@@ -171,4 +253,11 @@ class WorkoutShareBottomSheet extends HookConsumerWidget {
           WorkoutShareBottomSheet(workout: workout, styles: styles),
     );
   }
+}
+
+class _DownloadFeedback {
+  const _DownloadFeedback({required this.message, required this.isError});
+
+  final String message;
+  final bool isError;
 }

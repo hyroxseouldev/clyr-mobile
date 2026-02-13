@@ -6,6 +6,7 @@ import 'package:clyr_mobile/src/feature/home/presentation/widget/home_workout_fe
 import 'package:clyr_mobile/src/shared/widgets/date_selector/date_selector_widget.dart';
 import 'package:clyr_mobile/src/shared/widgets/empty_state.dart';
 import 'package:clyr_mobile/src/shared/widgets/loader.dart';
+import 'package:clyr_mobile/src/shared/widgets/profile_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -22,6 +23,7 @@ class NewHomeView extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: const ProfileIconButton(),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined),

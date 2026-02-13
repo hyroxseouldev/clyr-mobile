@@ -15,7 +15,7 @@ class UserAvatarCard extends StatelessWidget {
     required this.userName,
     this.onEditPressed,
     this.editButtonText,
-    this.avatarRadius = 40,
+    this.avatarRadius = 32,
     this.padding,
     super.key,
   });
@@ -27,53 +27,67 @@ class UserAvatarCard extends StatelessWidget {
 
     return Container(
       padding: padding ?? const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: theme.colorScheme.outline.withValues(alpha: 0.2),
-        ),
-      ),
       child: Column(
         children: [
-          // User Avatar
-          CircleAvatar(
-            radius: avatarRadius,
-            backgroundImage: userAvatarUrl.isNotEmpty
-                ? NetworkImage(userAvatarUrl)
-                : null,
-            onBackgroundImageError: userAvatarUrl.isNotEmpty
-                ? (exception, stackTrace) {}
-                : null,
-            child: userAvatarUrl.isEmpty
-                ? Icon(
-                    Icons.person,
-                    size: avatarRadius,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                  )
-                : null,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // User Avatar
+              CircleAvatar(
+                radius: avatarRadius,
+                backgroundImage: userAvatarUrl.isNotEmpty
+                    ? NetworkImage(userAvatarUrl)
+                    : null,
+                onBackgroundImageError: userAvatarUrl.isNotEmpty
+                    ? (exception, stackTrace) {}
+                    : null,
+                child: userAvatarUrl.isEmpty
+                    ? Icon(
+                        Icons.person,
+                        size: avatarRadius,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.4,
+                        ),
+                      )
+                    : null,
+              ),
+              const SizedBox(width: 16),
+
+              Text(
+                userName,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
+
           const SizedBox(height: 16),
 
-          // User Name
-          Text(
-            userName,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
+          Row(
+            children: [
+              if (onEditPressed != null) ...[
+                OutlinedButton.icon(
+                  onPressed: onEditPressed,
+                  icon: const Icon(Icons.edit_outlined, size: 12),
+                  label: Text(
+                    editButtonText ?? l10n.modify,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ),
-
-          // Edit Button (if onEditPressed is provided)
-          if (onEditPressed != null) ...[
-            const SizedBox(height: 16),
-            FilledButton.tonalIcon(
-              onPressed: onEditPressed,
-              icon: const Icon(Icons.edit_outlined, size: 18),
-              label: Text(editButtonText ?? l10n.modify),
-            ),
-          ],
         ],
       ),
     );
