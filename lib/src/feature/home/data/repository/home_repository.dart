@@ -48,9 +48,9 @@ class HomeRepositoryImpl implements HomeRepository {
     required CoreDataSource dataSource,
     required HealthService healthService,
     required PermissionService permissionService,
-  })  : _dataSource = dataSource,
-        _healthService = healthService,
-        _permissionService = permissionService;
+  }) : _dataSource = dataSource,
+       _healthService = healthService,
+       _permissionService = permissionService;
 
   final CoreDataSource _dataSource;
   final HealthService _healthService;
@@ -69,9 +69,7 @@ class HomeRepositoryImpl implements HomeRepository {
       }
       return right(ActiveProgramEntity.fromDto(dto));
     } catch (e) {
-      return left(
-        AppException.home(e.toString()),
-      );
+      return left(AppException.home(e.toString()));
     }
   }
 
@@ -97,9 +95,7 @@ class HomeRepositoryImpl implements HomeRepository {
 
       return right(sessionData);
     } catch (e) {
-      return left(
-        AppException.home(e.toString()),
-      );
+      return left(AppException.home(e.toString()));
     }
   }
 
@@ -117,15 +113,15 @@ class HomeRepositoryImpl implements HomeRepository {
       );
       return right(null);
     } catch (e) {
-      return left(
-        AppException.home(e.toString()),
-      );
+      return left(AppException.home(e.toString()));
     }
   }
 
   @override
   FutureEither<List<HealthWorkoutData>> getWorkoutsByDate(DateTime date) async {
-    debugPrint('📅 [HomeRepository] Fetching workouts for date: ${date.toString().split(' ')[0]}');
+    debugPrint(
+      '📅 [HomeRepository] Fetching workouts for date: ${date.toString().split(' ')[0]}',
+    );
 
     try {
       // Step 1: Validate date - check if future date
@@ -134,18 +130,23 @@ class HomeRepositoryImpl implements HomeRepository {
       final queryDate = DateTime(date.year, date.month, date.day);
 
       if (queryDate.isAfter(today)) {
-        debugPrint('⏭️ [HomeRepository] Future date detected, returning empty list');
+        debugPrint(
+          '⏭️ [HomeRepository] Future date detected, returning empty list',
+        );
         return right(const <HealthWorkoutData>[]);
       }
 
       // Step 2: Check permissions (with cache)
       if (!_permissionsChecked) {
         debugPrint('🔐 [HomeRepository] Checking health permissions...');
-        final permissionsResult = await _permissionService.areHealthPermissionsGranted();
+        final permissionsResult = await _permissionService
+            .areHealthPermissionsGranted();
 
         permissionsResult.fold(
           (error) {
-            debugPrint('❌ [HomeRepository] Permission check failed: ${error.message}');
+            debugPrint(
+              '❌ [HomeRepository] Permission check failed: ${error.message}',
+            );
             return left(error);
           },
           (granted) {
@@ -157,12 +158,14 @@ class HomeRepositoryImpl implements HomeRepository {
 
         if (!_permissionsGranted) {
           debugPrint('⛔ [HomeRepository] Health permissions not granted');
-          return left(AppException.permission(
-            'Health permissions not granted',
-          ));
+          return left(
+            AppException.permission('Health permissions not granted'),
+          );
         }
       } else {
-        debugPrint('♻️ [HomeRepository] Using cached permission state: $_permissionsGranted');
+        debugPrint(
+          '♻️ [HomeRepository] Using cached permission state: $_permissionsGranted',
+        );
       }
 
       // Step 2: Get start and end of day
@@ -180,22 +183,34 @@ class HomeRepositoryImpl implements HomeRepository {
       // Step 4: Return workouts
       return workoutsResult.fold(
         (error) {
-          debugPrint('❌ [HomeRepository] Failed to fetch workouts: ${error.message}');
+          debugPrint(
+            '❌ [HomeRepository] Failed to fetch workouts: ${error.message}',
+          );
           return left(error);
         },
         (workouts) {
-          debugPrint('✅ [HomeRepository] Fetched ${workouts.length} workouts from HealthService');
+          debugPrint(
+            '✅ [HomeRepository] Fetched ${workouts.length} workouts from HealthService',
+          );
 
           if (workouts.isEmpty) {
-            debugPrint('📭 [HomeRepository] No workouts found for ${date.toString().split(' ')[0]}');
-            return left(AppException.noData(
-              'No workouts found for ${date.toString().split(' ')[0]}',
-            ));
+            debugPrint(
+              '📭 [HomeRepository] No workouts found for ${date.toString().split(' ')[0]}',
+            );
+            return left(
+              AppException.noData(
+                'No workouts found for ${date.toString().split(' ')[0]}',
+              ),
+            );
           }
 
-          debugPrint('🎉 [HomeRepository] Successfully fetched ${workouts.length} workouts');
+          debugPrint(
+            '🎉 [HomeRepository] Successfully fetched ${workouts.length} workouts',
+          );
           for (final workout in workouts) {
-            debugPrint('   - ${workout.workoutType.displayName}: ${workout.duration}');
+            debugPrint(
+              '   - ${workout.workoutType.displayName}: ${workout.duration}',
+            );
           }
 
           return right(workouts);
@@ -204,9 +219,7 @@ class HomeRepositoryImpl implements HomeRepository {
     } on Exception catch (e) {
       debugPrint('💥 [HomeRepository] Exception caught: ${e.toString()}');
       return left(
-        AppException.health(
-          'Failed to get workouts: ${e.toString()}',
-        ),
+        AppException.health('Failed to get workouts: ${e.toString()}'),
       );
     }
   }
@@ -232,11 +245,14 @@ class HomeRepositoryImpl implements HomeRepository {
       // Check permissions first
       if (!_permissionsChecked) {
         debugPrint('🔐 [HomeRepository] Checking health permissions...');
-        final permissionsResult = await _permissionService.areHealthPermissionsGranted();
+        final permissionsResult = await _permissionService
+            .areHealthPermissionsGranted();
 
         final hasPermission = permissionsResult.fold(
           (error) {
-            debugPrint('❌ [HomeRepository] Permission check failed: ${error.message}');
+            debugPrint(
+              '❌ [HomeRepository] Permission check failed: ${error.message}',
+            );
             return false;
           },
           (granted) {
@@ -249,9 +265,9 @@ class HomeRepositoryImpl implements HomeRepository {
 
         if (!hasPermission) {
           debugPrint('⛔ [HomeRepository] Health permissions not granted');
-          return left(AppException.permission(
-            'Health permissions not granted',
-          ));
+          return left(
+            AppException.permission('Health permissions not granted'),
+          );
         }
       }
 
@@ -263,7 +279,9 @@ class HomeRepositoryImpl implements HomeRepository {
 
       return workoutsResult.fold(
         (error) {
-          debugPrint('❌ [HomeRepository] Failed to fetch workouts: ${error.message}');
+          debugPrint(
+            '❌ [HomeRepository] Failed to fetch workouts: ${error.message}',
+          );
           return left(error);
         },
         (workouts) {
@@ -277,16 +295,23 @@ class HomeRepositoryImpl implements HomeRepository {
             return right(null);
           }
 
-          debugPrint('✅ [HomeRepository] Workout found: ${workout.workoutType}');
+          debugPrint('✅ [HomeRepository] Workout found:');
+          debugPrint('   - ID: ${workout.id}');
+          debugPrint('   - Type: ${workout.workoutType}');
+          debugPrint('   - Duration: ${workout.duration}');
+          debugPrint('   - Start: ${workout.startTime}');
+          debugPrint('   - End: ${workout.endTime}');
+          debugPrint('   - Avg HR: ${workout.avgHeartRate} bpm');
+          debugPrint('   - Distance: ${workout.totalDistance} m');
+          debugPrint('   - Calories: ${workout.totalEnergyBurned} kcal');
+          debugPrint('   - Metadata: ${workout.metadata}');
           return right(workout);
         },
       );
     } on Exception catch (e) {
       debugPrint('❌ [HomeRepository] Error fetching workout by ID: $e');
       return left(
-        AppException.health(
-          'Failed to fetch workout: ${e.toString()}',
-        ),
+        AppException.health('Failed to fetch workout: ${e.toString()}'),
       );
     }
   }

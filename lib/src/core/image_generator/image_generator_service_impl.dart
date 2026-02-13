@@ -31,8 +31,8 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
   }
 
   Future<Uint8List> _createTransparentImage(HealthWorkoutData workout) async {
-    const double baseWidth = 400;
-    const double baseHeight = 450;
+    const double baseWidth = 1080;
+    const double baseHeight = 1080;
     const double scale = 1.0;
 
     final int width = (baseWidth * scale).toInt();

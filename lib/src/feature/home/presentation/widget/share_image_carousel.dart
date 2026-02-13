@@ -10,6 +10,8 @@ class ShareImageCarousel extends StatelessWidget {
   final List<ShareImageStyle> styles;
   final int selectedIndex;
   final ValueChanged<int>? onSelectedIndexChanged;
+  final double? itemWidth;
+  final double itemAspectRatio;
 
   const ShareImageCarousel({
     super.key,
@@ -17,6 +19,8 @@ class ShareImageCarousel extends StatelessWidget {
     required this.styles,
     this.selectedIndex = 0,
     this.onSelectedIndexChanged,
+    this.itemWidth,
+    this.itemAspectRatio = 1 / 2,
   });
 
   @override
@@ -41,7 +45,7 @@ class ShareImageCarousel extends StatelessWidget {
             child: Row(
               children: List.generate(
                 images.length,
-                (index) => _buildImageItem(context, index),
+                (index) => _buildImageItem(context, index, carouselHeight),
               ),
             ),
           ),
@@ -50,34 +54,51 @@ class ShareImageCarousel extends StatelessWidget {
     );
   }
 
-  Widget _buildImageItem(BuildContext context, int index) {
+  Widget _buildImageItem(
+    BuildContext context,
+    int index,
+    double carouselHeight,
+  ) {
     final isSelected = index == selectedIndex;
     final style = styles[index];
+    final resolvedWidth = itemWidth ?? (carouselHeight * itemAspectRatio);
 
     return GestureDetector(
       onTap: () => onSelectedIndexChanged?.call(index),
-      child: Container(
-        width: 300,
-        margin: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isSelected
-                ? Theme.of(context).colorScheme.primary
-                : Colors.transparent,
-            width: isSelected ? 3 : 0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: SizedBox(
+          width: resolvedWidth,
+          child: AspectRatio(
+            aspectRatio: itemAspectRatio,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.transparent,
+                  width: isSelected ? 3 : 0,
+                ),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: _buildImageContainer(images[index], style),
+              ),
+            ),
           ),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: _buildImageContainer(images[index], style),
         ),
       ),
     );
   }
 
   Widget _buildImageContainer(Uint8List imageBytes, ShareImageStyle style) {
-    final imageWidget = Image.memory(imageBytes, fit: BoxFit.contain);
+    final imageWidget = Image.memory(
+      imageBytes,
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
+    );
 
     // Apply checkerboard background for transparent style
     if (style == ShareImageStyle.transparent) {

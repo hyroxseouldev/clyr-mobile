@@ -93,6 +93,7 @@ class WorkoutShareBottomSheet extends HookConsumerWidget {
                     ShareImageCarousel(
                       images: images.map((e) => e.imageBytes).toList(),
                       styles: images.map((e) => e.style).toList(),
+                      itemAspectRatio: 1 / 2,
                       selectedIndex: selectedIndex.value,
                       onSelectedIndexChanged: (index) {
                         selectedIndex.value = index;
@@ -142,7 +143,6 @@ class WorkoutShareBottomSheet extends HookConsumerWidget {
                               ),
                             ],
                           ),
-                          const Spacer(),
                           AnimatedSwitcher(
                             duration: const Duration(milliseconds: 180),
                             child: feedback.value == null
