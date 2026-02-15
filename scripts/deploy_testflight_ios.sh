@@ -5,12 +5,20 @@ set -euo pipefail
 print_usage() {
   cat <<'EOF'
 Usage:
-  scripts/deploy_testflight_ios.sh --flavor <dev|stage|prod> --build-name <x.y.z> --build-number <number>
+  scripts/deploy_testflight_ios.sh --flavor <dev|stage|prod> --version <x.y.z+build>
+
+Examples:
+  scripts/deploy_testflight_ios.sh --flavor prod --version 1.4.0+108
+  scripts/deploy_testflight_ios.sh --flavor stage --version 1.4.0+205
 
 Required environment variables:
   ASC_KEY_ID       App Store Connect API Key ID
   ASC_ISSUER_ID    App Store Connect API Issuer ID
   ASC_API_KEY_PATH Absolute path to .p8 API key file
+
+Notes:
+  - This script must be run on main branch.
+  - version format must be SemVer+build, e.g. 1.2.3+45
 EOF
 }
 
@@ -18,13 +26,6 @@ require_command() {
   local command_name="$1"
   if ! command -v "$command_name" >/dev/null 2>&1; then
     echo "[ERROR] Required command not found: $command_name"
-    exit 1
-  fi
-}
-
-abort_if_dirty_worktree() {
-  if [[ -n "$(git status --porcelain)" ]]; then
-    echo "[ERROR] Working tree is not clean. Commit or stash changes first."
     exit 1
   fi
 }
@@ -38,8 +39,7 @@ ensure_required_env() {
 }
 
 flavor=""
-build_name=""
-build_number=""
+version=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -47,12 +47,8 @@ while [[ $# -gt 0 ]]; do
       flavor="${2:-}"
       shift 2
       ;;
-    --build-name)
-      build_name="${2:-}"
-      shift 2
-      ;;
-    --build-number)
-      build_number="${2:-}"
+    --version)
+      version="${2:-}"
       shift 2
       ;;
     -h|--help)
@@ -67,7 +63,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "$flavor" || -z "$build_name" || -z "$build_number" ]]; then
+if [[ -z "$flavor" || -z "$version" ]]; then
   echo "[ERROR] Missing required arguments."
   print_usage
   exit 1
@@ -78,10 +74,14 @@ if [[ ! "$flavor" =~ ^(dev|stage|prod)$ ]]; then
   exit 1
 fi
 
-if [[ ! "$build_number" =~ ^[0-9]+$ ]]; then
-  echo "[ERROR] build-number must be a positive integer."
+if [[ ! "$version" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)\+([0-9]+)$ ]]; then
+  echo "[ERROR] Invalid version format: $version"
+  echo "        Expected: x.y.z+build (example: 1.2.3+45)"
   exit 1
 fi
+
+build_name="${version%%+*}"
+build_number="${version##*+}"
 
 case "$flavor" in
   dev)
@@ -109,49 +109,27 @@ if [[ ! -f "$ASC_API_KEY_PATH" ]]; then
 fi
 
 current_branch="$(git rev-parse --abbrev-ref HEAD)"
-if [[ "$current_branch" != "development" ]]; then
-  echo "[ERROR] This script must be run from development branch. Current: $current_branch"
+if [[ "$current_branch" != "main" ]]; then
+  echo "[ERROR] This script must be run from main branch. Current: $current_branch"
   exit 1
 fi
 
 tmp_key_dir=""
 cleanup() {
   set +e
-
-  if git rev-parse -q --verify MERGE_HEAD >/dev/null 2>&1; then
-    git merge --abort >/dev/null 2>&1 || true
-  fi
-
-  if [[ "$(git rev-parse --abbrev-ref HEAD)" != "development" ]]; then
-    git checkout development >/dev/null 2>&1 || true
-  fi
-
   if [[ -n "$tmp_key_dir" && -d "$tmp_key_dir" ]]; then
     rm -rf "$tmp_key_dir"
   fi
 }
 trap cleanup EXIT
 
-abort_if_dirty_worktree
-
-echo "[INFO] Fetching latest branches..."
-git fetch origin
-
-echo "[INFO] Updating development..."
-git checkout development
-git pull --ff-only origin development
-
-echo "[INFO] Updating main..."
-git checkout main
+echo "[INFO] Pulling latest main..."
 git pull --ff-only origin main
 
-echo "[INFO] Merging development into main..."
-git merge --no-ff development -m "Merge development into main for TestFlight release"
+echo "[INFO] Running pub get..."
+fvm flutter pub get
 
-echo "[INFO] Pushing main..."
-git push origin main
-
-echo "[INFO] Building iOS IPA (flavor=$flavor, build=$build_name+$build_number)..."
+echo "[INFO] Building iOS IPA (flavor=$flavor, version=$build_name+$build_number)..."
 rm -f build/ios/ipa/*.ipa
 fvm flutter build ipa \
   --flavor "$flavor" \
@@ -184,6 +162,3 @@ xcrun altool \
   --apiIssuer "$ASC_ISSUER_ID"
 
 echo "[INFO] TestFlight upload completed successfully."
-
-git checkout development
-echo "[INFO] Switched back to development branch."
