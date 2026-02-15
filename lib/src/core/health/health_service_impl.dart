@@ -97,6 +97,30 @@ class HealthServiceImpl implements HealthService {
     );
   }
 
+  @override
+  FutureEither<void> writeWorkout({required HealthWorkoutData workout}) async {
+    try {
+      final success = await _health.writeWorkoutData(
+        activityType: _toHealthWorkoutActivityType(workout.workoutType),
+        start: workout.startTime,
+        end: workout.endTime,
+        totalEnergyBurned: workout.totalEnergyBurned,
+        totalDistance: workout.totalDistance.round(),
+        title: workout.workoutType.displayName,
+      );
+
+      if (!success) {
+        return left(AppException.health('Failed to write workout to health'));
+      }
+
+      return right(null);
+    } on Exception catch (e) {
+      return left(
+        AppException.health('Failed to write workout: ${e.toString()}'),
+      );
+    }
+  }
+
   /// Convert health package data to WorkoutData entity
   HealthWorkoutData? _convertToWorkoutData(
     HealthDataPoint data,
@@ -241,5 +265,20 @@ class HealthServiceImpl implements HealthService {
       final sourceId = point.sourceId.toLowerCase();
       return normalizedSources.any(sourceId.contains);
     }).toList();
+  }
+
+  HealthWorkoutActivityType _toHealthWorkoutActivityType(
+    HealthWorkoutType workoutType,
+  ) {
+    return switch (workoutType) {
+      HealthWorkoutType.running => HealthWorkoutActivityType.RUNNING,
+      HealthWorkoutType.walking => HealthWorkoutActivityType.WALKING,
+      HealthWorkoutType.cycling => HealthWorkoutActivityType.BIKING,
+      HealthWorkoutType.swimming => HealthWorkoutActivityType.SWIMMING,
+      HealthWorkoutType.hiking => HealthWorkoutActivityType.HIKING,
+      HealthWorkoutType.fitness =>
+        HealthWorkoutActivityType.HIGH_INTENSITY_INTERVAL_TRAINING,
+      HealthWorkoutType.other => HealthWorkoutActivityType.OTHER,
+    };
   }
 }

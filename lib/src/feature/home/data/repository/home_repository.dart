@@ -3,6 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:clyr_mobile/src/core/data/data_source.dart';
 import 'package:clyr_mobile/src/core/health/connected_device_service.dart';
 import 'package:clyr_mobile/src/core/error/exception.dart';
+import 'package:clyr_mobile/src/core/health/health_sync_store_service.dart';
 import 'package:clyr_mobile/src/core/health/health_service.dart';
 import 'package:clyr_mobile/src/core/permission/permission_service.dart';
 import 'package:clyr_mobile/src/core/util/type_defs.dart';
@@ -41,6 +42,9 @@ abstract class HomeRepository {
 
   /// Get single workout by ID from HealthKit
   FutureEither<HealthWorkoutData?> getWorkoutById(String id);
+
+  /// Scan connected device workouts and write them as app workouts.
+  FutureEither<int> syncConnectedDeviceWorkouts();
 }
 
 /// 홈 데이터 소스 구현체
@@ -50,15 +54,18 @@ class HomeRepositoryImpl implements HomeRepository {
     required HealthService healthService,
     required PermissionService permissionService,
     required ConnectedDeviceService connectedDeviceService,
+    required HealthSyncStoreService healthSyncStoreService,
   }) : _dataSource = dataSource,
        _healthService = healthService,
        _permissionService = permissionService,
-       _connectedDeviceService = connectedDeviceService;
+       _connectedDeviceService = connectedDeviceService,
+       _healthSyncStoreService = healthSyncStoreService;
 
   final CoreDataSource _dataSource;
   final HealthService _healthService;
   final PermissionService _permissionService;
   final ConnectedDeviceService _connectedDeviceService;
+  final HealthSyncStoreService _healthSyncStoreService;
 
   /// Cache for permission state to avoid repeated prompts
   bool _permissionsChecked = false;
@@ -324,6 +331,115 @@ class HomeRepositoryImpl implements HomeRepository {
       debugPrint('❌ [HomeRepository] Error fetching workout by ID: $e');
       return left(
         AppException.health('Failed to fetch workout: ${e.toString()}'),
+      );
+    }
+  }
+
+  @override
+  FutureEither<int> syncConnectedDeviceWorkouts() async {
+    debugPrint('🔄 [HomeRepository] Starting connected device sync');
+
+    try {
+      final now = DateTime.now();
+      final startDate = now.subtract(const Duration(days: 30));
+
+      final lastSyncedAt = await _healthSyncStoreService.getLastSyncedAt();
+      if (lastSyncedAt != null && now.difference(lastSyncedAt).inMinutes < 10) {
+        debugPrint('⏭️ [HomeRepository] Skip sync (recently synced)');
+        return right(0);
+      }
+
+      final selectedSourceIds = await _connectedDeviceService
+          .getSelectedSourceIds();
+      if (selectedSourceIds.isEmpty) {
+        debugPrint('📭 [HomeRepository] No selected device sources');
+        return right(0);
+      }
+
+      final readGranted = await _permissionService
+          .areHealthReadPermissionsGranted();
+      final hasReadPermission = await readGranted.fold((_) async {
+        final requestResult = await _permissionService
+            .requestHealthReadPermissions();
+        return requestResult.fold((_) => false, (result) {
+          return result.values.every((status) => status.isGranted);
+        });
+      }, (granted) async => granted);
+
+      if (!hasReadPermission) {
+        return left(
+          AppException.permission('Health read permission not granted'),
+        );
+      }
+
+      final writeGranted = await _permissionService
+          .isHealthWorkoutWritePermissionGranted();
+      final hasWritePermission = await writeGranted.fold((_) async {
+        final requestResult = await _permissionService
+            .requestHealthWorkoutWritePermission();
+        return requestResult.fold((_) => false, (status) => status.isGranted);
+      }, (granted) async => granted);
+
+      if (!hasWritePermission) {
+        return left(
+          AppException.permission(
+            'Health workout write permission not granted',
+          ),
+        );
+      }
+
+      final workoutsResult = await _healthService.getWorkouts(
+        startDate: startDate,
+        endDate: now,
+        sourceIds: selectedSourceIds,
+      );
+
+      return await workoutsResult.fold(
+        (error) async {
+          if (error.message?.contains('No workouts found') ?? false) {
+            await _healthSyncStoreService.setLastSyncedAt(now);
+            return right(0);
+          }
+
+          return left(error);
+        },
+        (workouts) async {
+          var syncedCount = 0;
+          final sorted = [...workouts]
+            ..sort((a, b) => a.startTime.compareTo(b.startTime));
+
+          for (final workout in sorted) {
+            final syncId =
+                '${workout.id}_${workout.startTime.toIso8601String()}';
+            final alreadySynced = await _healthSyncStoreService.isWorkoutSynced(
+              syncId,
+            );
+
+            if (alreadySynced) {
+              continue;
+            }
+
+            final writeResult = await _healthService.writeWorkout(
+              workout: workout,
+            );
+            final isSuccess = writeResult.fold((_) => false, (_) => true);
+            if (!isSuccess) {
+              continue;
+            }
+
+            await _healthSyncStoreService.markWorkoutSynced(syncId);
+            syncedCount++;
+          }
+
+          await _healthSyncStoreService.setLastSyncedAt(now);
+          debugPrint('✅ [HomeRepository] Synced $syncedCount workouts');
+          return right(syncedCount);
+        },
+      );
+    } on Exception catch (e) {
+      debugPrint('❌ [HomeRepository] Sync error: $e');
+      return left(
+        AppException.health('Failed to sync workouts: ${e.toString()}'),
       );
     }
   }

@@ -273,3 +273,55 @@ final class GetWorkoutByIdUseCaseProvider
 
 String _$getWorkoutByIdUseCaseHash() =>
     r'656426d2db9983645d7247e349e1abac2a546881';
+
+@ProviderFor(syncConnectedDeviceWorkoutsUseCase)
+final syncConnectedDeviceWorkoutsUseCaseProvider =
+    SyncConnectedDeviceWorkoutsUseCaseProvider._();
+
+final class SyncConnectedDeviceWorkoutsUseCaseProvider
+    extends
+        $FunctionalProvider<
+          SyncConnectedDeviceWorkoutsUseCase,
+          SyncConnectedDeviceWorkoutsUseCase,
+          SyncConnectedDeviceWorkoutsUseCase
+        >
+    with $Provider<SyncConnectedDeviceWorkoutsUseCase> {
+  SyncConnectedDeviceWorkoutsUseCaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'syncConnectedDeviceWorkoutsUseCaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() =>
+      _$syncConnectedDeviceWorkoutsUseCaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<SyncConnectedDeviceWorkoutsUseCase> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  SyncConnectedDeviceWorkoutsUseCase create(Ref ref) {
+    return syncConnectedDeviceWorkoutsUseCase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SyncConnectedDeviceWorkoutsUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SyncConnectedDeviceWorkoutsUseCase>(
+        value,
+      ),
+    );
+  }
+}
+
+String _$syncConnectedDeviceWorkoutsUseCaseHash() =>
+    r'a5041d8627b7f43d3287fc009d8937458655dad9';

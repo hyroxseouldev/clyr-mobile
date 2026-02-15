@@ -274,6 +274,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permissionDenied => 'Denied';
 
   @override
+  String healthSyncCompleted(int count) {
+    return 'Synced $count workouts';
+  }
+
+  @override
   String get logout => 'Logout';
 
   @override

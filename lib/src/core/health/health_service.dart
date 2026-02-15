@@ -25,4 +25,7 @@ abstract class HealthService {
     required DateTime endDate,
     required List<String> sourceIds,
   });
+
+  /// Write a workout to Apple Health / Health Connect.
+  FutureEither<void> writeWorkout({required HealthWorkoutData workout});
 }

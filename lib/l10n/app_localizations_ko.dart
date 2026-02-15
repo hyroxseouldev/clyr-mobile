@@ -272,6 +272,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get permissionDenied => '허용되지 않음';
 
   @override
+  String healthSyncCompleted(int count) {
+    return '운동 $count건 동기화 완료';
+  }
+
+  @override
   String get logout => '로그아웃';
 
   @override

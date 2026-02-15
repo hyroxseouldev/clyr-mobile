@@ -620,6 +620,12 @@ abstract class AppLocalizations {
   /// **'허용되지 않음'**
   String get permissionDenied;
 
+  /// No description provided for @healthSyncCompleted.
+  ///
+  /// In ko, this message translates to:
+  /// **'운동 {count}건 동기화 완료'**
+  String healthSyncCompleted(int count);
+
   /// No description provided for @logout.
   ///
   /// In ko, this message translates to:

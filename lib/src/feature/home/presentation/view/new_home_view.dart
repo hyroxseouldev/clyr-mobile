@@ -2,6 +2,7 @@ import 'package:clyr_mobile/l10n/app_localizations.dart';
 import 'package:clyr_mobile/src/core/router/router_path.dart';
 import 'package:clyr_mobile/src/feature/auth/presentation/provider/onboarding_controller.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/selected_date_provider.dart';
+import 'package:clyr_mobile/src/feature/home/presentation/provider/startup_health_sync_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/workout_list_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/home_workout_detail_view.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/widget/home_workout_feed_card_widget.dart';
@@ -21,7 +22,22 @@ class NewHomeView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final selectedDate = ref.watch(selectedDateProvider);
+    ref.watch(startupHealthSyncProvider);
     final workoutListAsync = ref.watch(workoutListProvider);
+
+    ref.listen<AsyncValue<int>>(startupHealthSyncProvider, (previous, next) {
+      next.whenData((count) {
+        if (count > 0) {
+          ref.invalidate(workoutListProvider);
+
+          final messenger = ScaffoldMessenger.of(context);
+          messenger.hideCurrentSnackBar();
+          messenger.showSnackBar(
+            SnackBar(content: Text(l10n.healthSyncCompleted(count))),
+          );
+        }
+      });
+    });
 
     ref.listen<AsyncValue<bool>>(checkOnboardingStatusProvider, (
       previous,

@@ -87,6 +87,14 @@
   "openSystemSettings": "Open System Settings",
   "permissionGranted": "Granted",
   "permissionDenied": "Denied",
+  "healthSyncCompleted": "Synced {count} workouts",
+  "@healthSyncCompleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "logout": "Logout",
   "save": "Save",
   "saving": "Saving...",

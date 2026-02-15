@@ -1,5 +1,6 @@
 import 'package:clyr_mobile/src/core/data/data_source.dart';
 import 'package:clyr_mobile/src/core/health/connected_device_service_provider.dart';
+import 'package:clyr_mobile/src/core/health/health_sync_store_service_provider.dart';
 import 'package:clyr_mobile/src/core/health/health_service_provider.dart';
 import 'package:clyr_mobile/src/core/permission/permission_service_provider.dart';
 import 'package:clyr_mobile/src/feature/home/data/repository/home_repository.dart';
@@ -22,5 +23,6 @@ HomeRepository homeRepository(Ref ref) {
     healthService: ref.watch(healthServiceProvider),
     permissionService: ref.watch(permissionServiceProvider),
     connectedDeviceService: ref.watch(connectedDeviceServiceProvider),
+    healthSyncStoreService: ref.watch(healthSyncStoreServiceProvider),
   );
 }

@@ -291,4 +291,11 @@ class TestHomeRepository implements HomeRepository {
     );
     return right(null);
   }
+
+  @override
+  FutureEither<int> syncConnectedDeviceWorkouts() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    debugPrint('🔄 [TestHomeRepository] Mock sync completed');
+    return right(0);
+  }
 }
