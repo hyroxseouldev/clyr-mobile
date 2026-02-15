@@ -209,7 +209,13 @@ class LoginView extends HookConsumerWidget {
                         ),
                         const SizedBox(height: 12),
                         OutlinedButton.icon(
-                          onPressed: () {},
+                          onPressed: isLoading
+                              ? null
+                              : () {
+                                  ref
+                                      .read(authControllerProvider.notifier)
+                                      .loginWithGoogle();
+                                },
                           icon: const Icon(Icons.g_mobiledata, size: 28),
                           label: Text(l10n.continueWithGoogle),
                           style: OutlinedButton.styleFrom(

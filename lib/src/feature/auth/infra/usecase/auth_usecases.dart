@@ -6,6 +6,7 @@ import 'package:clyr_mobile/src/feature/auth/infra/usecase/user_profile_usecase.
 // Params 정의
 typedef LoginParams = ({String email, String password});
 typedef SignupParams = ({String email, String password, String fullName});
+typedef GoogleLoginParams = void;
 typedef LogoutParams = void;
 
 // UseCase 들
@@ -43,10 +44,21 @@ class LogoutUseCase implements Usecase<LogoutParams, void> {
   }
 }
 
+class GoogleLoginUseCase implements Usecase<GoogleLoginParams, void> {
+  final UserRepository _repository;
+  GoogleLoginUseCase(this._repository);
+
+  @override
+  FutureEither<void> call(GoogleLoginParams input) {
+    return _repository.loginWithGoogle();
+  }
+}
+
 // 모든 UseCase를 담는 컨테이너
 class AuthUseCases {
   final LoginUseCase login;
   final SignupUseCase signup;
+  final GoogleLoginUseCase googleLogin;
   final LogoutUseCase logout;
   final GetUserProfileUseCase getUserProfile;
   final UpdateUserProfileUseCase updateUserProfile;
@@ -54,6 +66,7 @@ class AuthUseCases {
   AuthUseCases({
     required this.login,
     required this.signup,
+    required this.googleLogin,
     required this.logout,
     required this.getUserProfile,
     required this.updateUserProfile,
@@ -63,6 +76,7 @@ class AuthUseCases {
     return AuthUseCases(
       login: LoginUseCase(repository),
       signup: SignupUseCase(repository),
+      googleLogin: GoogleLoginUseCase(repository),
       logout: LogoutUseCase(repository),
       getUserProfile: GetUserProfileUseCase(repository),
       updateUserProfile: UpdateUserProfileUseCase(repository),

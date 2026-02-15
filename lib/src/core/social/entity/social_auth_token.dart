@@ -1,0 +1,6 @@
+class SocialAuthToken {
+  const SocialAuthToken({required this.idToken, this.accessToken});
+
+  final String idToken;
+  final String? accessToken;
+}

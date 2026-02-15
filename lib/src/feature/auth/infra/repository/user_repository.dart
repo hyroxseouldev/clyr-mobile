@@ -1,5 +1,7 @@
 import 'package:clyr_mobile/src/core/data/auth_data_source.dart';
 import 'package:clyr_mobile/src/core/error/exception.dart';
+import 'package:clyr_mobile/src/core/social/social_login_service.dart';
+import 'package:clyr_mobile/src/core/social/social_login_service_provider.dart';
 import 'package:clyr_mobile/src/core/util/type_defs.dart';
 import 'package:clyr_mobile/src/feature/auth/infra/entity/user_profile_entity.dart';
 import 'package:fpdart/fpdart.dart';
@@ -10,16 +12,20 @@ part 'user_repository.g.dart';
 @Riverpod(keepAlive: true)
 UserRepository userRepository(Ref ref) {
   final authDataSource = ref.read(authDataSourceProvider);
-  return UserRepositoryImpl(authDataSource: authDataSource);
+  final socialLoginService = ref.read(socialLoginServiceProvider);
+
+  return UserRepositoryImpl(
+    authDataSource: authDataSource,
+    socialLoginService: socialLoginService,
+  );
 }
 
 abstract interface class UserRepository {
-  FutureEither<void> login(
-    ({String email, String password}) params,
-  );
+  FutureEither<void> login(({String email, String password}) params);
   FutureEither<void> signup(
     ({String email, String password, String fullName}) params,
   );
+  FutureEither<void> loginWithGoogle();
   FutureEither<void> logout();
 
   /// 사용자 프로필 조회
@@ -42,22 +48,20 @@ abstract interface class UserRepository {
   FutureEither<bool> checkOnboardingStatus();
 
   /// 온보딩 데이터 업데이트
-  FutureEither<void> completeOnboarding(
-    Map<String, dynamic> data,
-  );
+  FutureEither<void> completeOnboarding(Map<String, dynamic> data);
 }
 
 class UserRepositoryImpl implements UserRepository {
   final AuthDataSource authDataSource;
+  final SocialLoginService socialLoginService;
 
   UserRepositoryImpl({
     required this.authDataSource,
+    required this.socialLoginService,
   });
 
   @override
-  FutureEither<void> login(
-    ({String email, String password}) params,
-  ) async {
+  FutureEither<void> login(({String email, String password}) params) async {
     try {
       await authDataSource.login(
         email: params.email,
@@ -86,6 +90,26 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  FutureEither<void> loginWithGoogle() async {
+    try {
+      final socialResult = await socialLoginService.signInWithGoogle();
+
+      return await socialResult.fold((error) async => left(error), (
+        token,
+      ) async {
+        await authDataSource.loginWithGoogle(
+          idToken: token.idToken,
+          accessToken: token.accessToken,
+        );
+
+        return right(null);
+      });
+    } catch (e) {
+      return left(AppException.auth(e.toString()));
+    }
+  }
+
+  @override
   FutureEither<void> logout() async {
     try {
       await authDataSource.logout();
@@ -104,12 +128,12 @@ class UserRepositoryImpl implements UserRepository {
       // If profile not found, create new empty profile
       final userId = authDataSource.getCurrentUserId();
       if (userId != null) {
-        final newDto = await authDataSource.createUserProfile(accountId: userId);
+        final newDto = await authDataSource.createUserProfile(
+          accountId: userId,
+        );
         return right(newDto.toEntity());
       }
-      return left(
-        AppException.auth('User not authenticated'),
-      );
+      return left(AppException.auth('User not authenticated'));
     }
   }
 
@@ -127,9 +151,7 @@ class UserRepositoryImpl implements UserRepository {
   ) async {
     final userId = authDataSource.getCurrentUserId();
     if (userId == null) {
-      return left(
-        AppException.auth('User not authenticated'),
-      );
+      return left(AppException.auth('User not authenticated'));
     }
 
     try {
@@ -160,9 +182,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  FutureEither<void> completeOnboarding(
-    Map<String, dynamic> data,
-  ) async {
+  FutureEither<void> completeOnboarding(Map<String, dynamic> data) async {
     final userId = authDataSource.getCurrentUserId();
     if (userId == null) {
       return left(AppException.onboarding('User not authenticated'));

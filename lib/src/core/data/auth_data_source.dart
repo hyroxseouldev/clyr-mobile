@@ -30,6 +30,9 @@ abstract interface class AuthDataSource {
   /// Sign out current user
   Future<void> logout();
 
+  /// Sign in with Google token
+  Future<void> loginWithGoogle({required String idToken, String? accessToken});
+
   /// Get current user's ID
   String? getCurrentUserId();
 
@@ -105,6 +108,24 @@ class SupabaseAuthDataSource implements AuthDataSource {
       throw Exception('Logout failed: ${e.message}');
     } catch (e) {
       throw Exception('Logout error: $e');
+    }
+  }
+
+  @override
+  Future<void> loginWithGoogle({
+    required String idToken,
+    String? accessToken,
+  }) async {
+    try {
+      await supabase.auth.signInWithIdToken(
+        provider: sb.OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+    } on sb.AuthException catch (e) {
+      throw Exception('Google login failed: ${e.message}');
+    } catch (e) {
+      throw Exception('Google login error: $e');
     }
   }
 

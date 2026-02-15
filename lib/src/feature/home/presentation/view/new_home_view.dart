@@ -1,4 +1,6 @@
 import 'package:clyr_mobile/l10n/app_localizations.dart';
+import 'package:clyr_mobile/src/core/router/router_path.dart';
+import 'package:clyr_mobile/src/feature/auth/presentation/provider/onboarding_controller.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/selected_date_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/workout_list_provider.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/view/home_workout_detail_view.dart';
@@ -20,6 +22,23 @@ class NewHomeView extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final selectedDate = ref.watch(selectedDateProvider);
     final workoutListAsync = ref.watch(workoutListProvider);
+
+    ref.listen<AsyncValue<bool>>(checkOnboardingStatusProvider, (
+      previous,
+      next,
+    ) {
+      next.when(
+        data: (isOnboarded) {
+          if (!isOnboarded) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              context.go(RoutePaths.onboarding);
+            });
+          }
+        },
+        loading: () {},
+        error: (error, stackTrace) {},
+      );
+    });
 
     return Scaffold(
       appBar: AppBar(

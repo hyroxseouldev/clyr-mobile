@@ -34,6 +34,16 @@ class AuthController extends _$AuthController {
     });
   }
 
+  Future<void> loginWithGoogle() async {
+    state = const AsyncLoading();
+    final usecases = ref.read(authUseCasesProvider);
+
+    state = await AsyncValue.guard(() async {
+      final result = await usecases.googleLogin(null);
+      return result.fold((l) => throw l, (r) => r);
+    });
+  }
+
   Future<void> logout() async {
     state = const AsyncLoading();
     final usecases = ref.read(authUseCasesProvider);
