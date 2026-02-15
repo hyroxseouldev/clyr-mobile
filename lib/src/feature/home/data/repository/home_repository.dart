@@ -55,6 +55,7 @@ class HomeRepositoryImpl implements HomeRepository {
   final CoreDataSource _dataSource;
   final HealthService _healthService;
   final PermissionService _permissionService;
+  final List<String> _healthSourceIds = const ['com.garmin.connect.mobile'];
 
   /// Cache for permission state to avoid repeated prompts
   bool _permissionsChecked = false;
@@ -178,6 +179,7 @@ class HomeRepositoryImpl implements HomeRepository {
       final workoutsResult = await _healthService.getWorkouts(
         startDate: startOfDay,
         endDate: endOfDay,
+        sourceIds: _healthSourceIds,
       );
 
       // Step 4: Return workouts
@@ -275,6 +277,7 @@ class HomeRepositoryImpl implements HomeRepository {
       final workoutsResult = await _healthService.getWorkouts(
         startDate: startDate,
         endDate: endDate,
+        sourceIds: _healthSourceIds,
       );
 
       return workoutsResult.fold(

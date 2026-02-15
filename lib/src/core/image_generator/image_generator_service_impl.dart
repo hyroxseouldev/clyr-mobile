@@ -47,8 +47,8 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
 
     final double itemHeight = _calculateItemHeight(width.toDouble(), scale);
     final double logoHeight = _calculateLogoHeight(width.toDouble(), scale);
-    final double itemSpacing = 10 * scale;
-    final double logoSpacing = 40 * scale;
+    final double itemSpacing = 0 * scale;
+    final double logoSpacing = 20 * scale;
 
     final double totalContentHeight =
         (itemHeight * 3) + (itemSpacing * 2) + logoSpacing + logoHeight;
@@ -145,7 +145,7 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
     final textStyle = ui.TextStyle(
       color: const Color(0xFFFFFFFF),
       fontSize: 32 * scale,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w900,
     );
 
     final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
@@ -172,7 +172,7 @@ class ImageGeneratorServiceImpl implements ImageGeneratorService {
       final textStyle = ui.TextStyle(
         color: const Color(0xFFFFFFFF),
         fontSize: 32,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w900,
       );
 
       final paragraphStyle = ui.ParagraphStyle(

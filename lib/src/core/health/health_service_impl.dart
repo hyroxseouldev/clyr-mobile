@@ -18,6 +18,7 @@ class HealthServiceImpl implements HealthService {
     required DateTime startDate,
     required DateTime endDate,
     int? limit,
+    List<String>? sourceIds,
   }) async {
     try {
       // Fetch workout data
@@ -29,7 +30,12 @@ class HealthServiceImpl implements HealthService {
           )
           .timeout(const Duration(seconds: 5));
 
-      if (healthData.isEmpty) {
+      final filteredWorkouts = _filterBySourceIds(
+        healthData,
+        sourceIds: sourceIds,
+      );
+
+      if (filteredWorkouts.isEmpty) {
         return left(AppException.noData('No workouts found in date range'));
       }
 
@@ -40,9 +46,14 @@ class HealthServiceImpl implements HealthService {
         types: [HealthDataType.HEART_RATE],
       );
 
+      final filteredHeartRates = _filterBySourceIds(
+        heartRateData,
+        sourceIds: sourceIds,
+      );
+
       // Convert to WorkoutData entities with heart rates
-      final workouts = healthData
-          .map((data) => _convertToWorkoutData(data, heartRateData))
+      final workouts = filteredWorkouts
+          .map((data) => _convertToWorkoutData(data, filteredHeartRates))
           .where((workout) => workout != null)
           .cast<HealthWorkoutData>()
           .toList();
@@ -71,11 +82,13 @@ class HealthServiceImpl implements HealthService {
   FutureEither<HealthWorkoutData?> getLatestWorkout({
     required DateTime startDate,
     required DateTime endDate,
+    List<String>? sourceIds,
   }) async {
     final result = await getWorkouts(
       startDate: startDate,
       endDate: endDate,
       limit: 1,
+      sourceIds: sourceIds,
     );
 
     return result.fold(
@@ -205,5 +218,28 @@ class HealthServiceImpl implements HealthService {
     };
 
     return typeMap[workoutTypeString.toUpperCase()] ?? HealthWorkoutType.other;
+  }
+
+  List<HealthDataPoint> _filterBySourceIds(
+    List<HealthDataPoint> data, {
+    List<String>? sourceIds,
+  }) {
+    if (sourceIds == null || sourceIds.isEmpty) {
+      return data;
+    }
+
+    final normalizedSources = sourceIds
+        .map((source) => source.trim().toLowerCase())
+        .where((source) => source.isNotEmpty)
+        .toList();
+
+    if (normalizedSources.isEmpty) {
+      return data;
+    }
+
+    return data.where((point) {
+      final sourceId = point.sourceId.toLowerCase();
+      return normalizedSources.any(sourceId.contains);
+    }).toList();
   }
 }

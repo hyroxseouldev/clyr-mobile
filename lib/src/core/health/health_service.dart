@@ -16,11 +16,13 @@ abstract class HealthService {
     required DateTime startDate,
     required DateTime endDate,
     int? limit,
+    List<String>? sourceIds,
   });
 
   /// Get latest workout within date range
   FutureEither<HealthWorkoutData?> getLatestWorkout({
     required DateTime startDate,
     required DateTime endDate,
+    List<String>? sourceIds,
   });
 }
