@@ -24,8 +24,21 @@ abstract class PermissionService {
   FutureEither<Map<PermissionType, PermissionResult>>
   requestHealthPermissions();
 
+  /// Request all health-related read permissions
+  FutureEither<Map<PermissionType, PermissionResult>>
+  requestHealthReadPermissions();
+
+  /// Request workout write permission
+  FutureEither<PermissionResult> requestHealthWorkoutWritePermission();
+
   /// Check if all health permissions are granted
   FutureEither<bool> areHealthPermissionsGranted();
+
+  /// Check if all health read permissions are granted
+  FutureEither<bool> areHealthReadPermissionsGranted();
+
+  /// Check if workout write permission is granted
+  FutureEither<bool> isHealthWorkoutWritePermissionGranted();
 
   /// Open app settings for manual permission enablement
   FutureEither<void> openAppSettings();

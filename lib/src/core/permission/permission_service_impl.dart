@@ -88,7 +88,10 @@ class PermissionServiceImpl implements PermissionService {
 
     // Request health permissions in batch
     if (healthTypes.isNotEmpty) {
-      final healthResult = await _requestHealthPermissionsBatch(healthTypes);
+      final healthResult = await _requestHealthPermissionsBatch(
+        healthTypes,
+        access: health.HealthDataAccess.READ,
+      );
       healthResult.fold(
         (error) => errors.add('Health: ${error.message}'),
         (statuses) => results.addAll(statuses),
@@ -118,6 +121,12 @@ class PermissionServiceImpl implements PermissionService {
   @override
   FutureEither<Map<PermissionType, PermissionResult>>
   requestHealthPermissions() async {
+    return requestHealthReadPermissions();
+  }
+
+  @override
+  FutureEither<Map<PermissionType, PermissionResult>>
+  requestHealthReadPermissions() async {
     final healthTypes = [
       PermissionType.healthWorkout,
       PermissionType.healthSteps,
@@ -127,17 +136,58 @@ class PermissionServiceImpl implements PermissionService {
       PermissionType.healthWorkoutRoute,
     ];
 
-    return await _requestHealthPermissionsBatch(healthTypes);
+    return _requestHealthPermissionsBatch(
+      healthTypes,
+      access: health.HealthDataAccess.READ,
+    );
+  }
+
+  @override
+  FutureEither<PermissionResult> requestHealthWorkoutWritePermission() async {
+    final result = await _requestHealthPermissionsBatch([
+      PermissionType.healthWorkout,
+    ], access: health.HealthDataAccess.WRITE);
+
+    return result.fold(
+      (error) => left(error),
+      (statuses) => right(
+        statuses[PermissionType.healthWorkout] ??
+            const PermissionResult.denied(),
+      ),
+    );
   }
 
   @override
   FutureEither<bool> areHealthPermissionsGranted() async {
-    final result = await requestHealthPermissions();
+    return areHealthReadPermissionsGranted();
+  }
+
+  @override
+  FutureEither<bool> areHealthReadPermissionsGranted() async {
+    final healthTypes = [
+      PermissionType.healthWorkout,
+      PermissionType.healthSteps,
+      PermissionType.healthEnergy,
+      PermissionType.healthDistance,
+      PermissionType.healthHeartRate,
+      PermissionType.healthWorkoutRoute,
+    ];
+
+    final result = await checkPermissions(healthTypes);
 
     return result.fold((error) => left(error), (statuses) {
       final allGranted = statuses.values.every((status) => status.isGranted);
       return right(allGranted);
     });
+  }
+
+  @override
+  FutureEither<bool> isHealthWorkoutWritePermissionGranted() async {
+    final result = await _checkHealthPermission(PermissionType.healthWorkout);
+    return result.fold(
+      (error) => left(error),
+      (status) => right(status.isGranted),
+    );
   }
 
   @override
@@ -218,7 +268,9 @@ class PermissionServiceImpl implements PermissionService {
   FutureEither<PermissionResult> _requestHealthPermission(
     PermissionType type,
   ) async {
-    return await _requestHealthPermissionsBatch([type]).then(
+    return await _requestHealthPermissionsBatch([
+      type,
+    ], access: health.HealthDataAccess.READ).then(
       (result) => result.fold(
         (error) => left(error),
         (statuses) => right(
@@ -229,12 +281,15 @@ class PermissionServiceImpl implements PermissionService {
   }
 
   FutureEither<Map<PermissionType, PermissionResult>>
-  _requestHealthPermissionsBatch(List<PermissionType> types) async {
+  _requestHealthPermissionsBatch(
+    List<PermissionType> types, {
+    required health.HealthDataAccess access,
+  }) async {
     try {
       if (Platform.isIOS) {
-        return await _requestIOSHealthPermissions(types);
+        return _requestIOSHealthPermissions(types, access: access);
       } else if (Platform.isAndroid) {
-        return await _requestAndroidHealthPermissions(types);
+        return _requestAndroidHealthPermissions(types, access: access);
       } else {
         return left(
           AppException.permission(
@@ -252,14 +307,14 @@ class PermissionServiceImpl implements PermissionService {
   }
 
   FutureEither<Map<PermissionType, PermissionResult>>
-  _requestIOSHealthPermissions(List<PermissionType> types) async {
+  _requestIOSHealthPermissions(
+    List<PermissionType> types, {
+    required health.HealthDataAccess access,
+  }) async {
     final dataTypes = _getHealthDataTypes(types);
 
     // Create permissions list with same length as dataTypes
-    final permissions = List.generate(
-      dataTypes.length,
-      (_) => health.HealthDataAccess.READ,
-    );
+    final permissions = List.generate(dataTypes.length, (_) => access);
 
     // Request HealthKit permissions
     final requested = await _health.requestAuthorization(
@@ -279,16 +334,16 @@ class PermissionServiceImpl implements PermissionService {
   }
 
   FutureEither<Map<PermissionType, PermissionResult>>
-  _requestAndroidHealthPermissions(List<PermissionType> types) async {
+  _requestAndroidHealthPermissions(
+    List<PermissionType> types, {
+    required health.HealthDataAccess access,
+  }) async {
     // Android Health Connect integration
     final dataTypes = _getHealthDataTypes(types);
 
     try {
       // Create permissions list with same length as dataTypes
-      final permissions = List.generate(
-        dataTypes.length,
-        (_) => health.HealthDataAccess.READ,
-      );
+      final permissions = List.generate(dataTypes.length, (_) => access);
 
       // Request Health Connect permissions
       final requested = await _health.requestAuthorization(

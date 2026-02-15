@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:clyr_mobile/src/core/data/data_source.dart';
+import 'package:clyr_mobile/src/core/health/connected_device_service.dart';
 import 'package:clyr_mobile/src/core/error/exception.dart';
 import 'package:clyr_mobile/src/core/health/health_service.dart';
 import 'package:clyr_mobile/src/core/permission/permission_service.dart';
@@ -48,14 +49,16 @@ class HomeRepositoryImpl implements HomeRepository {
     required CoreDataSource dataSource,
     required HealthService healthService,
     required PermissionService permissionService,
+    required ConnectedDeviceService connectedDeviceService,
   }) : _dataSource = dataSource,
        _healthService = healthService,
-       _permissionService = permissionService;
+       _permissionService = permissionService,
+       _connectedDeviceService = connectedDeviceService;
 
   final CoreDataSource _dataSource;
   final HealthService _healthService;
   final PermissionService _permissionService;
-  final List<String> _healthSourceIds = const ['com.garmin.connect.mobile'];
+  final ConnectedDeviceService _connectedDeviceService;
 
   /// Cache for permission state to avoid repeated prompts
   bool _permissionsChecked = false;
@@ -176,10 +179,13 @@ class HomeRepositoryImpl implements HomeRepository {
 
       // Step 3: Fetch workouts from HealthService
       debugPrint('🔍 [HomeRepository] Fetching workouts from HealthService...');
+      final selectedSourceIds = await _connectedDeviceService
+          .getSelectedSourceIds();
+
       final workoutsResult = await _healthService.getWorkouts(
         startDate: startOfDay,
         endDate: endOfDay,
-        sourceIds: _healthSourceIds,
+        sourceIds: selectedSourceIds,
       );
 
       // Step 4: Return workouts
@@ -274,10 +280,13 @@ class HomeRepositoryImpl implements HomeRepository {
       }
 
       // Fetch workouts from HealthService
+      final selectedSourceIds = await _connectedDeviceService
+          .getSelectedSourceIds();
+
       final workoutsResult = await _healthService.getWorkouts(
         startDate: startDate,
         endDate: endDate,
-        sourceIds: _healthSourceIds,
+        sourceIds: selectedSourceIds,
       );
 
       return workoutsResult.fold(

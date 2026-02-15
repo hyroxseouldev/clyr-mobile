@@ -82,7 +82,7 @@ class HealthServiceImpl implements HealthService {
   FutureEither<HealthWorkoutData?> getLatestWorkout({
     required DateTime startDate,
     required DateTime endDate,
-    List<String>? sourceIds,
+    required List<String> sourceIds,
   }) async {
     final result = await getWorkouts(
       startDate: startDate,

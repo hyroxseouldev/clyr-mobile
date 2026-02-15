@@ -17,6 +17,7 @@ import 'package:clyr_mobile/src/feature/program/presentation/view/program_list_v
 import 'package:clyr_mobile/src/feature/program/presentation/view/program_detail_view.dart';
 import 'package:clyr_mobile/src/feature/ranking/presentation/view/ranking_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/app_info_view.dart';
+import 'package:clyr_mobile/src/feature/settings/presentation/view/device_connect_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/membership_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/purchase_history_view.dart';
 import 'package:clyr_mobile/src/feature/settings/presentation/view/terms_of_service_view.dart';
@@ -177,6 +178,11 @@ GoRouter router(Ref ref) {
                 name: SettingsListView.routeName,
                 builder: (context, state) => const SettingsListView(),
                 routes: [
+                  GoRoute(
+                    path: 'device-connect',
+                    name: DeviceConnectView.routeName,
+                    builder: (context, state) => const DeviceConnectView(),
+                  ),
                   GoRoute(
                     path: 'purchase-history',
                     builder: (context, state) => const PurchaseHistoryView(),

@@ -230,6 +230,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsThemeSystem => '시스템 설정 따르기';
 
   @override
+  String get settingsDeviceConnect => '디바이스 연결';
+
+  @override
   String get settingsPurchaseHistory => '구매내역';
 
   @override
@@ -240,6 +243,33 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsAppInfo => '앱정보';
+
+  @override
+  String get deviceSelectTitle => '연결할 디바이스';
+
+  @override
+  String get deviceSelectDescription => '운동 데이터를 가져올 디바이스를 선택하세요';
+
+  @override
+  String get deviceGarmin => 'Garmin Connect';
+
+  @override
+  String get healthReadPermission => '헬스 데이터 읽기 권한';
+
+  @override
+  String get healthWritePermission => '헬스 운동 기록 쓰기 권한';
+
+  @override
+  String get requestPermission => '권한 요청';
+
+  @override
+  String get openSystemSettings => '시스템 설정 열기';
+
+  @override
+  String get permissionGranted => '허용됨';
+
+  @override
+  String get permissionDenied => '허용되지 않음';
 
   @override
   String get logout => '로그아웃';

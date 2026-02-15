@@ -400,6 +400,11 @@ lib/src/core/
    - Use `debugPrint()` for development logging
    - Log service operations: entry, success, errors
 
+5. **No Service-to-Service Injection**
+   - Do not inject one Service directly into another Service (e.g., `HealthService` -> `ConnectedDeviceService`)
+   - Service composition/orchestration must happen in Repository or UseCase layer
+   - Services should stay focused on a single external SDK/API boundary
+
 ### Service Example: HealthService
 
 **Interface** (`health_service.dart`):

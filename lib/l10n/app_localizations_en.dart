@@ -231,6 +231,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsThemeSystem => '시스템 설정 따르기';
 
   @override
+  String get settingsDeviceConnect => 'Device Connection';
+
+  @override
   String get settingsPurchaseHistory => 'Purchase History';
 
   @override
@@ -241,6 +244,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsAppInfo => 'App Info';
+
+  @override
+  String get deviceSelectTitle => 'Connected Device';
+
+  @override
+  String get deviceSelectDescription =>
+      'Select a device to import workout data';
+
+  @override
+  String get deviceGarmin => 'Garmin Connect';
+
+  @override
+  String get healthReadPermission => 'Health Data Read Permission';
+
+  @override
+  String get healthWritePermission => 'Health Workout Write Permission';
+
+  @override
+  String get requestPermission => 'Request';
+
+  @override
+  String get openSystemSettings => 'Open System Settings';
+
+  @override
+  String get permissionGranted => 'Granted';
+
+  @override
+  String get permissionDenied => 'Denied';
 
   @override
   String get logout => 'Logout';

@@ -536,6 +536,12 @@ abstract class AppLocalizations {
   /// **'시스템 설정 따르기'**
   String get settingsThemeSystem;
 
+  /// No description provided for @settingsDeviceConnect.
+  ///
+  /// In ko, this message translates to:
+  /// **'디바이스 연결'**
+  String get settingsDeviceConnect;
+
   /// No description provided for @settingsPurchaseHistory.
   ///
   /// In ko, this message translates to:
@@ -559,6 +565,60 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'앱정보'**
   String get settingsAppInfo;
+
+  /// No description provided for @deviceSelectTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'연결할 디바이스'**
+  String get deviceSelectTitle;
+
+  /// No description provided for @deviceSelectDescription.
+  ///
+  /// In ko, this message translates to:
+  /// **'운동 데이터를 가져올 디바이스를 선택하세요'**
+  String get deviceSelectDescription;
+
+  /// No description provided for @deviceGarmin.
+  ///
+  /// In ko, this message translates to:
+  /// **'Garmin Connect'**
+  String get deviceGarmin;
+
+  /// No description provided for @healthReadPermission.
+  ///
+  /// In ko, this message translates to:
+  /// **'헬스 데이터 읽기 권한'**
+  String get healthReadPermission;
+
+  /// No description provided for @healthWritePermission.
+  ///
+  /// In ko, this message translates to:
+  /// **'헬스 운동 기록 쓰기 권한'**
+  String get healthWritePermission;
+
+  /// No description provided for @requestPermission.
+  ///
+  /// In ko, this message translates to:
+  /// **'권한 요청'**
+  String get requestPermission;
+
+  /// No description provided for @openSystemSettings.
+  ///
+  /// In ko, this message translates to:
+  /// **'시스템 설정 열기'**
+  String get openSystemSettings;
+
+  /// No description provided for @permissionGranted.
+  ///
+  /// In ko, this message translates to:
+  /// **'허용됨'**
+  String get permissionGranted;
+
+  /// No description provided for @permissionDenied.
+  ///
+  /// In ko, this message translates to:
+  /// **'허용되지 않음'**
+  String get permissionDenied;
 
   /// No description provided for @logout.
   ///
