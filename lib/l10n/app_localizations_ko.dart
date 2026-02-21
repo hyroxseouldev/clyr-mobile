@@ -772,6 +772,21 @@ class AppLocalizationsKo extends AppLocalizations {
   String get maxHeartRate => '최대 심박수';
 
   @override
+  String get heartRate => '심박수';
+
+  @override
+  String get noHeartRateData => '심박수 데이터가 없습니다';
+
+  @override
+  String get bpmUnit => 'bpm';
+
+  @override
+  String get distanceUnitKm => 'km';
+
+  @override
+  String get timeUnitMin => '분';
+
+  @override
   String get communityTitle => '커뮤니티';
 
   @override

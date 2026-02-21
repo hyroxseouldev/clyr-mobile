@@ -142,12 +142,17 @@ class HealthServiceImpl implements HealthService {
         '💪 [HealthService] Workout range: ${data.dateFrom} ~ ${data.dateTo}',
       );
 
-      final workoutHeartRates = allHeartRates
-          .where(
-            (hr) =>
-                !hr.dateFrom.isBefore(data.dateFrom) &&
-                !hr.dateTo.isAfter(data.dateTo),
-          )
+      final workoutHeartRatePoints =
+          allHeartRates
+              .where(
+                (hr) =>
+                    !hr.dateFrom.isBefore(data.dateFrom) &&
+                    !hr.dateTo.isAfter(data.dateTo),
+              )
+              .toList()
+            ..sort((a, b) => a.dateFrom.compareTo(b.dateFrom));
+
+      final workoutHeartRates = workoutHeartRatePoints
           .map((hr) => (hr.value as NumericHealthValue).numericValue.toInt())
           .toList();
 

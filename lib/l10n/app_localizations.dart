@@ -1604,6 +1604,36 @@ abstract class AppLocalizations {
   /// **'최대 심박수'**
   String get maxHeartRate;
 
+  /// No description provided for @heartRate.
+  ///
+  /// In ko, this message translates to:
+  /// **'심박수'**
+  String get heartRate;
+
+  /// No description provided for @noHeartRateData.
+  ///
+  /// In ko, this message translates to:
+  /// **'심박수 데이터가 없습니다'**
+  String get noHeartRateData;
+
+  /// No description provided for @bpmUnit.
+  ///
+  /// In ko, this message translates to:
+  /// **'bpm'**
+  String get bpmUnit;
+
+  /// No description provided for @distanceUnitKm.
+  ///
+  /// In ko, this message translates to:
+  /// **'km'**
+  String get distanceUnitKm;
+
+  /// No description provided for @timeUnitMin.
+  ///
+  /// In ko, this message translates to:
+  /// **'분'**
+  String get timeUnitMin;
+
   /// No description provided for @communityTitle.
   ///
   /// In ko, this message translates to:

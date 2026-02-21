@@ -275,6 +275,11 @@
   "workoutNotFound": "Workout not found",
   "workoutLoading": "Loading workout information...",
   "maxHeartRate": "Max Heart Rate",
+  "heartRate": "Heart Rate",
+  "noHeartRateData": "No heart rate data",
+  "bpmUnit": "bpm",
+  "distanceUnitKm": "km",
+  "timeUnitMin": "min",
 
   "communityTitle": "Community",
   "communityCreate": "Create Community",

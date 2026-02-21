@@ -5,6 +5,7 @@ import 'package:clyr_mobile/src/core/health/entity/health_workout_data.dart';
 import 'package:clyr_mobile/src/feature/home/presentation/provider/workout_detail_provider.dart';
 import 'package:clyr_mobile/src/shared/widgets/async_widget.dart';
 import 'package:clyr_mobile/src/shared/widgets/health_detail_widget.dart';
+import 'package:clyr_mobile/src/shared/widgets/heart_rate_chart_widget.dart';
 import 'package:clyr_mobile/src/shared/widgets/not_found_widget.dart';
 
 class HomeWorkoutDetailView extends ConsumerWidget {
@@ -18,10 +19,7 @@ class HomeWorkoutDetailView extends ConsumerWidget {
     final workoutState = ref.watch(workoutDetailProvider(workoutId));
 
     return Scaffold(
-      appBar: AppBar(actions: [
-      
-        ],
-      ),
+      appBar: AppBar(),
       body: AsyncWidget<HealthWorkoutData?>(
         data: workoutState,
         builder: (workout) {
@@ -30,12 +28,31 @@ class HomeWorkoutDetailView extends ConsumerWidget {
           }
 
           return SingleChildScrollView(
-            child: HealthDetailWidget(
-              workout: workout,
-              timeText: l10n.duration,
-              avgHeartRateText: l10n.avgHeartRate,
-              caloriesText: l10n.calories,
-              maxHeartRateText: l10n.maxHeartRate,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                HealthDetailWidget(
+                  workout: workout,
+                  timeText: l10n.duration,
+                  avgHeartRateText: l10n.avgHeartRate,
+                  caloriesText: l10n.calories,
+                  maxHeartRateText: l10n.maxHeartRate,
+                ),
+                HeartRateChartWidget(
+                  heartRates: workout.heartRates,
+                  averageHeartRate: workout.avgHeartRate,
+                  maxHeartRate: workout.maxHeartRate,
+                  duration: workout.duration,
+                  totalDistance: workout.totalDistance,
+                  titleText: l10n.heartRate,
+                  avgHeartRateText: l10n.avgHeartRate,
+                  maxHeartRateText: l10n.maxHeartRate,
+                  bpmText: l10n.bpmUnit,
+                  distanceUnitText: l10n.distanceUnitKm,
+                  minuteUnitText: l10n.timeUnitMin,
+                  emptyText: l10n.noHeartRateData,
+                ),
+              ],
             ),
           );
         },

@@ -780,6 +780,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get maxHeartRate => 'Max Heart Rate';
 
   @override
+  String get heartRate => 'Heart Rate';
+
+  @override
+  String get noHeartRateData => 'No heart rate data';
+
+  @override
+  String get bpmUnit => 'bpm';
+
+  @override
+  String get distanceUnitKm => 'km';
+
+  @override
+  String get timeUnitMin => 'min';
+
+  @override
   String get communityTitle => 'Community';
 
   @override
